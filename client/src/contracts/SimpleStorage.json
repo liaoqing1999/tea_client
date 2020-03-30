@@ -784,13 +784,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x287191c57a6Add5C5ee7BE4C42540B85834963a4",
-      "transactionHash": "0x7ea6354072391e3355939b777ddf94155956af71455b4cf7a7fe2a62589938bc"
+      "address": "0xc3563Dc709043eF053A7DcE873B3fb70428Ce732",
+      "transactionHash": "0x3845980db7daf6ba7362f432962dc3660d6a988a85227d26dff61033c1692889"
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-03-25T03:32:36.708Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-03-30T14:33:53.756Z",
   "devdoc": {
     "methods": {}
   },

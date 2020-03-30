@@ -1,0 +1,49 @@
+.header{
+    height: 80px;
+    width: 100%;
+    background: #fff;
+    
+    .header-top{
+        height: 40px;
+        text-align: right;
+        line-height: 40px;
+        padding-right: 20px;
+        border-bottom: 1px solid #1da57a;
+        span{
+            margin-right:10px;
+        }
+    }
+    .header-bottom{
+        height: 40px;
+        display: flex;
+        align-items: center;
+        .header-bottom-left{
+            text-align: center;
+            width: 25%;
+            font-size: 20px;
+            position: relative;
+            &::after{
+                content:'';
+                position: absolute;
+                right: 50%;
+                transform: translateX(50%);
+                top: 100%;
+                border-top:20px solid white;
+                border-right:20px solid transparent;
+                border-bottom:20px solid transparent;
+                border-left:20px solid transparent;
+            }
+        }
+        .header-bottom-right{
+            width:75%;
+            text-align: right;
+            margin-right: 20px;
+            font-size: 13px;
+            img{
+                margin: 0 15px;
+                width:30px;
+                height: 20px;
+            }
+        }
+    }
+}
