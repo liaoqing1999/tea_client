@@ -1,13 +1,13 @@
 import React,{Component} from 'react'
 import './index.less'
-import {formateDate} from '../../utils/dateUtils'
-import memoryUtils from '../../utils/memoryUtils';
+import {formateDate} from '../../../utils/dateUtils'
+import memoryUtils from '../../../utils/memoryUtils';
 import { withRouter} from 'react-router-dom'
-import { reqWeather } from '../../api';
-
+import { reqWeather } from '../../../api';
+import logo from '../../../assets/GREEN_TEA.svg'
 import { Modal, Button } from 'antd';
-import storageUtils from '../../utils/storageUtils';
-import { menuList } from '../../config/menuConfig';
+import storageUtils from '../../../utils/storageUtils';
+import TopNav from "../top-nav";
 class Top extends Component{
 
     state = {
@@ -21,8 +21,9 @@ class Top extends Component{
             const currenTime = formateDate(Date.now());
             this.setState({currenTime})
         },1000)
+      
     }
-    getWeather =async () =>{
+    getWeather = async () =>{
         const {dayPictureUrl,weather} = await reqWeather('changsha')
         this.setState({dayPictureUrl,weather})
     }
@@ -41,13 +42,7 @@ class Top extends Component{
         })
         return title;
     }
-    //获取标题
-    getTitle = () =>{
-        const path = this.props.location.pathname;
-        const title =this.getTitleForEach(menuList,path)
-       
-        return title;
-    }
+   
     logout = () =>{
         Modal.confirm({
             title: '确认退出登录吗?',
@@ -76,28 +71,36 @@ class Top extends Component{
     /*当前组件卸载之前调用 */
     componentWillUnmount(){
         //清除定时器
+        
         clearInterval(this.interval )
     }
     render(){
         const {currenTime,dayPictureUrl,weather} = this.state;
-        const title = this.getTitle() 
         const user = memoryUtils.user
         return(
             <div className="header">
-                <div className="header-top">
-                    <span>欢迎您,{user.userName}</span>
-                    
-                    <Button type="primary" size='small'  onClick={this.logout}>退出</Button>
-                    
-                </div>
-                <div className='header-bottom'>
-                    <div className="header-bottom-left">
-                        {title}
+
+                <div className="header-top">  
+                    <div style={{display:'flex'}}>
+                        <img src={logo} alt="logo"></img>
+                        <h1 style = {{color:'#2E8B57'}}>喝好茶</h1>
+                        <h1  style = {{marginLeft:'20px'}}>中国茶叶专业追溯防伪平台</h1>
                     </div>
-                    <div className="header-bottom-right">
+                    <div className="header-top-right" >              
                         <span>{currenTime}</span>
                         <img src={dayPictureUrl} alt='天气'></img>
                         <span>{weather}</span>
+                        <Button type="primary" size='small'  onClick={this.logout}>登录</Button>  
+                    </div>
+                     
+                </div>
+                <div className='header-bottom'>
+                    <div className="header-bottom-left">
+                        <h2 style = {{fontSize:'15px'}}>生产有规程、质量有标准、安全可追溯</h2>
+                        
+                    </div>
+                    <div className="header-bottom-right">
+                        <TopNav></TopNav>
                     </div>
                 </div>
             </div>

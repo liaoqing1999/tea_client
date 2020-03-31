@@ -45,4 +45,35 @@ const menuList = [
     }
 ]
 
-export default menuList;
+const topMenu = [
+    {
+        title:'首页',
+        key:'/'
+    },
+    {
+        title:'品牌',
+        key:'/main/brand'
+    },
+    {
+        title:'资讯',
+        key:'/main/news'
+    },
+    {
+        title:'商城',
+        key:'/main/shop'
+    },
+    {
+        title:'入住',
+        key:'/main/jion'
+    },
+    {
+        title:'关于',
+        key:'/main/about'
+    },
+    {
+        title:'联系',
+        key:'/main/contact'
+    }
+]
+
+export  {menuList,topMenu};

@@ -5,6 +5,7 @@ import {BrowserRouter,Route,Switch} from 'react-router-dom'
 import Login from "./pages/login/login";
 import Admin from "./pages/admin/admin";
 import { Trace } from "./pages/trace";
+import Main from "./pages/trace/main/main";
 /*
 应用的根组件
 */
@@ -14,8 +15,9 @@ export default class App extends Component{
             <BrowserRouter>
             <Switch>
                 <Route exact path='/' component={Trace}></Route>
-                <Route path='/login' component={Login}></Route>
-                <Route path='/admin' component={Admin}></Route>
+                <Route exact path='/login' component={Login}></Route>
+                <Route exact path='/admin' component={Admin}></Route>
+                <Route path='/main' component={Main}></Route>
             </Switch>
             </BrowserRouter>
         )

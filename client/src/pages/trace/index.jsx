@@ -1,22 +1,25 @@
 import React, { Component } from "react";
 import './index.less';
-import logo from './image/GREEN TEA.svg'
+import logo from '../../assets/GREEN_TEA.svg'
 import banner1 from './image/banner1.jpg'
 import banner2 from './image/banner2.jpg'
-import { Input, Button } from 'antd';
+import { Button } from 'antd';
 import { reqTea } from "../../api";
 import Tea from "../../contracts/Tea.json";
 import getWeb3 from "../../getWeb3";
-const { Search } = Input;
+import SearchTea from "./searchtea";
 export class Trace extends Component{
     state = {
         bg : banner1,
         setBg :false,
         web3: null, 
         accounts: null, 
-        contract: null 
+        contract: null,
+        width:"100%",
+        height:"100%"
     }
     componentDidMount = async () => {
+        this.setState({width:document.body.clientWidth,height: document.body.clientHeight})
         //动态修改背景
         this.setBg();
         try {
@@ -77,7 +80,7 @@ export class Trace extends Component{
     render(){
      
         return (
-            <div className="main" style ={{ backgroundImage: `url(${this.state.bg})`,backgroundSize:'100% 100%'}}>
+            <div className="main" style ={{height:this.state.height, width:this.state.width,backgroundImage: `url(${this.state.bg})`,backgroundSize:'100% 100%'}}>
                 <div className="main-top">
                     <img src={logo} alt="logo"></img>
                     <h1 style = {{color:'#2E8B57'}}>喝好茶</h1>
@@ -85,20 +88,15 @@ export class Trace extends Component{
                 </div>
                 <div className="main-search">
                     <h1>茶类质量安全溯源</h1>
-                    <Search
-                        placeholder="请输入溯源码查询"
-                        size ="large"
-                        onSearch={value => console.log(value)}
-                        style={{ width: 300 }}
-                    />
+                    <SearchTea></SearchTea>
                     <Button onClick ={this.getDate}>获取</Button>
                     <h2>生产有规程、质量有标准、安全可追溯</h2>
                 </div>
                 <div className="main-cnav">
-                    <div className="main-cnav-item"><a>品牌</a></div>
-                    <div className="main-cnav-item">><a>资讯</a></div>
-                    <div className="main-cnav-item">><a>商城</a></div>
-                    <div className="main-cnav-item">><a>关于</a></div>
+                    <div className="main-cnav-item"><a href="/main/brand">品牌</a></div>
+                    <div className="main-cnav-item"><a href="/main/news">资讯</a></div>
+                    <div className="main-cnav-item"><a href="/main/shop">商城</a></div>
+                    <div className="main-cnav-item"><a href="/main/about">关于</a></div>
                 </div>
             </div>
         )
