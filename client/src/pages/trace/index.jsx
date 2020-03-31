@@ -3,18 +3,12 @@ import './index.less';
 import logo from '../../assets/GREEN_TEA.svg'
 import banner1 from './image/banner1.jpg'
 import banner2 from './image/banner2.jpg'
-import { Button } from 'antd';
-import { reqTea } from "../../api";
-import Tea from "../../contracts/Tea.json";
-import getWeb3 from "../../getWeb3";
 import SearchTea from "./searchtea";
 export class Trace extends Component{
     state = {
         bg : banner1,
         setBg :false,
-        web3: null, 
-        accounts: null, 
-        contract: null,
+    
         width:"100%",
         height:"100%"
     }
@@ -22,36 +16,6 @@ export class Trace extends Component{
         this.setState({width:document.body.clientWidth,height: document.body.clientHeight})
         //动态修改背景
         this.setBg();
-        try {
-          // Get network provider and web3 instance.
-          //web3对象  用于获取区块链  账号 节点等
-          const web3 = await getWeb3();
-    
-          // Use web3 to get the user's accounts.
-          // 获取到的账号
-          const accounts = await web3.eth.getAccounts();
-    
-          // Get the contract instance.
-          //网络id
-          const networkId = await web3.eth.net.getId();
-          //合约地址  交易哈希等  通过合约名  网络id获取
-          const deployedNetwork = Tea.networks[networkId];
-          //合约实例对象 通过这个可以调用合约方法
-          const instance = new web3.eth.Contract(
-            Tea.abi,
-            deployedNetwork && deployedNetwork.address,
-          );
-    
-          // Set web3, accounts, and contract to the state, and then proceed with an
-          // example of interacting with the contract's methods.
-          this.setState({ web3, accounts, contract: instance });
-        } catch (error) {
-          // Catch any errors for any of the above operations.
-          alert(
-            `Failed to load web3, accounts, or contract. Check console for details.`,
-          );
-          console.error(error);
-        }
       };
     setBg = () =>{
         this.interval = setInterval(()=>{
@@ -67,16 +31,7 @@ export class Trace extends Component{
           })
         },7000)
     }
-    getDate = async () =>{
-       const data= await reqTea();
-       const d = data.data.data;
-       console.log(d);
-       console.log(JSON.stringify(d._id))
-       console.log(this.state)
-       await this.state.contract.methods.setProduct("5e7f52b6790e9318bc605d80",d.name,d.type_id,d.batch,d.grade,d.period,d.store,d.img,d.qr).send({ from: this.state.accounts[0] });
-       const response = await this.state.contract.methods.getProduct("5e7f52b6790e9318bc605d80").call();
-       console.log(response);
-    }
+   
     render(){
      
         return (
@@ -89,7 +44,6 @@ export class Trace extends Component{
                 <div className="main-search">
                     <h1>茶类质量安全溯源</h1>
                     <SearchTea></SearchTea>
-                    <Button onClick ={this.getDate}>获取</Button>
                     <h2>生产有规程、质量有标准、安全可追溯</h2>
                 </div>
                 <div className="main-cnav">
