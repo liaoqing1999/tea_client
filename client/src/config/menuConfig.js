@@ -64,7 +64,7 @@ const topMenu = [
     },
     {
         title:'入住',
-        key:'/main/jion'
+        key:'/main/join'
     },
     {
         title:'关于',

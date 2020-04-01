@@ -5,12 +5,16 @@ import {Route,Switch} from 'react-router-dom'
 import Top from "../top";
 import banner1 from '../image/banner1.jpg'
 import Bottom from "../bottom";
-import Trace from "..";
 import Brand from "../brand";
 import About from "../about";
 import Contact from "../contact";
-
-const {  Content, Footer, Sider } = Layout;
+import Shop from "../shop";
+import Join from "../join";
+import News from "../news";
+import Clause from "../clause";
+import Union from "../union";
+import Forum from "../forum";
+const {  Content, Footer } = Layout;
 
 export default class Main extends Component{
     state = {
@@ -35,14 +39,14 @@ export default class Main extends Component{
                
                 <Switch>
                     <Route path='/main/brand' component={Brand}></Route>
-                    <Route path='/main/news' component={Trace}></Route>
-                    <Route path='/main/shop' component={Trace}></Route>
-                    <Route path='/main/jion' component={Trace}></Route>
-                    <Route path='/main/clause' component={Trace}></Route>
+                    <Route path='/main/news' component={News}></Route>
+                    <Route path='/main/shop' component={Shop}></Route>
+                    <Route path='/main/join' component={Join}></Route>
+                    <Route path='/main/clause' component={Clause}></Route>
                     <Route path='/main/about' component={About}></Route>
                     <Route path='/main/contact' component={Contact}></Route>
-                    <Route path='/main/union' component={Trace}></Route>
-                    <Route path='/main/forum' component={Trace}></Route>
+                    <Route path='/main/union' component={Union}></Route>
+                    <Route path='/main/forum' component={Forum}></Route>
                     <Redirect to = '/main/brand' /> 
                 </Switch>
               </Content>
