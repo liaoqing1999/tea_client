@@ -1,12 +1,11 @@
 import React,{Component} from 'react'
 import './index.less'
-import { Input, Tabs ,Typography,Timeline} from 'antd';
+import { Tabs} from 'antd';
+import { trace } from '../../../assets/data';
 import SearchTea from '../searchtea';
-const { Search } = Input;
 const { TabPane } = Tabs;
-const { Title, Paragraph, Text } = Typography;
-
-const title = ["联系我们"]
+const { contact } = trace;
+const title = contact.title;
 export default class Contact extends Component{
     state = {
         text:title[0]
@@ -16,12 +15,28 @@ export default class Contact extends Component{
             text:title[activeKey-1]
         })
     }
+     /*使用reduce()+递归调用 */
+     getContent = (title) =>{
+        let i=1;
+       return title.reduce((pre,item)=>{
+            pre.push((
+                <TabPane tab={item} key={i}>
+                    {contact.content[i-1]}
+                </TabPane>
+            ))
+            i++
+           return pre
+       },[])
+    }
+    componentWillMount(){
+        this.content =  this.getContent(title);
+    }
     render(){
         return(
             <div className="about">
               <div className="about-top">
                 <div className="about-top-left">
-                    <h1>联系</h1>
+                    <h1>{contact.mainTitle}</h1>
                     <span>/</span>
                     <span>{this.state.text}</span>
                 </div>
@@ -31,41 +46,7 @@ export default class Contact extends Component{
               </div>
               <div className="about-center">
                 <Tabs defaultActiveKey="1" tabPosition="left" onChange={this.onChange}>
-                <TabPane tab={title[0]} key="1">
-                <Typography style={{textIndent:"2em",marginTop:"10px"}}>
-                    <Title>联系我们</Title>
-                    <Paragraph>
-                    电话： <Text strong>
-                       8080888
-                    </Text>
-                    </Paragraph>
-                    <Paragraph>
-                    手机：
-                    <Text strong>
-                       1555555555
-                    </Text>
-                    </Paragraph>
-                    <Paragraph>
-                    QQ：
-                    <Text strong>
-                       160000000
-                    </Text>
-                    </Paragraph>
-                   
-                    <Paragraph>
-                    邮箱：
-                    <Text strong>
-                       160000000@qq.com
-                    </Text>
-                    </Paragraph>
-                    <Paragraph>
-                    地址：
-                    <Text strong>
-                       湖南省长沙市岳麓区
-                    </Text>
-                    </Paragraph>
-                </Typography>
-                </TabPane>
+                    { this.content}
                 </Tabs>       
               </div>
             </div>
