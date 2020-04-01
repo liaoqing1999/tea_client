@@ -1,7 +1,8 @@
 import React,{Component} from 'react'
-import { Input} from 'antd';
+import { Input, Button} from 'antd';
 import Tea from "../../../contracts/Tea.json";
 import getWeb3 from "../../../getWeb3";
+import { reqTea } from '../../../api';
 
 const { Search } = Input;
 
@@ -47,15 +48,56 @@ export default class SearchTea extends Component{
         console.log(this.state)
         const response = await this.state.contract.methods.getProduct(value).call();
         console.log(response);
+        const  response1 = await this.state.contract.methods.getPlant(value).call();
+        console.log(response1);
+        const response2 = await this.state.contract.methods.getPesticide(value).call();
+        console.log(response2);
+        const response3 = await this.state.contract.methods.getProcess(value).call();
+        console.log(response3);
+        const response4 = await this.state.contract.methods.getStorage(value).call();
+        console.log(response4);
+        const response5 = await this.state.contract.methods.getCheck(value).call();
+        console.log(response5);
+        const response6 = await this.state.contract.methods.getSale(value).call();
+        console.log(response6);
+     }
+     onClick = async() =>{
+      const data = await reqTea();
+      const tea = data.data.data;
+      const plant =tea.plant;
+      const pesticide = plant.pesticide;
+      const process = tea.process;
+      const storage = tea.storage;
+      const check = tea.check;
+      const sale = tea.sale;
+      console.log(tea);
+      console.log(new Date(pesticide[0].date).valueOf())
+      await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.grade,tea.period,tea.store,tea.img,tea.qr).send({ from: this.state.accounts[0] });
+      await this.state.contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img).send({ from: this.state.accounts[0] });
+      for(let i = 0;i<pesticide.length;i++){
+        await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
+      }
+      for(let i = 0;i<process.length;i++){
+        console.log(process[i].img)
+        await this.state.contract.methods.setProcess(tea.id,process[i].method,new Date(process[i].startDate).valueOf(),new Date(process[i].endDate).valueOf(),process[i].processer,process[i].img).send({ from: this.state.accounts[0] });
+      }
+      await this.state.contract.methods.setStorage(tea.id,storage.place,new Date(storage.startDate).valueOf(),new Date(storage.endDate).valueOf(),storage.storageer,storage.img).send({ from: this.state.accounts[0] });
+      for(let i = 0;i<check.length;i++){
+        await this.state.contract.methods.setCheck(tea.id,check[i].typeId,new Date(check[i].date).valueOf(),check[i].result,check[i].info,check[i].checker).send({ from: this.state.accounts[0] });
+      }
+      await this.state.contract.methods.setSale(tea.id,sale.place,sale.method,new Date(sale.date).valueOf(),sale.saleer).send({ from: this.state.accounts[0] });
      }
     render(){
         return(
+          <div>
             <Search
             placeholder="请输入溯源码查询"
             size ="large"
             onSearch={this.onSearch}
             style={{ width: 300 }}
             />
+            <Button onClick={this.onClick}>设置</Button>
+            </div>
         )
     }
 }

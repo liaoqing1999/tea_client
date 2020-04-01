@@ -44,6 +44,6 @@ export const reqTypeName = (typeId) => ajax2('/bookType/typeName',{typeId},'GET'
 //文件上传 图片
 export const reqImageUpload = (formData) =>ajax2('/file',{formData},'POST')
 
-
+export const reqTea = () =>ajax2('/tea/getAll',{},'GET')
 export const reqVerify = () =>ajax2('/tea/test',{},'GET')
 
