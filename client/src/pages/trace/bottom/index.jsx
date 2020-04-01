@@ -1,7 +1,6 @@
 import React,{Component} from 'react'
 import './index.less'
 import { withRouter} from 'react-router-dom'
-import { Button } from 'antd';
 class Top extends Component{
 
     state = {
