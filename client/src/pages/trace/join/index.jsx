@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import SearchTea from '../searchtea';
 import { Tabs} from 'antd';
-import {Typography,Steps,Form, Input,Tooltip, Upload, Button} from 'antd';
+import {Typography,Steps,Form, Checkbox,Input,Tooltip, Upload, Button} from 'antd';
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -44,12 +44,16 @@ export default class Join extends Component{
     state = {
         text:title[0],
         current: 0,
-        verify :""
+        verify :"",
+        checked:false
     }
     onChange = (activeKey) => {
         this.setState({
             text:title[activeKey-1]
         })
+    }
+    agreement = (e) => {
+       this.setState({checked:e.target.checked})
     }
     getVerify =async () => {
         
@@ -173,14 +177,29 @@ export default class Join extends Component{
                         <Form.Item name={['verify']}  rules={[{ required: true ,message: '验证码不能为空' }]} style={{ display: 'inline-block', width: 'calc(50% - 5px)' }}>
                             <Input />
                         </Form.Item>
-                        <div onClick={this.getVerify}  style={{ display: 'inline-block', width: 'calc(50% - 5px)' }}>
-                        <Tooltip placement="topLeft" title="看不清？点击更换">
+                        <Tooltip  onClick={this.getVerify} placement="topLeft" title="看不清？点击更换"  style={{ display: 'inline-block', width: 'calc(50% - 5px)' }}>
                         <img alt="验证码"  style={{marginLeft:"15px",width:"100px",height:"30px"}} src={"http://127.0.0.1:8090/tea/test?p="+this.state.verify}></img>
                         </Tooltip>  
-                        </div>
                     </Form.Item> 
+                    <Form.Item name="agreement" valuePropName="checked"
+                        rules={[
+                        { validator:(_, value) => value ? Promise.resolve() : Promise.reject('请勾选用户协议') },
+                        ]}
+                        wrapperCol={{ xs: {
+                            span: 16,
+                            offset: 0,
+                          },
+                          sm: {
+                            span: 16,
+                            offset: 4,
+                          }}}
+                    >
+                        <Checkbox onChange={this.agreement}>
+                        我已阅读并同意<a href="">《喝好茶用户协议》</a>
+                        </Checkbox>
+                    </Form.Item>
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={!this.state.checked}>
                         立即入驻
                         </Button>
                     </Form.Item>
