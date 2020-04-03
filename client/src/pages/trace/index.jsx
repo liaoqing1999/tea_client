@@ -12,7 +12,7 @@ export class Trace extends Component{
         width:"100%",
         height:"100%"
     }
-    componentDidMount = async () => {
+    componentDidMount = () => {
         this.setState({width:document.body.clientWidth,height: document.body.clientHeight})
         //动态修改背景
         this.setBg();
@@ -38,7 +38,7 @@ export class Trace extends Component{
             <div className="main" style ={{height:this.state.height, width:this.state.width,backgroundImage: `url(${this.state.bg})`,backgroundSize:'100% 100%'}}>
                 <div className="main-top">
                     <img src={logo} alt="logo"></img>
-                    <h1 style = {{color:'#2E8B57'}}>喝好茶</h1>
+                    <h1 style = {{color:'#2E8B57',lineHeight:"20px"}}>喝好茶</h1>
                     <h1  style = {{fontSize:'40px',marginLeft:'70px'}}>中国茶叶专业追溯防伪平台</h1>
                 </div>
                 <div className="main-search">

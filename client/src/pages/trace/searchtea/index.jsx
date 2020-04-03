@@ -1,17 +1,19 @@
 import React,{Component} from 'react'
-import { Input, Button} from 'antd';
+import { Input, Button, message} from 'antd';
 import Tea from "../../../contracts/Tea.json";
 import getWeb3 from "../../../getWeb3";
 import { reqTea } from '../../../api';
+import { withRouter } from 'react-router-dom';
 
 const { Search } = Input;
 
-export default class SearchTea extends Component{
+ class SearchTea extends Component{
     state = {
         web3: null, 
         accounts: null, 
         contract: null,
     }
+    
     componentDidMount = async () => {
         try {
           // Get network provider and web3 instance.
@@ -45,21 +47,13 @@ export default class SearchTea extends Component{
         }
       };
     onSearch = async (value, event) =>{
-        console.log(this.state)
-        const response = await this.state.contract.methods.getProduct(value).call();
-        console.log(response);
-        const  response1 = await this.state.contract.methods.getPlant(value).call();
-        console.log(response1);
-        const response2 = await this.state.contract.methods.getPesticide(value).call();
-        console.log(response2);
-        const response3 = await this.state.contract.methods.getProcess(value).call();
-        console.log(response3);
-        const response4 = await this.state.contract.methods.getStorage(value).call();
-        console.log(response4);
-        const response5 = await this.state.contract.methods.getCheck(value).call();
-        console.log(response5);
-        const response6 = await this.state.contract.methods.getSale(value).call();
-        console.log(response6);
+        if(value){
+          this.props.history.push({ pathname:'/main/result',state:{id : value} })
+         
+        }else{
+          message.error("请输入溯源码")
+        }
+       
      }
      onClick = async() =>{
       const data = await reqTea();
@@ -101,3 +95,5 @@ export default class SearchTea extends Component{
         )
     }
 }
+
+export default withRouter(SearchTea)

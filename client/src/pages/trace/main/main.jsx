@@ -14,6 +14,7 @@ import News from "../news";
 import Clause from "../clause";
 import Union from "../union";
 import Forum from "../forum";
+import TeaResult from "../tearesult";
 const {  Content, Footer } = Layout;
 
 export default class Main extends Component{
@@ -47,6 +48,7 @@ export default class Main extends Component{
                     <Route path='/main/contact' component={Contact}></Route>
                     <Route path='/main/union' component={Union}></Route>
                     <Route path='/main/forum' component={Forum}></Route>
+                    <Route path='/main/result' component={TeaResult}></Route>
                     <Redirect to = '/main/brand' /> 
                 </Switch>
               </Content>

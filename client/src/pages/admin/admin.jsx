@@ -29,7 +29,7 @@ export default class Admin extends Component{
       
         if(!user || !user.id){
             //自动跳转到登录
-            //return <Redirect to = '/login' />
+            return <Redirect to = '/login' />
         }
         return (
             <Layout >
