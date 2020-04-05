@@ -47,3 +47,5 @@ export const reqImageUpload = (formData) =>ajax2('/file',{formData},'POST')
 export const reqTea = () =>ajax2('/tea/getAll',{},'GET')
 export const reqVerify = () =>ajax2('/tea/test',{},'GET')
 
+export const reqDictionaryByCond = (typeCode,valueId) =>ajax2('/dictionary/getByCond',{typeCode,valueId},'GET')
+
