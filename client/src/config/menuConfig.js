@@ -1,4 +1,4 @@
-import React,{ Component } from "react";
+import React from "react";
 import { UserOutlined, BookOutlined,PieChartOutlined,RadarChartOutlined,LineChartOutlined,AreaChartOutlined,BarChartOutlined,DesktopOutlined } from '@ant-design/icons';
 const menuList = [
     {
