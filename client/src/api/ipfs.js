@@ -25,7 +25,7 @@ export const addImg = (reader) => {
     return new Promise(function(resolve, reject) {
       const buffer = Buffer.from(reader.result);
       ipfs.add(buffer).then((response) => {
-        console.log(response)
+        //console.log(response)
         resolve(response[0].hash);
       }).catch((err) => {
         console.error(err)

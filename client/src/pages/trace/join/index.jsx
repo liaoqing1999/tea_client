@@ -4,7 +4,7 @@ import { Tabs, message } from 'antd';
 import { Modal, Typography, Steps, Form, Checkbox, Input, Tooltip, Upload, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Place from '../../../components/place';
-import { reqCheckVerify } from '../../../api';
+import { reqCheckVerify, reqOrgJoin } from '../../../api';
 import { addImg } from '../../../api/ipfs';
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -55,29 +55,46 @@ function getBase64(file) {
 }
 export default class Join extends Component {
     onFinish = async values => {
-        console.log(values);
         const verifyResult = await reqCheckVerify(values.verify);
         if (verifyResult.data.data === "success") {
-            const permit = this.ipfsUpload(this.state.permitFile)
-            const codePermit = this.ipfsUpload(this.state.codePermitFile)
-            console.log(permit)
-            console.log(codePermit)
+            const permit =await this.ipfsUpload(this.state.permitFile)
+            const codePermit =await this.ipfsUpload(this.state.codePermitFile)
+            const trademark =await this.ipfsUpload(this.state.trademarkFile)
+            if(permit&&codePermit&&trademark){
+                values.org.permit = permit
+                values.org.codePermit = codePermit
+                values.org.trademark = trademark[0]
+                console.log(trademark,values);
+                const res =await reqOrgJoin(values.org,values.staff)
+                console.log(res)
+                if(res.data.data==="success"){
+                    message.success("申请成功，等待管理员审核")
+                }
+            }
+          
         } else {
             message.error("验证码错误！请重试")
             this.getVerify()
         }
     };
-    ipfsUpload = async (fileList) => {
+    ipfsUpload =async (fileList) => {
         let hash = []
         if (Array.isArray(fileList)) {
             for (let i = 0; i < fileList.length; i++) {
-                let reader = new FileReader();
+                let reader = new FileReader()
                 reader.readAsArrayBuffer(fileList[i])
-                reader.onloadend = async (e) => {
-                    // 上传数据到IPFS
-                    hash[i] = await addImg(reader);
-                }
+                let promise = new Promise(resolve => {
+                    reader.onloadend =  (e) => {
+                        // 上传数据到IPFS
+                        addImg(reader).then((h) => {
+                           resolve(h)
+                        });        
+                    }
+                })        
+                hash[i] = await promise;
+                //console.log(hash[i])
             }
+            return  hash
         }else{
             let reader = new FileReader();
             reader.readAsArrayBuffer(fileList)
@@ -85,14 +102,17 @@ export default class Join extends Component {
                 // 上传数据到IPFS
                 hash[hash.length-1] = await addImg(reader);
             }
+            return hash
         }
-        return hash
+        
     }
     state = {
         text: title[0],
         current: 0,
         verify: "",
         checked: false,
+        trademarkFile:[],
+        trademarkFileList:[],
         permitFileList: [],
         permitFile:[],
         codePermitFile:[],
@@ -156,6 +176,26 @@ export default class Join extends Component {
             codePermitFileList: [...state.codePermitFileList, file],
         }));
         return false;
+    } 
+    handleChange2 = ({ fileList }) => this.setState({ trademarkFileList: fileList });
+    onRemove2 = (file) => {
+        this.setState(state => {
+            const index = state.trademarkFileList.indexOf(file);
+            const newFileList = state.trademarkFileList.slice();
+            newFileList.splice(index, 1);
+            return {
+                trademarkFileList: newFileList,
+            };
+        });
+    }
+    beforeUpload2 = file => {
+        const trademarkFile = this.state.trademarkFile;
+        trademarkFile.push(file);
+        this.setState({trademarkFile:trademarkFile})
+        this.setState(state => ({
+            trademarkFileList: [...state.trademarkFileList, file],
+        }));
+        return false;
     }
     agreement = (e) => {
         this.setState({ checked: e.target.checked })
@@ -167,7 +207,7 @@ export default class Join extends Component {
         this.setState({ current });
     };
     render() {
-        const { previewVisible, previewImage, codePermitFileList, permitFileList } = this.state;
+        const { previewVisible, previewImage,trademarkFileList, codePermitFileList, permitFileList } = this.state;
         const uploadButton = (
             <div>
                 <PlusOutlined />
@@ -226,17 +266,17 @@ export default class Join extends Component {
                         <TabPane tab={title[2]} key="3">
                             <Form style={{ marginTop: "10px", marginBottom: "20px" }} {...layout} name="nest-messages" onFinish={this.onFinish} validateMessages={validateMessages}>
                                 <span style={{ lineHeight: "30px", textIndent: "1.5em", fontSize: "15px", display: "block", width: "100%", backgroundColor: '#efefef', margin: "10px 0px" }}>机构管理员信息</span>
-                                <Form.Item name={['org', 'admin', 'name']} label="管理员账号" rules={[{ required: true }]} hasFeedback>
+                                <Form.Item name={[ 'staff', 'name']} label="管理员账号" rules={[{ required: true }]} hasFeedback>
                                     <Input />
                                 </Form.Item>
-                                <Form.Item name={['org', 'admin', 'password']} label="管理员密码" rules={[{ required: true }]} hasFeedback>
+                                <Form.Item name={[ 'staff', 'password']} label="管理员密码" rules={[{ required: true }]} hasFeedback>
                                     <Input.Password />
                                 </Form.Item>
                                 <Form.Item name="confirm" label="确认密码" dependencies={['org', 'admin', 'password']} hasFeedback
                                     rules={[{ required: true },
                                     ({ getFieldValue }) => ({
                                         validator(rule, value) {
-                                            if (!value || getFieldValue(['org', 'admin', 'password']) === value) {
+                                            if (!value || getFieldValue([ 'staff', 'password']) === value) {
                                                 return Promise.resolve();
                                             }
                                             return Promise.reject('两次输入密码不一致!');
@@ -252,6 +292,19 @@ export default class Join extends Component {
                                 </Form.Item>
                                 <Form.Item name={['org', 'corporation']} label="法人" rules={[{ required: true }]} hasFeedback>
                                     <Input />
+                                </Form.Item>
+                                <Form.Item name={['org', 'trademark']} label="商标" valuePropName="fileList"
+                                    getValueFromEvent={normFile} rules={[{ required: true }]} hasFeedback>
+                                    <Upload
+                                        onRemove={this.onRemove2}
+                                        beforeUpload={this.beforeUpload2}
+                                        listType="picture-card"
+                                        fileList={trademarkFileList}
+                                        onPreview={this.handlePreview}
+                                        onChange={this.handleChange2}
+                                    >
+                                        {trademarkFileList.length >= 1 ? null : uploadButton}
+                                    </Upload>
                                 </Form.Item>
                                 <Form.Item name={['org', 'phone']} label="联系电话" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号' }]} hasFeedback>
                                     <Input />
