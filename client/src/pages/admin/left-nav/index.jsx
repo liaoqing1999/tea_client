@@ -1,13 +1,12 @@
 import React,{Component} from 'react'
 import './index.less'
-import logo from '../../assets/book.svg'
+import logo from '../../../assets/GREEN_TEA.svg'
 import {Link , withRouter} from 'react-router-dom'
 import { Menu} from 'antd';
-import { menuList } from '../../config/menuConfig';
+import { menuList } from '../../../config/menuConfig';
 
 const { SubMenu } = Menu;
  class LeftNav extends Component{
-   
     /*根据menuList的数据数组生成对应的标签数组 
     使用map()+递归调用
     */
@@ -80,15 +79,14 @@ const { SubMenu } = Menu;
         const {collapsed} = this.props;
         let title =''
         if(!collapsed){
-            title ="图书馆管理系统"
+            title ="喝好茶后台管理"
         }
         //得到当前路由路径
         const path = this.props.location.pathname
        
         return(
             <div className="left-nav">
-
-                <Link to="/" className='left-nav-header'>
+                <Link to="/admin" className='left-nav-header'>
                     <img src ={logo} alt ='log'></img>
                     <h1>{title}</h1>
                 </Link>

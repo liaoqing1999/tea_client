@@ -1,9 +1,9 @@
 import React,{ Component } from "react";
-import { reqBookTypeAll, reqBooks, reqEBooks } from "../../api";
+import { reqBookTypeAll, reqBooks, reqEBooks } from "../../../api";
 import {Button, Tree,Modal, Input,Tabs,} from 'antd';
 import { StickyContainer, Sticky } from 'react-sticky';
 import './bookType.less'
-import MyTable from "../../utils/myTable"
+import MyTable from "../../../utils/myTable"
 import { AccountBookTwoTone, FolderTwoTone,BookTwoTone,DownOutlined,} from '@ant-design/icons';
 import Test from "./tableTest";
 import { Book } from "./book";

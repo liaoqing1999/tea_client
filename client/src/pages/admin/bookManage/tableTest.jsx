@@ -1,7 +1,7 @@
 import React,{ Component } from "react";
 import { Upload, Button, message } from 'antd';
 import { PlusOutlined ,UploadOutlined ,LoadingOutlined, ForkOutlined} from '@ant-design/icons';
-import { reqImageUpload } from "../../api";
+import { reqImageUpload } from "../../../api";
 import reqwest from 'reqwest';
 export default class Test extends React.Component {
   state = {

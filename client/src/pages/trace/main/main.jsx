@@ -37,7 +37,7 @@ export default class Main extends Component{
            
                <Top></Top>
               <Content style={{padding:"1.5% 5%",backgroundImage: `url(${banner1})`,backgroundSize:'100% 100%'}}>
-               
+              <div  style={{ padding: 24, minHeight: 450 }}>
                 <Switch>
                     <Route path='/main/brand' component={Brand}></Route>
                     <Route path='/main/news' component={News}></Route>
@@ -51,6 +51,7 @@ export default class Main extends Component{
                     <Route path='/main/result' component={TeaResult}></Route>
                     <Redirect to = '/main/brand' /> 
                 </Switch>
+                </div>
               </Content>
               <Footer style={{padding:"10px 0px",borderTop: "1px solid gray",backgroundColor:"white"}} ><Bottom></Bottom></Footer>
           </Layout>

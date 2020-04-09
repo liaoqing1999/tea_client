@@ -1,4 +1,4 @@
-import React,{ Component } from "react";
+import React from "react";
 import {Typography,Timeline} from 'antd';
 const { Title, Paragraph, Text } = Typography;
 const trace ={

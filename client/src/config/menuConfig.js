@@ -1,79 +1,96 @@
 import React from "react";
-import { UserOutlined, BookOutlined,PieChartOutlined,RadarChartOutlined,LineChartOutlined,AreaChartOutlined,BarChartOutlined,DesktopOutlined } from '@ant-design/icons';
+import { UserOutlined,DesktopOutlined, TeamOutlined,CloudOutlined,ToolOutlined, SolutionOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, TransactionOutlined, BankOutlined } from '@ant-design/icons';
+
 const menuList = [
     {
-        title:'图书管理',
-        key:'/bookManage',
-        icon:<BookOutlined />,
-    },
-    {
-        title:'借阅管理',
-        key:'/borrowManage',
-        icon:<DesktopOutlined />,
-    },
-    {
-        title:'个人信息管理',
-        key:'/infoManage',
-        icon:<UserOutlined />,
-    },
-    {
-        title:'统计分析',
-        key:'/chart',
-        icon:<PieChartOutlined />,
-        children:[
+        title: '个人中心',
+        key: '/admin/info',
+        icon: <UserOutlined />,
+        children: [
             {
-                title:'各时期图书馆藏量',
-                key:'/bookStore',
-                icon:<BarChartOutlined />,
+                title: '基础信息',
+                key: '/admin/info/user',
+                icon: <SolutionOutlined />,
             },
             {
-                title:'各时期分类馆藏量',
-                key:'/typeStore',
-                icon:<AreaChartOutlined />,
+                title: '消息中心',
+                key: '/admin/info/msg',
+                icon: <MessageOutlined />,
             },
             {
-                title:'读者数量变化趋势',
-                key:'/readerNumber',
-                icon:<LineChartOutlined />,
-            },
-            {
-                title:'已借借阅比例分布',
-                key:'/borrowRatio',
-                icon:<RadarChartOutlined />,
+                title: '修改密码',
+                key: '/admin/info/password',
+                icon: <EyeInvisibleOutlined />,
             }
         ]
+    },
+    {
+        title: '种植阶段',
+        key: '/admin/plant',
+        icon: <CloudOutlined />
+    },
+    {
+        title: '加工阶段',
+        key: '/admin/process',
+        icon: <ToolOutlined />,
+    },
+    {
+        title: '仓储阶段',
+        key: '/admin/storage',
+        icon: <BankOutlined />,
+    },
+    {
+        title: '检测阶段',
+        key: '/admin/check',
+        icon: <ExperimentOutlined />,
+    },
+    {
+        title: '售卖阶段',
+        key: '/admin/sale',
+        icon: <TransactionOutlined />,
+    },
+    {
+        title: '机构管理',
+        key: '/admin/org',
+        icon: <DesktopOutlined />
+    },
+    {
+        title: '员工管理',
+        key: '/admin/staff',
+        icon: <TeamOutlined />
     }
+
 ]
 
 const topMenu = [
     {
-        title:'首页',
-        key:'/'
+        title: '首页',
+        key: '/'
     },
     {
-        title:'品牌',
-        key:'/main/brand'
+        title: '品牌',
+        key: '/main/brand'
     },
     {
-        title:'资讯',
-        key:'/main/news'
+        title: '资讯',
+        key: '/main/news'
     },
     {
-        title:'商城',
-        key:'/main/shop'
+        title: '商城',
+        key: '/main/shop'
     },
     {
-        title:'入住',
-        key:'/main/join'
+        title: '入住',
+        key: '/main/join'
     },
     {
-        title:'关于',
-        key:'/main/about'
+        title: '关于',
+        key: '/main/about'
     },
     {
-        title:'联系',
-        key:'/main/contact'
+        title: '联系',
+        key: '/main/contact'
     }
 ]
 
-export  {menuList,topMenu};
+export { menuList, topMenu };
