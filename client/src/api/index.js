@@ -6,10 +6,7 @@ import { message } from "antd";
 
 
 //登录
-export const reqLogin = (account,password) => ajax1('http://ams.ptdev.c2cloud.cn/oauth2/login',{account,password},'POST')
-
-//获取用户信息
-export const reqLoginUser = (phone) => ajax2('/user/phone',{phone},'GET')
+export const reqLogin = (name,password) => ajax2('/staff/login',{name,password},'GET')
 
 //json的接口请求请求函数
 export const reqWeather = (city) => {
@@ -44,8 +41,18 @@ export const reqTypeName = (typeId) => ajax2('/bookType/typeName',{typeId},'GET'
 //文件上传 图片
 export const reqImageUpload = (formData) =>ajax2('/file',{formData},'POST')
 
+//获取所有茶叶信息
 export const reqTea = () =>ajax2('/tea/getAll',{},'GET')
+
+//获取验证码
 export const reqVerify = () =>ajax2('/verify/getVerify',{},'GET')
+
+//验证验证码
 export const reqCheckVerify = (verify) =>ajax2('/verify/checkVerify',{verify},'GET')
+
+//获取字典对应值
 export const reqDictionaryByCond = (typeCode,valueId) =>ajax2('/dictionary/getByCond',{typeCode,valueId},'GET')
+
+//机构入住
+export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
 

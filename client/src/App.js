@@ -6,6 +6,7 @@ import Login from "./pages/login/login";
 import Admin from "./pages/admin/admin";
 import { Trace } from "./pages/trace";
 import Main from "./pages/trace/main/main";
+import "./config/config"
 /*
 应用的根组件
 */
@@ -16,7 +17,7 @@ export default class App extends Component{
             <Switch>
                 <Route exact path='/' component={Trace}></Route>
                 <Route exact path='/login' component={Login}></Route>
-                <Route exact path='/admin' component={Admin}></Route>
+                <Route path='/admin' component={Admin}></Route>
                 <Route path='/main' component={Main}></Route>
             </Switch>
             </BrowserRouter>

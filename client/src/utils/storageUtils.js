@@ -4,7 +4,7 @@ import store from 'store'
 进行Local数据存储管理工具
 store 兼容所以浏览器
 */
-const USER_KEY = 'user_key'
+const USER_KEY = 'user'
 export default{
     /*保存user*/
     savaUser(user){
