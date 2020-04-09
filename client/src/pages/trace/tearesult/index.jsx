@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Tea from "../../../contracts/Tea.json";
 import getWeb3 from "../../../getWeb3";
 import SearchTea from '../searchtea';
-import { ConfigProvider, Modal, Table, Card, Col, Row, Collapse, Empty, Spin, Statistic, Button, Tag, Descriptions, Timeline } from 'antd';
+import { Carousel, ConfigProvider, Modal, Table, Card, Col, Row, Collapse, Empty, Spin, Statistic, Button, Tag, Descriptions, Timeline } from 'antd';
 import './index.less'
 import { CaretRightOutlined } from '@ant-design/icons';
 import Plant from '../../../assets/plant.svg'
@@ -19,7 +19,6 @@ const history = creatHistory();
 
 var _this = null;
 var _web3 = null;
-var _accounts = null;
 var _contract = null;
 var _id = false;
 const { Countdown } = Statistic;
@@ -48,7 +47,7 @@ export default class TeaResult extends Component {
         sale: null,
         pesticide: null,
         visible: false,
-        info: null
+        img: null
     }
     componentDidMount() {
         this.getWeb();
@@ -77,7 +76,6 @@ export default class TeaResult extends Component {
                 // example of interacting with the contract's methods.
                 this.setState({ web3, accounts, contract: instance });
                 _web3 = web3;
-                _accounts = accounts;
                 _contract = instance;
                 const id = this.props.location.state.id;
                 this.getId(id)
@@ -112,24 +110,28 @@ export default class TeaResult extends Component {
     getProcessCard = () => {
         const process = this.state.process
         let i = 0;
-        if(!process){
+        let start = 0;
+        if (!process) {
             return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
         }
-        if (process.method.length>0) {
+        if (process.method.length > 0) {
             return process.method.reduce((pre, item) => {
+                
                 pre.push((
                     <Col span={8} key={i}>
                         <Card hoverable>
-                            <h1>阶段图:{process.img[i]}</h1>
+                            <Carousel style={{ backgroundColor: "#364d79" }} autoplay>
+                                {this.getImgCarousel(process.img.slice(start,start+process.num[i]))}
+                            </Carousel>
                             <h1>加工方法:{item}</h1>
                             <h1>开始日期:{formateDate(Number(process.startDate[i]))}</h1>
                             <h1>结束日期:{formateDate(Number(process.endDate[i]))}</h1>
                             <h1>负责人:{process.processer[i]}</h1>
-                            <h1>图片数量:{process.num[i]}</h1>
                         </Card>
                     </Col>
                 ))
                 i++
+                start = start+process.num[i]
                 return pre
             }, [])
         } else {
@@ -270,14 +272,16 @@ export default class TeaResult extends Component {
         });
     };
     getPlantDescriptions = () => {
-        if(!this.state.plant){
+        if (!this.state.plant) {
             return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
         }
         if (this.state.plant.place) {
             return <Descriptions title="种植阶段信息" column={2}>
                 <Descriptions.Item label="产地">{this.state.plant.place}</Descriptions.Item>
                 <Descriptions.Item label="种植负责人">{this.state.plant.planter}</Descriptions.Item>
-                <Descriptions.Item label="阶段图">{this.state.tea.qr}<img style={{ height: "60px" }} src={Plant}></img></Descriptions.Item>
+                <Descriptions.Item label="阶段图">
+                    <Button type="link" onClick={() => { this.setState({ visible: true, img: this.state.plant.img }) }}>查看详情</Button>
+                </Descriptions.Item>
                 <Descriptions.Item label="施药记录" style={{ display: "flex", alignItems: 'center' }}>
                     <Timeline >
                         {this.getTimeLine()}
@@ -289,7 +293,7 @@ export default class TeaResult extends Component {
         }
     }
     getStorageDescriptions = () => {
-        if(!this.state.storage){
+        if (!this.state.storage) {
             return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
         }
         if (this.state.storage.place) {
@@ -299,7 +303,7 @@ export default class TeaResult extends Component {
                 <Descriptions.Item label="结束日期">{formateDate(Number(this.state.storage.endDate))}</Descriptions.Item>
                 <Descriptions.Item label="仓储负责人">{this.state.storage.storageer}</Descriptions.Item>
                 <Descriptions.Item span={2} label="阶段图">
-                    {this.state.storage.img}
+                <Button type="link" onClick={() => { this.setState({ visible: true, img: this.state.storage.img }) }}>查看详情</Button>
                 </Descriptions.Item>
             </Descriptions>
         } else {
@@ -307,19 +311,35 @@ export default class TeaResult extends Component {
         }
     }
     getSaleDescriptions = () => {
-        if(!this.state.sale){
+        if (!this.state.sale) {
             return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
         }
         if (this.state.sale.place) {
-            return <Descriptions title="仓储阶段信息" column={2}>
+            return <Descriptions title="售卖阶段信息" column={2}>
                 <Descriptions.Item label="售卖地点">{this.state.sale.place}</Descriptions.Item>
                 <Descriptions.Item label="售卖方式">{this.state.sale.method}</Descriptions.Item>
                 <Descriptions.Item label="售卖日期">{formateDate(Number(this.state.sale.date))}</Descriptions.Item>
                 <Descriptions.Item label="售卖负责人">{this.state.sale.saleer}</Descriptions.Item>
             </Descriptions>
         } else {
-          return <h1>暂无数据</h1>
+            return <h1>暂无数据</h1>
         }
+    }
+    getImgCarousel = (imgList) => {
+        let i = 0
+        if (Array.isArray(imgList)) {
+            return imgList.reduce((pre, item) => {
+                pre.push((
+                    <div key={i++}>
+                        <img alt="img" style={{ width: "470px", height: "300px" }} src={global.ipfs.uri + item}></img>
+                    </div>
+                ))
+                return pre
+            }, [])
+        } else {
+            return <img alt="img" src={global.ipfs.uri + imgList}></img>
+        }
+
     }
     render() {
         const customizeRenderEmpty = () => (
@@ -353,7 +373,7 @@ export default class TeaResult extends Component {
 
                 render: (text, record) =>
                     this.state.check.length >= 1 ? (
-                        <a onClick={() => { this.setState({ visible: true, info: text }) }}>查看详情</a>
+                        <Button type="link" onClick={() => { this.setState({ visible: true, img: text }) }}>查看详情</Button>
                     ) : null,
             },
             {
@@ -365,15 +385,15 @@ export default class TeaResult extends Component {
         const back = <h1>秒后完成跳转，或直接点击<Button onClick={onFinish} type="link" >这里</Button>返回</h1>;
         return (
             <div className="result">
+
                 <Modal
-                    title="Basic Modal"
+                    title="详情图"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                >
-
-                    <p>{this.state.info}</p>
-                    <p>Some contents...</p>
+                >   <Carousel style={{ backgroundColor: "#364d79" }} autoplay>
+                        {this.getImgCarousel(this.state.img)}
+                    </Carousel>
                 </Modal>
                 <div className="result-top">
                     <div className="result-top-left">
@@ -396,6 +416,7 @@ export default class TeaResult extends Component {
                                     className="result-center-collapse"
                                     onChange={this.onChange}
                                 >
+
                                     <Panel header="茶叶基本信息" key="tea" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={TeaIcon}></img>}>
                                         <Descriptions title="茶叶信息">
                                             <Descriptions.Item label="溯源码">{this.state.tea.id}</Descriptions.Item>
@@ -407,8 +428,10 @@ export default class TeaResult extends Component {
                                             </Descriptions.Item>
                                             <Descriptions.Item label="保质期">{this.state.tea.period}</Descriptions.Item>
                                             <Descriptions.Item label="存储条件">{this.state.tea.store}</Descriptions.Item>
-                                            <Descriptions.Item label="二维码">{this.state.tea.qr}<img style={{ height: "60px" }} src={Plant}></img></Descriptions.Item>
-                                            <Descriptions.Item label="产品图">{this.state.tea.img}<img style={{ height: "60px" }} src={Plant}></img></Descriptions.Item>
+                                            <Descriptions.Item label="二维码"><img alt="二维码" style={{ height: "60px" }} src={global.ipfs.uri + this.state.tea.qr}></img></Descriptions.Item>
+                                            <Descriptions.Item label="产品图">
+                                            <Button type="link" onClick={() => { this.setState({ visible: true, img: this.state.tea.img }) }}>查看详情</Button>
+                                            </Descriptions.Item>
                                         </Descriptions>
                                     </Panel>
                                     <Panel header="种植阶段" key="plant" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={Plant}></img>}>
