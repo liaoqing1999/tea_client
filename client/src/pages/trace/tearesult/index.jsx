@@ -417,7 +417,7 @@ export default class TeaResult extends Component {
                                     onChange={this.onChange}
                                 >
 
-                                    <Panel header="茶叶基本信息" key="tea" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={TeaIcon}></img>}>
+                                    <Panel header="茶叶基本信息" key="tea" className="result-center-collapse-custom-panel" extra={<img alt ="plant"style={{ height: "20px" }} src={TeaIcon}></img>}>
                                         <Descriptions title="茶叶信息">
                                             <Descriptions.Item label="溯源码">{this.state.tea.id}</Descriptions.Item>
                                             <Descriptions.Item label="名字">{this.state.tea.name}</Descriptions.Item>
@@ -434,23 +434,23 @@ export default class TeaResult extends Component {
                                             </Descriptions.Item>
                                         </Descriptions>
                                     </Panel>
-                                    <Panel header="种植阶段" key="plant" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={Plant}></img>}>
+                                    <Panel header="种植阶段" key="plant" className="result-center-collapse-custom-panel" extra={<img alt ="plant" style={{ height: "20px" }} src={Plant}></img>}>
                                         {this.getPlantDescriptions()}
                                     </Panel>
-                                    <Panel header="加工阶段" key="process" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={Process}></img>}>
+                                    <Panel header="加工阶段" key="process" className="result-center-collapse-custom-panel" extra={<img alt ="process"  style={{ height: "20px" }} src={Process}></img>}>
                                         <Row gutter={16}>
                                             {this.getProcessCard()}
                                         </Row>
                                     </Panel>
-                                    <Panel header="仓储阶段" key="storage" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={Storage}></img>}>
+                                    <Panel header="仓储阶段" key="storage" className="result-center-collapse-custom-panel" extra={<img alt ="storage"  style={{ height: "20px" }} src={Storage}></img>}>
                                         {this.getStorageDescriptions()}
                                     </Panel>
-                                    <Panel header="检测阶段" key="check" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={Check}></img>}>
+                                    <Panel header="检测阶段" key="check" className="result-center-collapse-custom-panel" extra={<img alt ="check"  style={{ height: "20px" }} src={Check}></img>}>
                                         <ConfigProvider renderEmpty={customizeRenderEmpty}>
                                             <Table rowKey={record => record.index} columns={columns} dataSource={this.state.check} />
                                         </ConfigProvider>
                                     </Panel>
-                                    <Panel header="售卖阶段" key="sale" className="result-center-collapse-custom-panel" extra={<img style={{ height: "20px" }} src={Sale}></img>}>
+                                    <Panel header="售卖阶段" key="sale" className="result-center-collapse-custom-panel" extra={<img alt ="sale" style={{ height: "20px" }} src={Sale}></img>}>
                                         {this.getSaleDescriptions()}
                                     </Panel>
                                 </Collapse>
