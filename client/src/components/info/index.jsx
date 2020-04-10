@@ -36,8 +36,8 @@ class Info extends Component {
                 user.id ? (<Dropdown overlay={menu}>
                     <div style={{ display: "flex" }}>
                         {
-                            user.img ? (<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />)
-                                : (<Avatar style={{ marginTop: "5px", backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                            user.img ? (<Avatar size={30}style={{ marginTop: "5px" }} src={global.ipfs.uri + user.img} />)
+                                : (<Avatar size={30} style={{ marginTop: "5px", backgroundColor: '#87d068' }} icon={<UserOutlined />} />
                                 )
                         }
                         <span>{user.name}</span></div>

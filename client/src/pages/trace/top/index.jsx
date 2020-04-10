@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './index.less'
 import { formateDate } from '../../../utils/dateUtils'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { reqWeather } from '../../../api';
 import logo from '../../../assets/GREEN_TEA.svg'
 import { Row, Col } from 'antd';
@@ -53,7 +53,7 @@ class Top extends Component {
                         </div>
                     </Col>
                     <Col span={10} offset={6}>
-                        <Row gutter={16} justify="end">
+                        <Row gutter={16} justify="end" style={{marginRight:"20px"}}>
                             <Col span={8}> <span>{currenTime}</span></Col>
                             <Col span={2}> <img style={{ height: "30px" }} src={dayPictureUrl} alt='天气'></img></Col>
                             {weather ? (<Col span={4}> <span>{weather}</span></Col>) : ("")}
