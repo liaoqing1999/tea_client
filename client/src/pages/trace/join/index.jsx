@@ -310,7 +310,7 @@ export default class Join extends Component {
                                     <Input />
                                 </Form.Item>
                                 <Form.Item name={['org', 'description']} label="企业介绍" rules={[{ required: true }]} hasFeedback>
-                                    <Input.TextArea />
+                                    <Input.TextArea autoSize/>
                                 </Form.Item>
                                 <Form.Item name={['org', 'license']} label="生产许可证编号" rules={[{ required: true }]} hasFeedback>
                                     <Input />
@@ -349,7 +349,7 @@ export default class Join extends Component {
                                     <Place></Place>
                                 </Form.Item>
                                 <Form.Item name={['org', 'remark']} label="备注" rules={[{ required: true }]} hasFeedback>
-                                    <Input.TextArea />
+                                    <Input.TextArea autoSize/>
                                 </Form.Item>
                                 <Form.Item label="验证码" rules={[{ required: true }]} hasFeedback>
                                     <Form.Item name={['verify']} rules={[{ required: true, message: '验证码不能为空' }]} style={{ display: 'inline-block', width: 'calc(50% - 5px)' }}>
