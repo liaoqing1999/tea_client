@@ -56,3 +56,9 @@ export const reqDictionaryByCond = (typeCode,valueId) =>ajax2('/dictionary/getBy
 //机构入住
 export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
 
+//获取机构
+export const reqOrg = (id) =>ajax2('/org/getOrg',{id},'GET')
+
+//更新用户
+export const reqUpdateStaff = (staff) =>ajax2('/staff/update',staff,'POST')
+
