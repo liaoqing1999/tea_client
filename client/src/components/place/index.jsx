@@ -43,7 +43,7 @@ export default class Place extends Component {
         this.getProvince(options);
     }
     onPlaceChange = (value, selectedOptions) => {
-        const { onChange, place } = this.props;
+        const { onChange } = this.props;
         onChange(value)
     }
     filter = (inputValue, path) => {
