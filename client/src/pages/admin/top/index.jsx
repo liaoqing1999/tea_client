@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './index.less'
 import { formateDate } from '../../../utils/dateUtils'
-import { withRouter,Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { reqWeather } from '../../../api';
 import { menuList } from '../../../config/menuConfig';
 import Info from '../../../components/info';
@@ -42,7 +42,6 @@ class Top extends Component {
     getTitle = () => {
         const path = this.props.location.pathname;
         const title = this.getTitleForEach(menuList, path)
-        console.log(path, title)
         return title;
     }
     /*

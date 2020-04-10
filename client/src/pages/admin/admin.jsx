@@ -7,13 +7,6 @@ import LeftNav from "./left-nav";
 import Top from "./top";
 import { Route, Switch } from 'react-router-dom'
 import User from '../../components/info/user'
-import BookManage from "./bookManage/bookManage";
-import BorrowManage from "./borrowManage/borrowManage";
-import InfoManage from "./infoManage/infoManage";
-import BookStore from "../chart/bookStore/bookStore";
-import TypeStore from "../chart/typeStore/typeStore";
-import ReaderNumber from "../chart/readerNumber/readerNumber";
-import BorrowRatio from "../chart/borrowRatio/borrowRatio";
 import Msg from "../../components/info/msg";
 import UserPassword from "../../components/info/password";
 import Plant from "./plant";
@@ -24,7 +17,6 @@ import Sale from "./sale";
 import Org from "./org";
 import Staff from "./staff";
 const { Content, Footer, Sider } = Layout;
-const { Header } = Layout;
 export default class Admin extends Component {
   state = {
     collapsed: false,
@@ -49,12 +41,13 @@ export default class Admin extends Component {
             <LeftNav collapsed={this.state.collapsed}></LeftNav>
           </Sider>
           <Layout className="site-layout">
-            <Header className="site-layout-background" style={{ padding: 0 }} >
+            
             <Top></Top>
-            </Header>
-            <Content style={{ margin: '40px 16px' }}>
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 450 }}>
-            <Switch>
+            
+            <Content >
+            <div className="site-layout-background" style={{ padding: 30 }}>
+              <div style={{backgroundColor:"white",padding: 24, minHeight: 450}}>
+              <Switch>
                 <Route path='/admin/info/user' component={User}></Route>
                 <Route path='/admin/info/msg' component={Msg}></Route>
                 <Route path='/admin/info/password' component={UserPassword}></Route>
@@ -67,6 +60,8 @@ export default class Admin extends Component {
                 <Route path='/admin/staff' component={Staff}></Route>
                 <Redirect to = '/admin/info/user' /> 
               </Switch>
+              </div>
+           
               </div>
             </Content>
             <Footer style={{ textAlign: 'center', color: '#aaaaaa' }}>喝好茶 © 2019-2020 廖青毕业设计作品</Footer>
