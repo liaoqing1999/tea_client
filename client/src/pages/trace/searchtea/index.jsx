@@ -48,7 +48,7 @@ const { Search } = Input;
       };
     onSearch = async (value, event) =>{
         if(value){
-          this.props.history.push({ pathname:'/main/result',state:{id : value} })
+          this.props.history.push('/main/result',{id : value})
         }else{
           message.error("请输入溯源码")
         }

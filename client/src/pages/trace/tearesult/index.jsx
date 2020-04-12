@@ -24,9 +24,6 @@ var _id = false;
 const { Countdown } = Statistic;
 var deadline = Date.now() + 1000 * 5; // Moment is also OK
 
-function onFinish() {
-    history.goBack();
-}
 
 export default class TeaResult extends Component {
     constructor() {
@@ -77,8 +74,13 @@ export default class TeaResult extends Component {
                 this.setState({ web3, accounts, contract: instance });
                 _web3 = web3;
                 _contract = instance;
-                const id = this.props.location.state.id;
-                this.getId(id)
+                if(this.props.location.state){
+                    const id = this.props.location.state.id;
+                    this.getId(id)
+                }else{
+                    this.setState({id:true,hasResult:false})
+                }
+              
             }
         } catch (error) {
             // Catch any errors for any of the above operations.
@@ -173,6 +175,10 @@ export default class TeaResult extends Component {
             _this.getWeb()
         }
         return null;
+    }
+    
+    onFinish = () => {
+        this.props.history.goBack()
     }
     onChange = async (activeKey) => {
         const id = this.state.id;
@@ -382,7 +388,7 @@ export default class TeaResult extends Component {
 
             },
         ]
-        const back = <h1>秒后完成跳转，或直接点击<Button onClick={onFinish} type="link" >这里</Button>返回</h1>;
+        const back = <h1>秒后完成跳转，或直接点击<Button onClick={this.onFinish} type="link" >这里</Button>返回</h1>;
         return (
             <div className="result">
 
@@ -457,7 +463,7 @@ export default class TeaResult extends Component {
                             </div>
                         ) : <div>
                                 <Empty description="暂无数据" />
-                                <Countdown title="溯源码可能是错误的" prefix="系统将在" suffix={back} format="s" value={deadline} onFinish={onFinish} />
+                                <Countdown title="溯源码可能是错误的" prefix="系统将在" suffix={back} format="s" value={deadline} onFinish={this.onFinish} />
                             </div>) : (
                                 <div>
                                     <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
