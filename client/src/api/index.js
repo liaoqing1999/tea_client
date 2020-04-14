@@ -62,3 +62,18 @@ export const reqOrg = (id) =>ajax2('/org/getOrg',{id},'GET')
 //更新用户
 export const reqUpdateStaff = (staff) =>ajax2('/staff/update',staff,'POST')
 
+//角色分页
+export const reqRolePage = (page,rows) =>ajax2('/role/getPage',{page,rows},'GET')
+
+//删除角色
+export const reqDeleteRole = (id) =>ajax2('/role/delete',{id},'GET')
+
+//增加角色
+export const reqAddRole = (role) =>ajax2('/role/add',role,'POST')
+
+//增加角色
+export const reqFindRoleByName = (name) =>ajax2('/role/findByName',{name},'GET')
+
+//更新角色
+export const reqUpdateRole = (role) =>ajax2('/role/update',role,'POST')
+

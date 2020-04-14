@@ -1,5 +1,5 @@
 import React from "react";
-import { UserOutlined,DesktopOutlined, TeamOutlined,CloudOutlined,ToolOutlined, SolutionOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, TransactionOutlined, BankOutlined } from '@ant-design/icons';
+import {TrademarkOutlined, UserOutlined,DesktopOutlined, TeamOutlined,CloudOutlined,ToolOutlined, SolutionOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, TransactionOutlined, BankOutlined } from '@ant-design/icons';
 
 const menuList = [
     {
@@ -55,9 +55,14 @@ const menuList = [
         icon: <DesktopOutlined />
     },
     {
-        title: '员工管理',
+        title: '用户管理',
         key: '/admin/staff',
         icon: <TeamOutlined />
+    },
+    {
+        title: '角色管理',
+        key: '/admin/role',
+        icon: <TrademarkOutlined />
     }
 
 ]
