@@ -16,6 +16,7 @@ import Check from "./check";
 import Sale from "./sale";
 import Org from "./org";
 import Staff from "./staff";
+import Role from "./role";
 const { Content, Footer, Sider } = Layout;
 export default class Admin extends Component {
   state = {
@@ -46,7 +47,7 @@ export default class Admin extends Component {
             
             <Content >
             <div className="site-layout-background" style={{ padding: 30 }}>
-              <div style={{backgroundColor:"white",padding: 24, minHeight: 450}}>
+              <div style={{backgroundColor:"white",padding: 24, minHeight: 480}}>
               <Switch>
                 <Route path='/admin/info/user' component={User}></Route>
                 <Route path='/admin/info/msg' component={Msg}></Route>
@@ -58,6 +59,7 @@ export default class Admin extends Component {
                 <Route path='/admin/sale' component={Sale}></Route>
                 <Route path='/admin/org' component={Org}></Route>
                 <Route path='/admin/staff' component={Staff}></Route>
+                <Route path='/admin/role' component={Role}></Route>
                 <Redirect to = '/admin/info/user' /> 
               </Switch>
               </div>

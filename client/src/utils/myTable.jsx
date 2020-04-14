@@ -47,12 +47,7 @@ export default class MyTable extends Component{
         const data = [];
         if(datas){
             datas.data.contents.forEach( item =>  {
-                // const typeName = await reqTypeName(item.typeId)
-                // if(typeName){
-                // item.typeName = typeName.data
                 data.push(item)
-                // this.setState({ typeName: typeName.data });
-                //}
             })
             this.paginationProps.total = datas.data.total
             this.setState({ tableData: data ,totals: datas.data.total});
@@ -223,7 +218,8 @@ export default class MyTable extends Component{
          rowKey={record =>record.id} 
          rowSelection={rowSelection} 
          size="middle"
-         columns={c} dataSource={this.state.tableData} 
+         columns={c} 
+         dataSource={this.state.tableData} 
          title={() =>
           <div>
             <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading} style={{marginRight:"10px"}}>
