@@ -1,27 +1,28 @@
-import React,{Component} from 'react'
+import React, { Component } from 'react'
 import './index.less'
 import logo from '../../../assets/GREEN_TEA.svg'
-import {Link , withRouter} from 'react-router-dom'
-import { Menu} from 'antd';
+import { Link, withRouter } from 'react-router-dom'
+import { Menu } from 'antd';
 import { menuList } from '../../../config/menuConfig';
+import memoryUtils from '../../../utils/memoryUtils';
 
 const { SubMenu } = Menu;
- class LeftNav extends Component{
+class LeftNav extends Component {
     /*根据menuList的数据数组生成对应的标签数组 
     使用map()+递归调用
     */
-    getMenuNodes =(menuList) => {
-        return menuList.map(item =>{
-            if(!item.children){
+    getMenuNodes = (menuList) => {
+        return menuList.map(item => {
+            if (!item.children) {
                 return (
-                    <Menu.Item key = {item.key}>
+                    <Menu.Item key={item.key}>
                         <Link to={item.key}>
                             {item.icon}
                             <span>{item.title}</span>
                         </Link>
                     </Menu.Item>
                 )
-            }else{
+            } else {
                 return (
                     <SubMenu key={item.key} title={
                         <span>
@@ -35,28 +36,38 @@ const { SubMenu } = Menu;
             }
         })
     }
-
+    hashAuth = (item) => {
+        const {key,isPublic} = item
+        const role = memoryUtils.role
+        if(role.name==='superAdmin'||isPublic  || role.menu.indexOf(key)!==-1){
+            return true
+        }else if(item.children){
+            return !!item.children.find(child => role.menu.indexOf(child.key)!==-1 )
+        }
+        return false
+    }
     /*使用reduce()+递归调用 */
-    getMenuNodes_r = (menuList) =>{
-         //得到当前路由路径
-         const path = this.props.location.pathname
-        return menuList.reduce((pre,item)=>{
-            if(!item.children){
-                pre.push((
-                        <Menu.Item key = {item.key}>
-                        <Link to={item.key}>
-                            {item.icon}
-                            <span>{item.title}</span>
-                        </Link>
+    getMenuNodes_r = (menuList) => {
+        //得到当前路由路径
+        const path = this.props.location.pathname
+        return menuList.reduce((pre, item) => {
+            if (this.hashAuth(item)) {
+                if (!item.children) {
+                    pre.push((
+                        <Menu.Item key={item.key}>
+                            <Link to={item.key}>
+                                {item.icon}
+                                <span>{item.title}</span>
+                            </Link>
                         </Menu.Item>
                     ))
-            }else{
-                const citem=item.children.find(citem => citem.key===path)
-                if(citem){
-                    this.openKey = item.key;
-                }
-                
-                pre.push((
+                } else {
+                    const citem = item.children.find(citem => citem.key === path)
+                    if (citem) {
+                        this.openKey = item.key;
+                    }
+
+                    pre.push((
                         <SubMenu key={item.key} title={
                             <span>
                                 {item.icon}
@@ -66,28 +77,29 @@ const { SubMenu } = Menu;
                             {this.getMenuNodes_r(item.children)}
                         </SubMenu>
                     ))
+                } 
             }
             return pre
-        },[])
+        }, [])
     }
     //第一次render()之前执行一次
     //为第一个render()准备数据（必须同步）
-    componentWillMount(){
-        this.menuNodes =  this.getMenuNodes_r(menuList);
+    componentWillMount() {
+        this.menuNodes = this.getMenuNodes_r(menuList);
     }
-    render(){
-        const {collapsed} = this.props;
-        let title =''
-        if(!collapsed){
-            title ="喝好茶后台管理"
+    render() {
+        const { collapsed } = this.props;
+        let title = ''
+        if (!collapsed) {
+            title = "喝好茶后台管理"
         }
         //得到当前路由路径
         const path = this.props.location.pathname
-       
-        return(
+
+        return (
             <div className="left-nav">
                 <Link to="/admin" className='left-nav-header'>
-                    <img src ={logo} alt ='log'></img>
+                    <img src={logo} alt='log'></img>
                     <h1>{title}</h1>
                 </Link>
                 <Menu
@@ -95,9 +107,9 @@ const { SubMenu } = Menu;
                     defaultOpenKeys={[this.openKey]}
                     mode="inline"
                     theme="dark"
-                    >
+                >
                     {
-                       this.menuNodes
+                        this.menuNodes
                     }
                 </Menu>
             </div>

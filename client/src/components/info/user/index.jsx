@@ -75,6 +75,7 @@ export default class User extends Component {
                         'card': user.card,
                         'work': user.work,
                         'org': user.org,
+                        'role':memoryUtils.role.name,
                         'email': "1609614437@qq.com"
                     }}>
                     <Row>
@@ -88,18 +89,20 @@ export default class User extends Component {
                             <Form.Item name='realName' label="真实姓名">
                                 <Input />
                             </Form.Item>
-                            <Form.Item name='phone' label="手机号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号' }]} hasFeedback>
+                            <Form.Item name='phone' label="手机号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号'}]} hasFeedback>
                                 <Input />
                             </Form.Item>
                             <Form.Item name='card' label="身份证号">
                                 <Input />
                             </Form.Item>
-                            <Form.Item name='work' label="身份">
+                            <Form.Item name='work' label="工作">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name='role' label="角色">
                                 <Input disabled />
                             </Form.Item>
                             <Form.Item name='org' label="所属机构">
                                 <Input disabled />
-
                             </Form.Item>
 
                             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

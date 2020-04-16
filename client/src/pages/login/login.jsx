@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './login.less';
 import logo from '../../assets/GREEN_TEA.svg'
 import { Form, Checkbox, Input, Button, message } from 'antd';
-import { reqLogin } from '../../api/index'
+import { reqLogin, reqFindRole } from '../../api/index'
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -12,13 +12,22 @@ export class Login extends Component {
     handleSubmit = async (values) => {
         //阻止事件的默认行为
         //event.preventDefault()
-        const { account, password } = values;
-        const res = await reqLogin(account, password)
+        const { name, password,remember } = values;
+        const res = await reqLogin(name, password)
         if (res.data.data.id) {
             const user = res.data.data
             message.success("登陆成功")
             memoryUtils.user = user //保存在内存中
             storageUtils.savaUser(user)
+            const r = await reqFindRole(user.role)
+            const role = r.data.data
+            memoryUtils.role = role
+            storageUtils.savaRole(role)
+            let rem ={}
+            rem.name = user.name
+            rem.remember = remember
+            rem.password = remember?user.password:''
+            storageUtils.savaRemeber(rem)
             history.goBack();
         } else {
             message.error(res.data.data)
@@ -28,12 +37,10 @@ export class Login extends Component {
     render() {
         //如果用户已经登录，自动跳转到首页
         const user = memoryUtils.user
-        console.log(user)
         if (user && user.id) {
             history.goBack();
         }
-        //const form = this.props.form;
-        //const { getFieldDecorator } = form;
+        const rem =storageUtils.getRemeber()
         return (
             <div className="login">
                 <header className="login-header">
@@ -45,12 +52,11 @@ export class Login extends Component {
                     <div>
                         <Form
                             name="normal_login"
-                            className="login-form"
-                            initialValues={{ remember: true }}
+                            initialValues={{ remember: rem.remember ,name:rem.name,password:rem.password}}
                             onFinish={this.handleSubmit}
                         >
                             <Form.Item
-                                name="account"
+                                name="name"
                                 rules={[{ required: true, message: '请输入你的账户!' }]}
                             >
                                 <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Account" />
@@ -69,16 +75,14 @@ export class Login extends Component {
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>记住密码</Checkbox>
                                 </Form.Item>
-                                <a className="login-form-forgot" href="#">
-                                    忘记密码
-                            </a>
+                                <Button type="link" onClick={() => {}}>忘记密码</Button>
                             </Form.Item>
 
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">
                                     登录
                             </Button>
-                            Or <a href="#">立即注册!</a>
+                            Or <Button type="link" onClick={() => {}}>立即注册!</Button>
                             </Form.Item>
                         </Form>
                     </div>

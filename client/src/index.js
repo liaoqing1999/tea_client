@@ -5,10 +5,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import memoryUtils from  './utils/memoryUtils'
 import storageUtils from './utils/storageUtils'
+
 //读取local中的user
 const user = storageUtils.getUser()
+const role = storageUtils.getRole()
 memoryUtils.user = user
-
+memoryUtils.role = role
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

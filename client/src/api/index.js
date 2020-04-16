@@ -24,23 +24,6 @@ export const reqWeather = (city) => {
     })
     
 }
-//reqWeather('beijing')
-
-//获取书籍类型的信息
-export const reqBookTypeAll = () => ajax2('/bookType/all',{},'GET')
-
-//获取书籍信息
-export const reqBooks = (page,rows,sidx,sord,cond) => ajax2('/book',{page,rows,sidx,sord,cond},'GET')
-
-//获取电子书籍信息
-export const reqEBooks = (page,rows,sidx,sord,cond) => ajax2('/ebook',{page,rows,sidx,sord,cond},'GET')
-
-//根据类别id获取类别信息
-export const reqTypeName = (typeId) => ajax2('/bookType/typeName',{typeId},'GET')
-
-//文件上传 图片
-export const reqImageUpload = (formData) =>ajax2('/file',{formData},'POST')
-
 //获取所有茶叶信息
 export const reqTea = () =>ajax2('/tea/getAll',{},'GET')
 
@@ -71,8 +54,11 @@ export const reqDeleteRole = (id) =>ajax2('/role/delete',{id},'GET')
 //增加角色
 export const reqAddRole = (role) =>ajax2('/role/add',role,'POST')
 
-//增加角色
+//通过名字查询角色
 export const reqFindRoleByName = (name) =>ajax2('/role/findByName',{name},'GET')
+
+//通过id查询角色
+export const reqFindRole = (id) =>ajax2('/role/find',{id},'GET')
 
 //更新角色
 export const reqUpdateRole = (role) =>ajax2('/role/update',role,'POST')

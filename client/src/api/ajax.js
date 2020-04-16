@@ -35,9 +35,13 @@ export  function ajax2(url,data={},type='GET'){
          promise.then(response =>{
              resolve(response)
          }).catch(error =>{
+             console.log()
+             if(window.location.href.indexOf('admin')!==-1){
+                window.location.href='/admin/500'
+             }else{
+                window.location.href='/500'
+             }
              message.error('请求出错了:'+error.message)
          })
     })  
-    
-
 }

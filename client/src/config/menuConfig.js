@@ -1,26 +1,30 @@
 import React from "react";
-import {TrademarkOutlined, UserOutlined,DesktopOutlined, TeamOutlined,CloudOutlined,ToolOutlined, SolutionOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, TransactionOutlined, BankOutlined } from '@ant-design/icons';
+import { TrademarkOutlined, UserOutlined, DesktopOutlined, TeamOutlined, CloudOutlined, ToolOutlined, SolutionOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, TransactionOutlined, BankOutlined } from '@ant-design/icons';
 
 const menuList = [
     {
         title: '个人中心',
         key: '/admin/info',
         icon: <UserOutlined />,
+        isPublic: true,
         children: [
             {
                 title: '基础信息',
                 key: '/admin/info/user',
                 icon: <SolutionOutlined />,
+                isPublic: true,
             },
             {
                 title: '消息中心',
                 key: '/admin/info/msg',
                 icon: <MessageOutlined />,
+                isPublic: true,
             },
             {
                 title: '修改密码',
                 key: '/admin/info/password',
                 icon: <EyeInvisibleOutlined />,
+                isPublic: true,
             }
         ]
     },
@@ -66,7 +70,20 @@ const menuList = [
     }
 
 ]
-
+const routeList = [
+    '/admin/info',
+    '/admin/info/user',
+    '/admin/info/msg',
+    '/admin/info/password',
+    '/admin/plant',
+    '/admin/process',
+    '/admin/storage',
+    '/admin/check',
+    '/admin/sale',
+    '/admin/org',
+    '/admin/staff',
+    '/admin/role'
+]
 const topMenu = [
     {
         title: '首页',
@@ -98,4 +115,4 @@ const topMenu = [
     }
 ]
 
-export { menuList, topMenu };
+export { menuList, topMenu,routeList };

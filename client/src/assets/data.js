@@ -1,5 +1,5 @@
 import React from "react";
-import {Typography,Timeline} from 'antd';
+import {Typography,Timeline,Button} from 'antd';
 const { Title, Paragraph, Text } = Typography;
 const trace ={
     about:{
@@ -31,13 +31,13 @@ const trace ={
                 <Paragraph>
                 <ul>
                     <li>
-                    <a href="#">使用手册</a>
+                    <Button type="link" onClick={() => {}}>使用手册</Button>
                     </li>
                     <li>
-                    <a href="#">帮助说明</a>
+                    <Button type="link" onClick={() => {}}>帮助说明</Button>
                     </li>
                     <li>
-                    <a href="#">其他资源文件</a>
+                    <Button type="link" onClick={() => {}}>其他资源文件</Button>
                     </li>
                 </ul>
                 </Paragraph>

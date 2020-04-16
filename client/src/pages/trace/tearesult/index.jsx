@@ -23,8 +23,6 @@ var _contract = null;
 var _id = false;
 const { Countdown } = Statistic;
 var deadline = Date.now() + 1000 * 5; // Moment is also OK
-
-
 export default class TeaResult extends Component {
     constructor() {
         super();

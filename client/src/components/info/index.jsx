@@ -9,10 +9,15 @@ class Info extends Component {
         Modal.confirm({
             title: '确认退出登录吗?',
             content: '这可能会导致某些数据未保存',
+            cancelText:'取消',
+            okText:'确认',
+            bodyStyle:{ backgroundColor: "white" },
             onOk: () => {
                 storageUtils.removeUser();
                 memoryUtils.user = {};
-                this.props.history.replace('/login')
+                storageUtils.removeRole();
+                memoryUtils.role = {};
+                this.props.history.push('/login')
             },
             onCancel() {
 
@@ -20,14 +25,20 @@ class Info extends Component {
         })
     }
     login = () => {
-        this.props.history.replace('/login')
+        this.props.history.push('/login')
     }
     render() {
         const user = memoryUtils.user
+        let uri=""
+        if(this.props.location.pathname.indexOf('admin')!==-1){
+            uri = '/admin'
+        }else{
+            uri = '/main'
+        }
         const menu = (
             <Menu >
-                <Menu.Item key="1"> <Link to="/"><UserOutlined style={{marginRight:"10px"}} />个人中心</Link></Menu.Item>
-                <Menu.Item key="2"> <Link to="/"><MessageOutlined style={{marginRight:"10px"}}/>消息提醒</Link></Menu.Item>
+                <Menu.Item key="1"> <Link to={uri+"/info/user"}><UserOutlined style={{marginRight:"10px"}} />个人中心</Link></Menu.Item>
+                <Menu.Item key="2"> <Link to={uri+"/info/msg"}><MessageOutlined style={{marginRight:"10px"}}/>消息提醒</Link></Menu.Item>
                 <Menu.Item key="3" onClick ={this.logout}><LogoutOutlined style={{marginRight:"10px"}} />退出登录</Menu.Item>
             </Menu>
         );

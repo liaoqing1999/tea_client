@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { Input, Button, message} from 'antd';
+import { Input, message} from 'antd';
 import Tea from "../../../contracts/Tea.json";
 import getWeb3 from "../../../getWeb3";
 import { reqTea } from '../../../api';
@@ -89,7 +89,6 @@ const { Search } = Input;
             onSearch={this.onSearch}
             style={{ width: 300 }}
             />
-            <Button onClick={this.onClick}>设置</Button>
             </div>
         )
     }

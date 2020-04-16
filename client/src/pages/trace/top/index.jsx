@@ -55,8 +55,8 @@ class Top extends Component {
                     <Col span={10} offset={6}>
                         <Row gutter={16} justify="end" style={{marginRight:"20px"}}>
                             <Col span={8}> <span>{currenTime}</span></Col>
-                            <Col span={2}> <img style={{ height: "30px" }} src={dayPictureUrl} alt='天气'></img></Col>
-                            {weather ? (<Col span={4}> <span>{weather}</span></Col>) : ("")}
+                          
+                            {weather ? (<Col > <img style={{ height: "25px" }} src={dayPictureUrl} alt='天气'></img> <span>{weather}</span></Col>) : ("")}
                             <Info></Info>
                         </Row>
                     </Col>

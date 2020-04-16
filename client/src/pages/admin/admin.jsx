@@ -5,7 +5,7 @@ import { Layout} from 'antd';
 import './index.less';
 import LeftNav from "./left-nav";
 import Top from "./top";
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch,withRouter } from 'react-router-dom'
 import User from '../../components/info/user'
 import Msg from "../../components/info/msg";
 import UserPassword from "../../components/info/password";
@@ -17,12 +17,28 @@ import Sale from "./sale";
 import Org from "./org";
 import Staff from "./staff";
 import Role from "./role";
+import Result404 from '../../components/result/404'
+import Result403 from '../../components/result/403'
+import Result500 from '../../components/result/500'
+import { routeList } from "../../config/menuConfig";
 const { Content, Footer, Sider } = Layout;
-export default class Admin extends Component {
+class Admin extends Component {
   state = {
     collapsed: false,
   };
-
+  componentWillReceiveProps(nextprops){
+    this.role(nextprops)
+  }
+  role(props){
+    const pathname = props.location.pathname
+    const role = memoryUtils.role
+    if(routeList.indexOf(pathname)!==-1&&role.menu.indexOf(pathname)===-1&&pathname!=='/admin/403'){
+      this.props.history.replace('/admin/403')
+    }
+  }
+  componentWillMount(){
+    this.role(this.props)
+  }
   onCollapse = collapsed => {
 
     this.setState({ collapsed });
@@ -30,7 +46,10 @@ export default class Admin extends Component {
 
   render() {
     const u = memoryUtils.user
-
+    const role = memoryUtils.role
+    if(role.name==="user"){
+      return <Redirect to='/403' />
+    }
     if (!u || !u.id) {
       //自动跳转到登录
       return <Redirect to='/login' />
@@ -60,7 +79,10 @@ export default class Admin extends Component {
                 <Route path='/admin/org' component={Org}></Route>
                 <Route path='/admin/staff' component={Staff}></Route>
                 <Route path='/admin/role' component={Role}></Route>
-                <Redirect to = '/admin/info/user' /> 
+                <Route path='/admin/404' component={Result404}></Route>
+                <Route path='/admin/403' component={Result403}></Route>
+                <Route path='/admin/500' component={Result500}></Route>
+                <Redirect to = '/admin/404' /> 
               </Switch>
               </div>
            
@@ -74,3 +96,5 @@ export default class Admin extends Component {
     )
   }
 }
+
+export default withRouter(Admin)
