@@ -16,6 +16,7 @@ import Union from "../union";
 import Forum from "../forum";
 import TeaResult from "../tearesult";
 import UserInfo from "../info";
+import OrgDetail from "../brand/detail";
 const {  Content, Footer } = Layout;
 
 export default class Main extends Component{
@@ -38,9 +39,10 @@ export default class Main extends Component{
            
                <Top></Top>
               <Content style={{padding:"1.5% 5%",backgroundImage: `url(${banner1})`,backgroundSize:'100% 100%'}}>
-              <div  style={{ padding: 24, minHeight: 450 }}>
+              <div  style={{display:"flex",justifyContent: "center" ,padding: 24, minHeight: 450 }}>
                 <Switch>
-                    <Route path='/main/brand' component={Brand}></Route>
+                    <Route path='/main/brand' exact component={Brand}></Route>
+                    <Route path='/main/brand/detail' component={OrgDetail}></Route>
                     <Route path='/main/news' component={News}></Route>
                     <Route path='/main/shop' component={Shop}></Route>
                     <Route path='/main/join' component={Join}></Route>
