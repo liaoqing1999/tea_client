@@ -31,14 +31,12 @@ const validateMessages = {
     },
 };
 const normFile = e => {
-    console.log('Upload event:', e);
     if (Array.isArray(e)) {
         return e;
     }
     return e && e.fileList;
 };
 const normPlace = e => {
-    console.log('Place:', e);
     if (Array.isArray(e)) {
         return e.join("-");
     }
