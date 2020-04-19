@@ -21,9 +21,6 @@ export default class EditRole extends Component {
         const { menu } = nextProps.role
         this.setState({ checkedKeys: menu })
     }
-    onSelect = (selectedKeys, info) => {
-        
-    };
     onCheck = (checkedKeys, info) => {
         this.setState({ checkedKeys })
     };
@@ -53,10 +50,9 @@ export default class EditRole extends Component {
                 checkable
                 checkedKeys={checkedKeys}
                 defaultExpandAll={true}
-                onSelect={this.onSelect}
                 onCheck={this.onCheck}
                 treeData={treeData}
-                disabled={role.name==='superAdmin'}
+                
             />
             <Row gutter={30} style={{marginTop:"20px"}}>
                 <Col offset={1}>

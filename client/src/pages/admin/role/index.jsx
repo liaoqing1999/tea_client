@@ -120,10 +120,15 @@ export default class Role extends Component {
             message.error("增加失败")
         }
     }
-    handleDelete = async (id) => {
-        console.log(id)
-        await reqDeleteRole(id)
-        this.getDate(this.state.current, this.state.pageSize)
+    handleDelete = async (record) => {
+        console.log(record)
+        if(record.name ==='superAdmin'){
+            message.error("不能删除超级管理员")
+        }else{
+            await reqDeleteRole(record.id)
+            this.getDate(this.state.current, this.state.pageSize)
+        }
+      
     }
     initColumn = () => {
         const columns = [
@@ -154,7 +159,7 @@ export default class Role extends Component {
                 dataIndex: 'operation',
                 render: (text, record) =>
                     this.state.roles.length >= 1 ? (
-                        <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record.id)}>
+                        <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record)}>
                             <Button type="danger">删除</Button>
                         </Popconfirm>
                     ) : null,
