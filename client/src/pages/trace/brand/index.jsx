@@ -1,127 +1,126 @@
 import React, { Component } from 'react'
-import { Button, Input, Upload, Modal } from 'antd'
-import { addText, catText, addImg } from '../../../api/ipfs'
-import { PlusOutlined } from '@ant-design/icons';
-import Place from '../../../components/place';
-const { Search } = Input;
-
-function getBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        console.log(reader)
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
+import SearchTea from '../searchtea';
+import {Pagination, Radio, Card, Col, Spin, Row } from 'antd';
+import { reqOrgPage } from '../../../api';
+import xzdq from '../image/xzdq_01.jpg'
+import province from '../../../components/place/province';
+const { Meta } = Card;
 export default class Brand extends Component {
     state = {
-        fileList: []
+        orgs: null,
+        total: 0,
+        current: 1,
+        pageSize: 16,
+        place:''
     }
-    onClick = async () => {
-        const res = await addText("aaaaaaa")
-        console.log(res)
+    componentDidMount() {
+        this.getDate(this.state.current, this.state.pageSize)
     }
-    onClick2 = (value, event) => {
-        const res = catText(value)
-        console.log(res)
-    }
-    handleCancel = () => this.setState({ previewVisible: false });
-
-    handlePreview = async file => {
-        console.log(this.state.fileList)
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
+    getDate = async (page, rows, place) => {
+        const res = await reqOrgPage(page, rows, place)
+        const result = res.data.data
+        if (result.content) {
+            this.setState({
+                orgs: result.content,
+                total: result.total,
+                current: result.page,
+                pageSize: result.rows,
+            })
         }
+    }
+    getPlace = () => {
+        return province.reduce((pre, item) => {
+            pre.push((
+                <Radio.Button style={{ width: "73px" }} key={item.id} value={item.name}>{item.name}</Radio.Button>
+            ))
+            return pre
+        }, [])
+    }
+    placeOnChange = (e) => {
+        this.getDate(1, this.state.pageSize, e.target.value)
+        this.setState({place: e.target.value})
+    }
+    currentOnChange = (page, pageSize) => {
+        this.getDate(page, pageSize, this.state.place)
+    }
 
-        this.setState({
-            previewImage: file.url || file.preview,
-            previewVisible: true,
-        });
-    };
-
-    handleChange = ({ fileList }) => this.setState({ fileList });
-    onRemove = (file) => {
-        this.setState(state => {
-          const index = state.fileList.indexOf(file);
-          const newFileList = state.fileList.slice();
-          newFileList.splice(index, 1);
-          return {
-            fileList: newFileList,
-          };
-        });
-      }
-    beforeUpload= file => {
-        this.setState({file:file})
-        this.setState(state => ({
-            fileList: [...state.fileList, file],
-        }));
-        return false;
-      }
-    handleUpload = () => {
-        
-        const { fileList } = this.state;
-        console.log(fileList)
-        let reader = new FileReader();
-        let hash
-        console.log(reader);
-        //console.log(new File(fileList[0]))
-        reader.readAsArrayBuffer(this.state.file)
-        reader.onloadend = async (e) => {
-            // 上传数据到IPFS
-            console.log(reader);
-            hash = await addImg(reader);
-            console.log(hash)
+    gerOrgCard = () => {
+        const orgs = this.state.orgs
+        if (!orgs) {
+            return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
         }
-      };
+        if (orgs.length > 0) {
+            let pre = []
+            for (let i = 0; i < 4; i++) {
+                pre.push((
+                    <Row justify="space-between" key={i}>
+                        {this.gerOrgCardCol(i)}
+                    </Row>
+                ))
+            }
+            return pre
+        } else {
+            return <h1>暂无数据</h1>
+        }
+    }
+    onClick = (org) =>{
+        this.props.history.push("/main/brand/detail",{org})
+    }
+    gerOrgCardCol = (i) => {
+        const orgs = this.state.orgs
+        const size = orgs.length > (i+1)*4 ? 4 : orgs.length - 4 * i
+        if (orgs.length > 0) {
+            if (i * 4 < orgs.length) {
+                let col = []
+                for (let j = 0; j < size; j++) {
+                    col.push((
+                        <Col key={orgs[4 * i + j].id}>
+                            <Card
+                                style={{ textAlign: 'center' }}
+                                hoverable
+                                onClick={() => this.onClick(orgs[4 * i + j])}
+                                cover={<img alt={orgs[4 * i + j].name} style={{ margin: "10px", width: "180px", height: "150px" }} src={global.ipfs.uri + orgs[4 * i + j].trademark} />}
+                            >
+                                <Meta title={orgs[4 * i + j].name} />
+                            </Card>
+                        </Col>
+                    ))
+                }
+                return col
+            }
+        }
+    }
     render() {
-        const { previewVisible, previewImage, fileList } = this.state;
-
-        const uploadButton = (
-            <div>
-                <PlusOutlined />
-                <div className="ant-upload-text">Upload</div>
-            </div>
-        );
+        const { total,current,pageSize} = this.state
         return (
-            <div className="top">
-                <Place></Place>
-                <Button onClick={this.onClick}>ipfs上传</Button>
-                <Search onSearch={this.onClick2}></Search>
-                <div>
-                    <label id="file">Choose file to upload</label>
-                    <input type="file" ref="file" id="file" name="file" multiple="multiple" />
+            <div className="about" style={{ width: "80%" }}>
+                <div className="about-top">
+                    <div className="about-top-left">
+                        <h1>入驻品牌 </h1>
+                        <span>/</span>
+                        <span>已经有{total}家茶企在使用</span>
+                    </div>
+                    <div className="about-top-right">
+                        <SearchTea></SearchTea>
+                    </div>
                 </div>
-                <div>
-                    <button onClick={() => {
-                        var file = this.refs.file.files[0];
-                        console.log(file)
-                        var reader = new FileReader();
-                        // reader.readAsDataURL(file);
-                        console.log(reader);
-                        reader.readAsArrayBuffer(file)
-                        reader.onloadend =async (e) => {
-                            console.log(reader);
-                            const hash =await addImg(reader)
-                            console.log(hash)
-                        }
-                    }}>Submit</button>
+                <div className="about-center" style={{ padding: "10px" }}>
+                    <Row>
+                        <Col span={3}>
+                            <img style={{ height: "130px", width: "130px" }} alt="" src={xzdq}></img>
+                        </Col>
+                        <Col span={21}>
+                            <Radio.Group defaultValue="" buttonStyle="solid" onChange={this.placeOnChange}>
+                                <Radio.Button style={{ width: "73px" }} value="">全部</Radio.Button>
+                                {this.getPlace()}
+                            </Radio.Group>
+                        </Col>
+                    </Row>
+                    <h1 style={{fontSize:"200%",marginTop:"10px"}}>企业品牌</h1>
+                    {this.gerOrgCard()}
+                    <Pagination style={{textAlign:"center",marginTop:"15px"}} hideOnSinglePage={true}onChange={this.currentOnChange} current={current} pageSize={pageSize} total={total} />
                 </div>
-                <Upload
-                    onRemove={this.onRemove}
-                    beforeUpload={this.beforeUpload}
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                >
-                    {fileList.length >= 8 ? null : uploadButton}
-                </Upload>
-                <Button onClick ={this.handleUpload }>点击上传</Button>
-            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-            </Modal>
-            </div >
+            </div>
         )
     }
 }

@@ -32,9 +32,14 @@ class Admin extends Component {
   role(props){
     const pathname = props.location.pathname
     const role = memoryUtils.role
-    if(routeList.indexOf(pathname)!==-1&&role.menu.indexOf(pathname)===-1&&pathname!=='/admin/403'){
-      this.props.history.replace('/admin/403')
+    if(role.name==="superAdmin"){
+
+    }else{
+      if(routeList.indexOf(pathname)!==-1&&role.menu.indexOf(pathname)===-1&&pathname!=='/admin/403'){
+        this.props.history.replace('/admin/403')
+      }
     }
+   
   }
   componentWillMount(){
     this.role(this.props)

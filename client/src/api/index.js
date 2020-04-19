@@ -42,6 +42,9 @@ export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
 //获取机构
 export const reqOrg = (id) =>ajax2('/org/getOrg',{id},'GET')
 
+//机构分页
+export const reqOrgPage = (page,rows,place) =>ajax2('/org/getPage',{page,rows,place},'GET')
+
 //更新用户
 export const reqUpdateStaff = (staff) =>ajax2('/staff/update',staff,'POST')
 
