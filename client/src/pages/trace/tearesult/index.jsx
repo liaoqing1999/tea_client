@@ -116,7 +116,6 @@ export default class TeaResult extends Component {
         }
         if (process.method.length > 0) {
             return process.method.reduce((pre, item) => {
-                
                 pre.push((
                     <Col span={8} key={i}>
                         <Card hoverable>
@@ -135,7 +134,6 @@ export default class TeaResult extends Component {
                 return pre
             }, [])
         } else {
-            console.log("111")
             return <h1>暂无数据</h1>
         }
     }
