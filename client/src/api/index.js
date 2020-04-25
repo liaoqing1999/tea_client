@@ -66,3 +66,17 @@ export const reqFindRole = (id) =>ajax2('/role/find',{id},'GET')
 //更新角色
 export const reqUpdateRole = (role) =>ajax2('/role/update',role,'POST')
 
+//资讯分页
+export const reqNewsPage = (page,rows,type) =>ajax2('/news/getPage',{page,rows,type},'GET')
+
+//增加资讯记录
+export const reqAddNewsDetail = (newsDetail) =>ajax2('/newsDetail/add',newsDetail,'POST')
+
+//获取用户资讯记录
+export const reqNewsDetailUser = (newsId,userId) =>ajax2('/newsDetail/getUser',{newsId,userId},'GET')
+
+//更新用户资讯记录
+export const reqUpdateNewsDetail = (newsDetail) =>ajax2('/newsDetail/updateUser',newsDetail,'POST')
+
+//更新资讯 用户互动
+export const reqUpdateNewsUser = (news) =>ajax2('/news/updateUser',news,'POST')

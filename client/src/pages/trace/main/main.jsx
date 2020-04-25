@@ -17,6 +17,7 @@ import Forum from "../forum";
 import TeaResult from "../tearesult";
 import UserInfo from "../info";
 import OrgDetail from "../brand/detail";
+import NewsDetail from "../news/detail";
 const {  Content, Footer } = Layout;
 
 export default class Main extends Component{
@@ -43,7 +44,8 @@ export default class Main extends Component{
                 <Switch>
                     <Route path='/main/brand' exact component={Brand}></Route>
                     <Route path='/main/brand/detail' component={OrgDetail}></Route>
-                    <Route path='/main/news' component={News}></Route>
+                    <Route path='/main/news'exact component={News}></Route>
+                    <Route path='/main/news/detail' component={NewsDetail}></Route>
                     <Route path='/main/shop' component={Shop}></Route>
                     <Route path='/main/join' component={Join}></Route>
                     <Route path='/main/clause' component={Clause}></Route>
