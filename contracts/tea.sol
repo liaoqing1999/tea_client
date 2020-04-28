@@ -6,7 +6,6 @@ contract Tea {
     mapping(string =>Process[]) processs;
     mapping(string =>Storage) storages;
     mapping(string =>Check[]) checks;
-    mapping(string =>Sale) sales;
     struct Product{
         string id;               //id
         string name;             //茶名
@@ -49,12 +48,6 @@ contract Tea {
         string result;           //检测结果
         string info;             //检测详情
         string checker;          //检测负责人
-    }
-     struct Sale{
-        string place;            //售卖地点
-        string method;           //售卖方式
-        uint date;               //售卖时间
-        string saleer;           //售卖负责人
     }
     //获取茶叶基本信息
     function  getProduct(string memory _id ) public view  returns (string memory id,string memory name,string memory typeId,
@@ -213,24 +206,5 @@ contract Tea {
            checker:checker
        });
        checks[id].push(check);
-    }
-     //获取售卖阶段基本信息
-    function  getSale(string memory _id ) public view  returns (string memory place,string memory method, uint date,string memory saleer){
-        Sale memory sale = sales[_id];
-        place = sale.place;
-        method = sale.method;
-        date = sale.date;
-        saleer = sale.saleer;
-        return(place,method,date,saleer);
-    }
-    //设置售卖阶段基本信息
-    function  setSale(string memory id,string memory place,string memory method, uint date,string memory saleer) public{
-       Sale memory sale = Sale({
-           place:place,
-           method:method,
-           date:date,
-           saleer:saleer
-       });
-       sales[id] = sale;
     }
 }

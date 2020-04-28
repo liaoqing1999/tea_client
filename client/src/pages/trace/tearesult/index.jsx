@@ -10,7 +10,6 @@ import TeaIcon from '../../../assets/GREEN_TEA.svg'
 import Process from '../../../assets/process.svg'
 import Storage from '../../../assets/storage.svg'
 import Check from '../../../assets/check.svg'
-import Sale from '../../../assets/sale.svg'
 import { reqDictionaryByCond } from '../../../api';
 import { formateDate } from '../../../utils/dateUtils';
 const creatHistory = require("history").createBrowserHistory
@@ -312,21 +311,6 @@ export default class TeaResult extends Component {
             return <h1>暂无数据</h1>
         }
     }
-    getSaleDescriptions = () => {
-        if (!this.state.sale) {
-            return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
-        }
-        if (this.state.sale.place) {
-            return <Descriptions title="售卖阶段信息" column={2}>
-                <Descriptions.Item label="售卖地点">{this.state.sale.place}</Descriptions.Item>
-                <Descriptions.Item label="售卖方式">{this.state.sale.method}</Descriptions.Item>
-                <Descriptions.Item label="售卖日期">{formateDate(Number(this.state.sale.date))}</Descriptions.Item>
-                <Descriptions.Item label="售卖负责人">{this.state.sale.saleer}</Descriptions.Item>
-            </Descriptions>
-        } else {
-            return <h1>暂无数据</h1>
-        }
-    }
     getImgCarousel = (imgList) => {
         let i = 0
         if (Array.isArray(imgList)) {
@@ -451,9 +435,6 @@ export default class TeaResult extends Component {
                                         <ConfigProvider renderEmpty={customizeRenderEmpty}>
                                             <Table rowKey={record => record.index} columns={columns} dataSource={this.state.check} />
                                         </ConfigProvider>
-                                    </Panel>
-                                    <Panel header="售卖阶段" key="sale" className="result-center-collapse-custom-panel" extra={<img alt ="sale" style={{ height: "20px" }} src={Sale}></img>}>
-                                        {this.getSaleDescriptions()}
                                     </Panel>
                                 </Collapse>
                             </div>
