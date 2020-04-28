@@ -62,9 +62,7 @@ export default class Join extends Component {
                 values.org.permit = permit
                 values.org.codePermit = codePermit
                 values.org.trademark = trademark[0]
-                console.log(trademark,values);
                 const res =await reqOrgJoin(values.org,values.staff)
-                console.log(res)
                 if(res.data.data==="success"){
                     message.success("申请成功，等待管理员审核")
                 }
