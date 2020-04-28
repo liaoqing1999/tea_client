@@ -24,23 +24,23 @@ export default class User extends Component {
         fileList: [],
         file: [],
         user: memoryUtils.user,
-        img:null,
+        img: null,
     }
-    onFinish =async values => {
+    onFinish = async values => {
         const user = this.state.user
         user.name = values.name
         user.realName = values.realName
         user.phone = values.phone
         user.card = values.card
         user.email = values.email
-        if(this.state.img) user.img = this.state.img
+        if (this.state.img) user.img = this.state.img
         const res = await reqUpdateStaff(user);
-        if(res.data.data){
+        if (res.data.data) {
             storageUtils.removeUser()
             storageUtils.savaUser(res.data.data)
             message.success("修改成功")
         }
-        
+
     };
     beforeUpload = file => {
         this.setState({ file: file })
@@ -49,8 +49,8 @@ export default class User extends Component {
         reader.readAsArrayBuffer(file)
         reader.onloadend = async (e) => {
             // 上传数据到IPFS
-           let hash = await addImg(reader);
-           this.setState({img:hash})
+            let hash = await addImg(reader);
+            this.setState({ img: hash })
         }
         return false;
     }
@@ -63,8 +63,8 @@ export default class User extends Component {
         }
     }
     render() {
-        const { fileList ,user,org} = this.state
-       
+        const { fileList, user, org } = this.state
+        const role = memoryUtils.role
         return (
             <div className="top">
                 <Form {...layout} name="nest-messages" onFinish={this.onFinish} validateMessages={validateMessages}
@@ -75,8 +75,8 @@ export default class User extends Component {
                         'card': user.card,
                         'work': user.work,
                         'org': user.org,
-                        'role':memoryUtils.role.name,
-                        'email': "1609614437@qq.com"
+                        'role': role.name,
+                        'email': user.email
                     }}>
                     <Row>
                         <Col span={8}>
@@ -89,7 +89,7 @@ export default class User extends Component {
                             <Form.Item name='realName' label="真实姓名">
                                 <Input />
                             </Form.Item>
-                            <Form.Item name='phone' label="手机号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号'}]} hasFeedback>
+                            <Form.Item name='phone' label="手机号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号' }]} hasFeedback>
                                 <Input />
                             </Form.Item>
                             <Form.Item name='card' label="身份证号">
@@ -98,26 +98,28 @@ export default class User extends Component {
                             <Form.Item name='work' label="工作">
                                 <Input />
                             </Form.Item>
-                            <Form.Item name='role' label="角色">
-                                <Input disabled />
-                            </Form.Item>
-                            <Form.Item name='org' label="所属机构">
-                                <Input disabled />
-                            </Form.Item>
-
+                            {role.name == "user" ? ("") :
+                                (<div>
+                                    <Form.Item name='role' label="角色">
+                                        <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item name='org' label="所属机构">
+                                        <Input disabled />
+                                    </Form.Item>
+                                </div>)}
                             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                                 <Button type="primary" htmlType="submit">
                                     提交修改
                                 </Button>
                             </Form.Item>
                         </Col>
-                        <Col style={{ textAlign: "center" }} offset={2}  span={3}>
+                        <Col style={{ textAlign: "center" }} offset={2} span={3}>
                             <Row justify="center">
                                 {
                                     this.state.img ?
-                                        (<Avatar size={80} src={global.ipfs.uri + this.state.img} />):
-                                            ( user.img?(<Avatar size={80} src={global.ipfs.uri + user.img} />) : (<Avatar size={80} icon={<UserOutlined />} />))
-                                       
+                                        (<Avatar size={80} src={global.ipfs.uri + this.state.img} />) :
+                                        (user.img ? (<Avatar size={80} src={global.ipfs.uri + user.img} />) : (<Avatar size={80} icon={<UserOutlined />} />))
+
                                 }
                             </Row>
                             <Upload
@@ -127,14 +129,14 @@ export default class User extends Component {
                             >
                                 <Button style={{ marginTop: "15px" }}>更改头像</Button>
                             </Upload>
-                            {user.org?( <Row justify="center">
+                            {user.org ? (<Row justify="center">
                                 <Button style={{ marginTop: "15px" }} type="link" onClick={this.onClick}>查看机构详情</Button>
-                            </Row>):(<div></div>)}
-                           
+                            </Row>) : (<div></div>)}
+
                         </Col>
-                        <Col  span={10} offset={1}>
+                        <Col span={10} offset={1}>
                             {org ? (<Descriptions title="机构信息" column={1}>
-                            <Descriptions.Item label="机构id">{org.id}</Descriptions.Item>
+                                <Descriptions.Item label="机构id">{org.id}</Descriptions.Item>
                                 <Descriptions.Item label="机构名">{org.name}</Descriptions.Item>
                                 <Descriptions.Item label="商标">
                                     <img alt="商标" style={{ height: "60px" }} src={global.ipfs.uri + org.trademark}></img>
@@ -146,7 +148,7 @@ export default class User extends Component {
                                 </Descriptions.Item>
                             </Descriptions>) : (<div></div>)}
                         </Col>
-                    </Row>                
+                    </Row>
                 </Form>
             </div>
         )
