@@ -27,6 +27,12 @@ export const reqWeather = (city) => {
 //获取所有茶叶信息
 export const reqTea = () =>ajax2('/tea/getAll',{},'GET')
 
+//获取茶叶种植阶段信息
+export const reqGetPlant = (page,rows,userId,finish) =>ajax2('/tea/getPlant',{page,rows,userId,finish},'GET')
+
+//获取茶叶种植阶段信息
+export const reqUpdatePlant = (tea) =>ajax2('/tea/updatePlant',tea,'POST')
+
 //获取验证码
 export const reqVerify = () =>ajax2('/verify/getVerify',{},'GET')
 
@@ -35,6 +41,9 @@ export const reqCheckVerify = (verify) =>ajax2('/verify/checkVerify',{verify},'G
 
 //获取字典对应值
 export const reqDictionaryByCond = (typeCode,valueId) =>ajax2('/dictionary/getByCond',{typeCode,valueId},'GET')
+
+//获取字典类型list
+export const reqDictType = (typeCodes) =>ajax2('/dictionary/getByType',{typeCodes},'GET')
 
 //机构入住
 export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
