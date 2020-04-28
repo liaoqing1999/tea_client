@@ -12,7 +12,7 @@ export class Login extends Component {
     handleSubmit = async (values) => {
         //阻止事件的默认行为
         //event.preventDefault()
-        const { name, password,remember } = values;
+        const { name, password, remember } = values;
         const res = await reqLogin(name, password)
         if (res.data.data.id) {
             const user = res.data.data
@@ -23,10 +23,10 @@ export class Login extends Component {
             const role = r.data.data
             memoryUtils.role = role
             storageUtils.savaRole(role)
-            let rem ={}
+            let rem = {}
             rem.name = user.name
             rem.remember = remember
-            rem.password = remember?user.password:''
+            rem.password = remember ? user.password : ''
             storageUtils.savaRemeber(rem)
             history.goBack();
         } else {
@@ -40,7 +40,7 @@ export class Login extends Component {
         if (user && user.id) {
             history.goBack();
         }
-        const rem =storageUtils.getRemeber()
+        const rem = storageUtils.getRemeber()
         return (
             <div className="login">
                 <header className="login-header">
@@ -52,7 +52,7 @@ export class Login extends Component {
                     <div>
                         <Form
                             name="normal_login"
-                            initialValues={{ remember: rem.remember ,name:rem.name,password:rem.password}}
+                            initialValues={{ remember: rem.remember, name: rem.name, password: rem.password }}
                             onFinish={this.handleSubmit}
                         >
                             <Form.Item
@@ -75,16 +75,16 @@ export class Login extends Component {
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>记住密码</Checkbox>
                                 </Form.Item>
-                                <Button type="link" onClick={() => {}}>忘记密码</Button>
+                                <Button type="link" size="small" onClick={() => { }}>忘记密码</Button>
                             </Form.Item>
 
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-form-button">
                                     登录
                             </Button>
-                            Or <Button type="link" onClick={() => {}}>立即注册!</Button>
-                            </Form.Item>
-                        </Form>
+                              <Button type="link" size="small" onClick={() => { }}>立即注册!</Button>
+                            </Form.Item>                          
+                        </Form>                       
                     </div>
                 </section>
             </div>
