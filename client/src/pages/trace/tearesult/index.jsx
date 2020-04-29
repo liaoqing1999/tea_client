@@ -180,21 +180,26 @@ export default class TeaResult extends Component {
         if (activeKey.indexOf("plant") !== -1) {
             if (!this.state.plant) {
                 const plant = await this.state.contract.methods.getPlant(id).call();
-                const place = await reqDictionaryByCond("place_origin", plant.place);
-                const placeP = await reqDictionaryByCond("place", plant.place);
-                if (place.data.data.length > 0) {
-                    plant.place = place.data.data[0].valueName;
-                }
-                if (placeP.data.data.length > 0) {
-                    plant.place = placeP.data.data[0].valueName + "-" + plant.place
+                if(plant.place){
+                    const place = await reqDictionaryByCond("place_origin", plant.place);
+                    const placeP = await reqDictionaryByCond("place", plant.place);
+                    if (place.data.data.length > 0) {
+                        plant.place = place.data.data[0].valueName;
+                    }
+                    if (placeP.data.data.length > 0) {
+                        plant.place = placeP.data.data[0].valueName + "-" + plant.place
+                    }
+                   
                 }
                 const pesticide = await this.state.contract.methods.getPesticide(id).call();
-                for (let i = 0; i < pesticide.name.length; i++) {
-                    let name = await reqDictionaryByCond("pesticide", pesticide.name[i]);
-                    if (name.data.data.length > 0) {
-                        pesticide.name[i] = name.data.data[0].valueName
+                if(Array.isArray(pesticide)&&pesticide.length>0){
+                    for (let i = 0; i < pesticide.name.length; i++) {
+                        let name = await reqDictionaryByCond("pesticide", pesticide.name[i]);
+                        if (name.data.data.length > 0) {
+                            pesticide.name[i] = name.data.data[0].valueName
+                        }
+    
                     }
-
                 }
                 this.setState({ plant: plant, pesticide: pesticide })
             }
@@ -214,13 +219,15 @@ export default class TeaResult extends Component {
         if (activeKey.indexOf("storage") !== -1) {
             if (!this.state.storage) {
                 const storage = await this.state.contract.methods.getStorage(id).call();
-                const splace = await reqDictionaryByCond("warehouse", storage.place);
-                const splaceP = await reqDictionaryByCond("place", storage.place);
-                if (splace.data.data.length > 0) {
-                    storage.place = splace.data.data[0].valueName;
-                }
-                if (splaceP.data.data.length > 0) {
-                    storage.place = splaceP.data.data[0].valueName + "-" + storage.place
+                if(storage.place){
+                    const splace = await reqDictionaryByCond("warehouse", storage.place);
+                    const splaceP = await reqDictionaryByCond("place", storage.place);
+                    if (splace.data.data.length > 0) {
+                        storage.place = splace.data.data[0].valueName;
+                    }
+                    if (splaceP.data.data.length > 0) {
+                        storage.place = splaceP.data.data[0].valueName + "-" + storage.place
+                    }
                 }
                 this.setState({ storage: storage })
             }

@@ -65,6 +65,7 @@ const { Search } = Input;
       const sale = tea.sale;
       console.log(tea);
       console.log(new Date(pesticide[0].date).valueOf())
+      await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
       await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.grade,tea.period,tea.store,tea.img,tea.qr).send({ from: this.state.accounts[0] });
       await this.state.contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img).send({ from: this.state.accounts[0] });
       for(let i = 0;i<pesticide.length;i++){

@@ -3,13 +3,16 @@ import memoryUtils from '../../../utils/memoryUtils'
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import {
     List, Alert, Collapse, Popconfirm, Button, Modal, Carousel, Descriptions,
-    Tabs, Table, Badge, Menu, Dropdown, Row, message, Upload
+    Tabs, Table, Badge, Menu, Dropdown, Row, message, Upload, Pagination
 } from 'antd'
 import { CaretRightOutlined } from '@ant-design/icons';
-import { reqGetPlant, reqDictType, reqUpdatePlant } from '../../../api';
+import { reqGetPlant, reqDictType, reqUpdatePlant, reqOrg } from '../../../api';
 import { formateDate } from '../../../utils/dateUtils';
 import EditPesticide from './editPesticide';
 import { addImg } from '../../../api/ipfs';
+import getWeb3 from '../../../getWeb3';
+import Tea from "../../../contracts/Tea.json";
+import AddTea from './addTea';
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 const menu = (
@@ -95,8 +98,9 @@ for (let i = 0; i < 3; ++i) {
 }
 export default class Plant extends Component {
     state = {
-        fPlant: null,
-        ufPlant: null,
+        fPlant: {},
+        ufPlant: {},
+        org: {},
         dict: {},
         img: [],
         visible: false,
@@ -104,15 +108,69 @@ export default class Plant extends Component {
         tea: null,
         editImg: false,
         imgFileList: [],
-        imgFile: []
+        imgFile: [],
+        web3: null, 
+        accounts: null, 
+        contract: null,
+        addTeaVisible:false,
     }
-    onChange = (key) => {
-
+    ufPlantCurrentChange = page => {
+        const user = memoryUtils.user
+        this.getPlant(page, 3, user.id, false)
     }
     getPlant = async (page, rows, userId, finish) => {
         const res = await reqGetPlant(page, rows, userId, finish)
         const ufPlant = res.data.data
         this.setState({ ufPlant })
+    }
+    getWeb3Tea =async () =>{
+        try {
+            const web3 = await getWeb3();
+            const accounts = await web3.eth.getAccounts();
+            const networkId = await web3.eth.net.getId();
+            const deployedNetwork = Tea.networks[networkId];
+            const instance = new web3.eth.Contract(
+              Tea.abi,
+              deployedNetwork && deployedNetwork.address,
+            );
+            this.setState({ web3, accounts, contract: instance });
+          } catch (error) {
+            alert(
+              `Failed to load web3, accounts, or contract. Check console for details.`,
+            );
+            console.error(error);
+          }
+    }
+    finishPlant = async (tea) => {
+        tea.plant.finish = true
+        const res = await reqUpdatePlant(tea)
+        if (res.data.data.id) {
+            const {contract} = this.state
+            message.success("任务完成！")
+            const user = memoryUtils.user
+            const tea = res.data.data
+            const plant =tea.plant;
+            const pesticide = plant.pesticide;
+            this.getPlant(1, 3, user.id, false)
+            if(plant.place){
+                await contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img,plant.finish).send({ from: this.state.accounts[0] });
+            }
+            if(Array.isArray(pesticide)&&pesticide.length>0){
+                for(let i = 0;i<pesticide.length;i++){
+                    await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
+                }
+            }
+        }
+    }
+    getOrg = async () => {
+        const user = memoryUtils.user
+        if (user.org) {
+            const res = await reqOrg(user.org)
+            if (res.data.data.id) {
+                const org = res.data.data
+                this.setState({ org })
+            }
+        }
     }
     getDict = async (typeCode) => {
         const res = await reqDictType(typeCode)
@@ -201,20 +259,20 @@ export default class Plant extends Component {
     handleImgOk = async () => {
         const { tea, imgFile, imgFileList } = this.state
         let edit = false
-        let imgList =[]
+        let imgList = []
         imgFileList.forEach(item => {
             const res = tea.plant.img.find(i => i === item.name)
-            if(!res){
-                edit = true 
-            }else{
+            if (!res) {
+                edit = true
+            } else {
                 imgList.push(item.name)
             }
         });
-        if (imgFileList.length!==tea.plant.img.length||edit) {
+        if (imgFileList.length !== tea.plant.img.length || edit) {
             const img = await this.ipfsUpload(imgFile)
             if (img) {
                 imgList = imgList.concat(img)
-                tea.plant.img =imgList
+                tea.plant.img = imgList
                 const res = await reqUpdatePlant(tea)
                 if (res.data.data.id) {
                     message.success("修改成功")
@@ -234,13 +292,15 @@ export default class Plant extends Component {
             file.url = global.ipfs.uri + img[index]
             imgFileList.push(file)
         });
-        this.setState({ visible: true, imgFileList, img, tea,imgFile:[] })
+        this.setState({ visible: true, imgFileList, img, tea, imgFile: [] })
     }
     componentDidMount = () => {
         const user = memoryUtils.user
         this.getPlant(1, 3, user.id, false)
         let typeCodes = ["type", "place_origin", "pesticide"]
         this.getDict(typeCodes)
+        this.getOrg()
+        this.getWeb3Tea()
     }
     getCarousel(img) {
         if (Array.isArray(img)) {
@@ -262,8 +322,18 @@ export default class Plant extends Component {
         if (ufPlant) {
             if (Array.isArray(ufPlant.content)) {
                 return ufPlant.content.reduce((pre, item) => {
+                    const extra = (
+                        <div>
+                            <span style={{ marginRight: "10px" }}>批次:{item.batch}</span>
+                            <Popconfirm title="确定完成此任务吗?" onConfirm={() => {
+                                this.finishPlant(item)
+                            }}>
+                                <Button type="primary">完成</Button>
+                            </Popconfirm>
+                        </div>
+                    )
                     pre.push((
-                        <Panel header={item.name} extra={"批次：" + item.batch} key={item.id} className="site-collapse-custom-panel">
+                        <Panel header={item.name} extra={extra} key={item.id} className="site-collapse-custom-panel">
                             <Descriptions size="small">
                                 <Descriptions.Item label="茶名">{item.name}</Descriptions.Item>
                                 <Descriptions.Item label="类型">{this.getDictValue("type", item.typeId.slice(0, 4) + "00") + "-" + this.getDictValue("type", item.typeId)}</Descriptions.Item>
@@ -305,14 +375,16 @@ export default class Plant extends Component {
     }
     render() {
         const user = memoryUtils.user
-        const { imgFileList, ufPlant, fPlant, editImg, pesticideVisible, visible, img, dict, tea } = this.state
+        const { imgFileList, ufPlant, fPlant, editImg,org, addTeaVisible,
+            pesticideVisible, visible, img, dict, tea } = this.state
+        const operations = org.staffProduce?(<Button type="primary" onClick={() =>this.setState({addTeaVisible:true})}>新增待办</Button>):("")
         const uploadButton = (
             <div>
                 <PlusOutlined />
                 <div className="ant-upload-text">上传图片</div>
             </div>
         );
-        const ufText = ufPlant ? "您有" + ufPlant.total + "条待办" : "暂无信息"
+        const ufText = ufPlant.total ? "您有" + ufPlant.total + "条待办" : "暂无信息"
         return (
             <div>
                 <Modal
@@ -358,8 +430,17 @@ export default class Plant extends Component {
                 >
                     <EditPesticide tea={tea} dict={dict} hideModal={() => this.setState({ pesticideVisible: false })}></EditPesticide>
                 </Modal>
+                <Modal
+                    title="新增茶叶"
+                    visible={addTeaVisible}
+                    bodyStyle={{ backgroundColor: "white" }}
+                    footer={null}
+                    onCancel={() => this.setState({ addTeaVisible: false })}
+                >
+                   <AddTea  hideModal={() => this.setState({ addTeaVisible: false })}></AddTea>
+                </Modal>
                 {user.org ? (
-                    <Tabs defaultActiveKey="1" onChange={this.onChange}>
+                    <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
                         <TabPane tab="待办" key="1">
                             <Alert message={ufText} type="info" />
                             <Collapse
@@ -370,6 +451,7 @@ export default class Plant extends Component {
                             >
                                 {this.getufPlant()}
                             </Collapse>
+                            <Pagination hideOnSinglePage style={{ marginTop: "10px", textAlign: "right" }} current={ufPlant.page} onChange={this.ufPlantCurrentChange} total={ufPlant.total} />
                         </TabPane>
                         <TabPane tab="已完成" key="2">
                             <Table
