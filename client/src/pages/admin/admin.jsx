@@ -21,6 +21,7 @@ import Result404 from '../../components/result/404'
 import Result403 from '../../components/result/403'
 import Result500 from '../../components/result/500'
 import { routeList } from "../../config/menuConfig";
+import Server from "./chart/server";
 const { Content, Footer, Sider } = Layout;
 class Admin extends Component {
   state = {
@@ -84,9 +85,10 @@ class Admin extends Component {
                 <Route path='/admin/org' component={Org}></Route>
                 <Route path='/admin/staff' component={Staff}></Route>
                 <Route path='/admin/role' component={Role}></Route>
+                <Route path='/admin/server' component={Server}></Route>
                 <Route path='/admin/404' component={Result404}></Route>
                 <Route path='/admin/403' component={Result403}></Route>
-                <Route path='/admin/500' component={Result500}></Route>
+                <Route path='/admin/500' component={Result500}></Route> 
                 <Redirect to = '/admin/404' /> 
               </Switch>
               </div>

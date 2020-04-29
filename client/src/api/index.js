@@ -89,3 +89,6 @@ export const reqUpdateNewsDetail = (newsDetail) =>ajax2('/newsDetail/updateUser'
 
 //更新资讯 用户互动
 export const reqUpdateNewsUser = (news) =>ajax2('/news/updateUser',news,'POST')
+
+//获取系统监控
+export const reqServer = () =>ajax2('/monitor/server',{},'GET')
