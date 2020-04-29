@@ -18,6 +18,7 @@ import TeaResult from "../tearesult";
 import UserInfo from "../info";
 import OrgDetail from "../brand/detail";
 import NewsDetail from "../news/detail";
+import Server from "../../admin/chart/server";
 const {  Content, Footer } = Layout;
 
 export default class Main extends Component{
@@ -55,6 +56,7 @@ export default class Main extends Component{
                     <Route path='/main/forum' component={Forum}></Route>
                     <Route path='/main/result' component={TeaResult}></Route>
                     <Route path='/main/info' component={UserInfo}></Route>
+                    <Route path='/main/server' component={Server}></Route>
                     <Redirect to = '/404' /> 
                 </Switch>
                 </div>
