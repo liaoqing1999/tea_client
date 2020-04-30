@@ -37,7 +37,7 @@ export default class UserInfo extends Component {
     }
     //第一次render()之前执行一次
     //为第一个render()准备数据（必须同步）
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.menuNodes = this.getMenuNodes_r(menuTitle);
     }
     render() {

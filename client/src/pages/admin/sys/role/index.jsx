@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Form, Modal, Input, Card, Button, Table, Popconfirm, message } from 'antd'
-import { reqRolePage, reqFindRoleByName, reqDeleteRole, reqAddRole } from '../../../api'
-import { formateDate } from '../../../utils/dateUtils'
-import memoryUtils from '../../../utils/memoryUtils';
+import { reqRolePage, reqFindRoleByName, reqDeleteRole, reqAddRole } from '../../../../api'
+import { formateDate } from '../../../../utils/dateUtils'
+import memoryUtils from '../../../../utils/memoryUtils';
 import EditRole from './edit';
 const layout = {
     labelCol: { span: 4 },
@@ -33,7 +33,7 @@ export default class Role extends Component {
         current: 1,
         pageSize: 10
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.initColumn()
     }
     componentDidMount() {

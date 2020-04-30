@@ -28,7 +28,7 @@ export default class Contact extends Component{
            return pre
        },[])
     }
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.content =  this.getContent(title);
     }
     render(){

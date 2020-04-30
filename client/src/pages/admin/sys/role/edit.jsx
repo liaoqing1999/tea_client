@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Form, Input, Button, message, Tree, Row, Col } from 'antd'
-import { menuList } from '../../../config/menuConfig';
-import { reqUpdateRole } from "../../../api";
-import memoryUtils from "../../../utils/memoryUtils";
+import { menuList } from '../../../../config/menuConfig';
+import { reqUpdateRole } from "../../../../api";
+import memoryUtils from "../../../../utils/memoryUtils";
 const treeData = [{
     title: '后台权限',
     key: '/admin',

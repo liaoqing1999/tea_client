@@ -29,7 +29,7 @@ export default class About extends Component{
            return pre
        },[])
     }
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.content =  this.getContent(title);
     }
     render(){

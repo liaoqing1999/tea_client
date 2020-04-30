@@ -84,11 +84,11 @@ class LeftNav extends Component {
     }
     //第一次render()之前执行一次
     //为第一个render()准备数据（必须同步）
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.menuNodes = this.getMenuNodes_r(menuList);
     }
     render() {
-        const { collapsed } = this.props;
+        const { collapsed } = this.props
         let title = ''
         if (!collapsed) {
             title = "喝好茶后台管理"

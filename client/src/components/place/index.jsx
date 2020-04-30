@@ -39,7 +39,7 @@ export default class Place extends Component {
             return item
         })
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.getProvince(options);
     }
     onPlaceChange = (value, selectedOptions) => {

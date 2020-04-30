@@ -15,7 +15,7 @@ import Storage from "./tea/storage";
 import Check from "./tea/check";
 import Org from "./sys/org";
 import Staff from "./sys/staff";
-import Role from "./role";
+import Role from "./sys/role";
 import Result404 from '../../components/result/404'
 import Result403 from '../../components/result/403'
 import Result500 from '../../components/result/500'
@@ -41,7 +41,7 @@ class Admin extends Component {
     }
    
   }
-  componentWillMount(){
+  UNSAFE_componentWillMount(){
     this.role(this.props)
   }
   onCollapse = collapsed => {
