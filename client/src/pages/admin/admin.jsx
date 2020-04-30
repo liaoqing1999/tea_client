@@ -9,13 +9,12 @@ import { Route, Switch,withRouter } from 'react-router-dom'
 import User from '../../components/info/user'
 import Msg from "../../components/info/msg";
 import UserPassword from "../../components/info/password";
-import Plant from "./plant";
-import Process from "./process";
-import Storage from "./storage";
-import Check from "./check";
-import Sale from "./sale";
-import Org from "./org";
-import Staff from "./staff";
+import Plant from "./tea/plant";
+import Process from "./tea/process";
+import Storage from "./tea/storage";
+import Check from "./tea/check";
+import Org from "./sys/org";
+import Staff from "./sys/staff";
 import Role from "./role";
 import Result404 from '../../components/result/404'
 import Result403 from '../../components/result/403'
@@ -81,7 +80,6 @@ class Admin extends Component {
                 <Route path='/admin/process' component={Process}></Route>
                 <Route path='/admin/storage' component={Storage}></Route>
                 <Route path='/admin/check' component={Check}></Route>
-                <Route path='/admin/sale' component={Sale}></Route>
                 <Route path='/admin/org' component={Org}></Route>
                 <Route path='/admin/staff' component={Staff}></Route>
                 <Route path='/admin/role' component={Role}></Route>

@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import memoryUtils from '../../../utils/memoryUtils'
+import memoryUtils from '../../../../utils/memoryUtils'
 import { Alert,Tabs  } from 'antd'
 const { TabPane } = Tabs;
 export default class Process extends Component{

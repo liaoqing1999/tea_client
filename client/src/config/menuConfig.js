@@ -1,7 +1,7 @@
 import React from "react";
 import {DatabaseOutlined,InsertRowRightOutlined,FileTextOutlined,GoldOutlined, ClusterOutlined,SettingOutlined,TrademarkOutlined,
     SafetyCertificateOutlined,StockOutlined,AreaChartOutlined, InsertRowLeftOutlined,UserOutlined, DesktopOutlined, TeamOutlined, CloudOutlined, ToolOutlined, 
-    SolutionOutlined,LineChartOutlined,PieChartOutlined,FireOutlined,BarChartOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, TransactionOutlined, BankOutlined } from '@ant-design/icons';
+    SolutionOutlined,SlidersOutlined,LineChartOutlined,PieChartOutlined,FireOutlined,BarChartOutlined, MessageOutlined, EyeInvisibleOutlined, ExperimentOutlined, BankOutlined } from '@ant-design/icons';
 
 const menuList = [
     {
@@ -55,11 +55,6 @@ const menuList = [
                 key: '/admin/check',
                 icon: <ExperimentOutlined />,
             },
-            {
-                title: '售卖阶段',
-                key: '/admin/sale',
-                icon: <TransactionOutlined />,
-            },
         ]
     },
     {
@@ -87,6 +82,11 @@ const menuList = [
                 key: '/admin/staffChart',
                 icon: <PieChartOutlined />
             },  
+            {
+                title: '系统监控',
+                key: '/admin/server',
+                icon: <SlidersOutlined />
+            }, 
         ]
     },
     {
@@ -101,17 +101,17 @@ const menuList = [
             },
             {
                 title: '机构用户',
-                key: '/admin/staff',
+                key: '/admin/orgStaff',
                 icon: <TeamOutlined />
             },
             {
                 title: '机构产品',
-                key: '/admin/produce',
+                key: '/admin/orgProduce',
                 icon: <InsertRowLeftOutlined />
             },
             {
                 title: '机构资讯',
-                key: '/admin/news',
+                key: '/admin/orgNews',
                 icon: <FireOutlined />
             },  
         ]
@@ -163,7 +163,6 @@ const routeList = [
     '/admin/process',
     '/admin/storage',
     '/admin/check',
-    '/admin/sale',
     '/admin/org',
     '/admin/staff',
     '/admin/role'

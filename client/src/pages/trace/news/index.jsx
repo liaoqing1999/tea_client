@@ -133,7 +133,7 @@ export default class News extends Component {
                     </div>
                 </div>
                 <div className="about-center">
-                    {title.length==0?(<Spin tip="正在查询中..." style={{ textAlign: "center" }} />):
+                    {title.length===0?(<Spin tip="正在查询中..." style={{ textAlign: "center" }} />):
                     ( <Tabs defaultActiveKey="0" tabPosition="left" onChange={this.onChange}>
                         {this.getContent()}
                     </Tabs>)}

@@ -12,10 +12,8 @@ import Storage from '../../../assets/storage.svg'
 import Check from '../../../assets/check.svg'
 import { reqDictionaryByCond } from '../../../api';
 import { formateDate } from '../../../utils/dateUtils';
-const creatHistory = require("history").createBrowserHistory
-const { Panel } = Collapse;
-const history = creatHistory();
 
+const { Panel } = Collapse;
 var _this = null;
 var _web3 = null;
 var _contract = null;
@@ -38,7 +36,6 @@ export default class TeaResult extends Component {
         process: null,
         storage: null,
         check: null,
-        sale: null,
         pesticide: null,
         visible: false,
         img: null
@@ -255,16 +252,6 @@ export default class TeaResult extends Component {
                     check[i] = c;
                 }
                 this.setState({ check: check })
-            }
-        }
-        if (activeKey.indexOf("sale") !== -1) {
-            if (!this.state.sale) {
-                const sale = await this.state.contract.methods.getSale(id).call();
-                const method = await reqDictionaryByCond("sale", sale.place);
-                if (method.data.data.length > 0) {
-                    sale.method = method.data.data[0].valueName;
-                }
-                this.setState({ sale: sale })
             }
         }
     }

@@ -371,7 +371,7 @@ export default class Join extends Component {
                                     }}
                                 >
                                     <Checkbox onChange={this.agreement}>
-                                        我已阅读并同意<a href="">《喝好茶用户协议》</a>
+                                        我已阅读并同意 <Button type="link" size="small">《喝好茶用户协议》</Button>
                                     </Checkbox>
                                 </Form.Item>
                                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

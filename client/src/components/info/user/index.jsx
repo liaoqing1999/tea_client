@@ -98,7 +98,7 @@ export default class User extends Component {
                             <Form.Item name='work' label="工作">
                                 <Input />
                             </Form.Item>
-                            {role.name == "user" ? ("") :
+                            {role.name === "user" ? ("") :
                                 (<div>
                                     <Form.Item name='role' label="角色">
                                         <Input disabled />

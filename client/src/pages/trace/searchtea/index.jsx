@@ -62,7 +62,6 @@ const { Search } = Input;
       const process = tea.process;
       const storage = tea.storage;
       const check = tea.check;
-      const sale = tea.sale;
       console.log(tea);
       console.log(new Date(pesticide[0].date).valueOf())
       await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
@@ -79,7 +78,6 @@ const { Search } = Input;
       for(let i = 0;i<check.length;i++){
         await this.state.contract.methods.setCheck(tea.id,check[i].typeId,new Date(check[i].date).valueOf(),check[i].result,check[i].info,check[i].checker).send({ from: this.state.accounts[0] });
       }
-      await this.state.contract.methods.setSale(tea.id,sale.place,sale.method,new Date(sale.date).valueOf(),sale.saleer).send({ from: this.state.accounts[0] });
      }
     render(){
         return(

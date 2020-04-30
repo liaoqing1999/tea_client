@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
-import memoryUtils from '../../../utils/memoryUtils'
+import memoryUtils from '../../../../utils/memoryUtils'
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import {
     List, Alert, Collapse, Popconfirm, Button, Modal, Carousel, Descriptions,
     Tabs, Table, Badge, Menu, Dropdown, Row, message, Upload, Pagination
 } from 'antd'
 import { CaretRightOutlined } from '@ant-design/icons';
-import { reqGetPlant, reqDictType, reqUpdatePlant, reqOrg } from '../../../api';
-import { formateDate } from '../../../utils/dateUtils';
+import { reqGetPlant, reqDictType, reqUpdatePlant, reqOrg } from '../../../../api';
+import { formateDate } from '../../../../utils/dateUtils';
 import EditPesticide from './editPesticide';
-import { addImg } from '../../../api/ipfs';
-import getWeb3 from '../../../getWeb3';
-import Tea from "../../../contracts/Tea.json";
+import { addImg } from '../../../../api/ipfs';
+import getWeb3 from '../../../../getWeb3';
+import Tea from "../../../../contracts/Tea.json";
 import AddTea from './addTea';
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
