@@ -1,99 +1,28 @@
 import React, { Component } from 'react'
 import memoryUtils from '../../../../utils/memoryUtils'
-import { DownOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import {
     List, Alert, Collapse, Popconfirm, Button, Modal, Carousel, Descriptions,
-    Tabs, Table, Badge, Menu, Dropdown, Row, message, Upload, Pagination
+    Tabs,Row, message, Upload, Pagination
 } from 'antd'
 import { CaretRightOutlined } from '@ant-design/icons';
-import { reqGetPlant, reqDictType, reqUpdatePlant, reqOrg } from '../../../../api';
+import { reqGetPlant, reqDictType, reqUpdatePlant, reqOrg, reqAddTea } from '../../../../api';
 import { formateDate } from '../../../../utils/dateUtils';
 import EditPesticide from './editPesticide';
 import { addImg } from '../../../../api/ipfs';
 import getWeb3 from '../../../../getWeb3';
 import Tea from "../../../../contracts/Tea.json";
 import AddTea from './addTea';
+import FPlant from './fPlant';
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
-const menu = (
-    <Menu>
-        <Menu.Item>Action 1</Menu.Item>
-        <Menu.Item>Action 2</Menu.Item>
-    </Menu>
-);
+
 function getBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
-    });
-}
-const expandedRowRender = () => {
-    const columns = [
-        { title: 'Date', dataIndex: 'date', key: 'date' },
-        { title: 'Name', dataIndex: 'name', key: 'name' },
-        {
-            title: 'Status',
-            key: 'state',
-            render: () => (
-                <span>
-                    <Badge status="success" />
-            Finished
-                </span>
-            ),
-        },
-        { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-        {
-            title: 'Action',
-            dataIndex: 'operation',
-            key: 'operation',
-            render: () => (
-                <span className="table-operation">
-                    <a>Pause</a>
-                    <a>Stop</a>
-                    <Dropdown overlay={menu}>
-                        <a>
-                            More <DownOutlined />
-                        </a>
-                    </Dropdown>
-                </span>
-            ),
-        },
-    ];
-
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-        data.push({
-            key: i,
-            date: '2014-12-24 23:12:00',
-            name: 'This is production name',
-            upgradeNum: 'Upgraded: 56',
-        });
-    }
-    return <Table columns={columns} dataSource={data} pagination={false} />;
-};
-
-const columns = [
-    { title: 'Name', dataIndex: 'name', key: 'name' },
-    { title: 'Platform', dataIndex: 'platform', key: 'platform' },
-    { title: 'Version', dataIndex: 'version', key: 'version' },
-    { title: 'Upgraded', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-    { title: 'Creator', dataIndex: 'creator', key: 'creator' },
-    { title: 'Date', dataIndex: 'createdAt', key: 'createdAt' },
-    { title: 'Action', key: 'operation', render: () => <a>Publish</a> },
-];
-
-const data = [];
-for (let i = 0; i < 3; ++i) {
-    data.push({
-        key: i,
-        name: 'Screem',
-        platform: 'iOS',
-        version: '10.3.4.5654',
-        upgradeNum: 500,
-        creator: 'Jack',
-        createdAt: '2014-12-24 23:12:00',
     });
 }
 export default class Plant extends Component {
@@ -160,6 +89,19 @@ export default class Plant extends Component {
                     await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
                 }
             }
+        }
+    }
+    addTea =async (tea) =>{
+        tea.plant.planter = memoryUtils.user.id
+        tea.plant.pesticide =[]
+        const res = await reqAddTea(tea)
+        if(res.data.data){
+            tea = res.data.data
+            const {contract} = this.state
+            const user = memoryUtils.user
+            await contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
+            this.getPlant(1, 3, user.id, false)
+            message.success("添加茶叶成功！")
         }
     }
     getOrg = async () => {
@@ -297,7 +239,7 @@ export default class Plant extends Component {
     componentDidMount = () => {
         const user = memoryUtils.user
         this.getPlant(1, 3, user.id, false)
-        let typeCodes = ["type", "place_origin", "pesticide"]
+        let typeCodes = ["type", "pesticide"]
         this.getDict(typeCodes)
         this.getOrg()
         this.getWeb3Tea()
@@ -338,8 +280,8 @@ export default class Plant extends Component {
                                 <Descriptions.Item label="茶名">{item.name}</Descriptions.Item>
                                 <Descriptions.Item label="类型">{this.getDictValue("type", item.typeId.slice(0, 4) + "00") + "-" + this.getDictValue("type", item.typeId)}</Descriptions.Item>
                                 <Descriptions.Item label="批次">{item.batch}</Descriptions.Item>
-                                <Descriptions.Item label="产地">{this.getDictValue("place_origin", item.plant.place)}</Descriptions.Item>
-                                <Descriptions.Item label="施药次数">{item.plant.pesticide.length}</Descriptions.Item>
+                                <Descriptions.Item label="产地">{item.plant.place}</Descriptions.Item>
+                                <Descriptions.Item label="施药次数">{item.plant.pesticide?item.plant.pesticide.length:0}</Descriptions.Item>
                                 <Descriptions.Item label="阶段图">
                                     <Button type="link" onClick={() => { this.imgView(item) }}>查看详情</Button>
                                 </Descriptions.Item>
@@ -350,7 +292,7 @@ export default class Plant extends Component {
                                     this.setState({ pesticideVisible: true, tea: item })
                                 }}>新增</Button></Row>}
                                 bordered
-                                dataSource={item.plant.pesticide}
+                                dataSource={item.plant.pesticide?item.plant.pesticide:[]}
                                 renderItem={(i, index) => (
                                     <List.Item actions={[<Button type="link" onClick={() => {
                                         item.index = index
@@ -436,8 +378,8 @@ export default class Plant extends Component {
                     bodyStyle={{ backgroundColor: "white" }}
                     footer={null}
                     onCancel={() => this.setState({ addTeaVisible: false })}
-                >
-                   <AddTea  hideModal={() => this.setState({ addTeaVisible: false })}></AddTea>
+                >  
+                   <AddTea  addTea={this.addTea} hideModal={() => this.setState({ addTeaVisible: false })}></AddTea>
                 </Modal>
                 {user.org ? (
                     <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
@@ -451,15 +393,10 @@ export default class Plant extends Component {
                             >
                                 {this.getufPlant()}
                             </Collapse>
-                            <Pagination hideOnSinglePage style={{ marginTop: "10px", textAlign: "right" }} current={ufPlant.page} onChange={this.ufPlantCurrentChange} total={ufPlant.total} />
+                            <Pagination hideOnSinglePage style={{ marginTop: "10px", textAlign: "right" }} pageSize={3} current={ufPlant.page} onChange={this.ufPlantCurrentChange} total={ufPlant.total} />
                         </TabPane>
                         <TabPane tab="已完成" key="2">
-                            <Table
-                                className="components-table-demo-nested"
-                                columns={columns}
-                                expandable={{ expandedRowRender }}
-                                dataSource={data}
-                            />
+                            <FPlant dict={dict}></FPlant>
                         </TabPane>
                     </Tabs>
                 ) :

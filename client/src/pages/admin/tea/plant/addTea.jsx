@@ -1,8 +1,7 @@
 import React from "react";
-import moment from 'moment';
-import 'moment/locale/zh-cn';
-import { Select, Form, Input, Button, DatePicker, message } from 'antd'
-import { reqUpdatePlant } from "../../../../api";
+import { Select, Form, Input, Button, TreeSelect, message } from 'antd'
+import { reqUpdatePlant, reqTeaType,reqOrgProduce } from "../../../../api";
+import memoryUtils from "../../../../utils/memoryUtils";
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -17,41 +16,79 @@ const validateMessages = {
         range: '${label}必须在 ${min} —— ${max}之间',
     },
 };
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 export default class AddTea extends React.Component {
     state = {
         tea: null
     }
     form = React.createRef();
     onFinish = async (values) => {
-        let pesticide = {}
-        pesticide.name = values.name
-        pesticide.date = new Date(values.date.valueOf())
-        const tea = this.props.tea
-        let msg = ""
-        if (tea.index === -1) {
-            tea.plant.pesticide.push(pesticide)
-            msg = "新增成功！"
-        } else {
-            tea.plant.pesticide[tea.index] = pesticide
-            msg = "修改成功！"
-        }
-        const res = await reqUpdatePlant(tea)
-        if (res.data.data.id) {
-            message.success(msg)
-        }
-        this.props.hideModal()
+       this.props.addTea(values)
+       this.props.hideModal()
     }
-    getOption = () => {
-        const dict = this.props.dict
-        let i = 0
-        return dict["pesticide"].reduce((pre, item) => {
-            pre.push((
-                <Option key={i} value={item.valueId}>{item.valueName}</Option>
-            ))
-            i++
-            return pre
-        }, [])
+    componentDidMount = () => {
+        const user = memoryUtils.user
+        this.getType()
+        this.getProduce(user.org)
+    }
+    getProduceOption = () =>{
+        const { produce } = this.state
+        if (Array.isArray(produce)) {
+            return produce.reduce((pre, item) => {
+                pre.push((
+                    <Option key={item.id} type={item.typeId} value={item.id}>{item.name}</Option>
+                ))
+                return pre
+            }, [])
+        }
+    }
+    getProduce =async (org) => {
+        const res = await reqOrgProduce(org)
+        if(res.data.data){
+            const produce  = res.data.data
+            this.setState({produce})
+        }
+    }
+    onChange = (value, option) =>{
+        this.form.current.setFieldsValue({
+            typeId: option.type
+        });
+    }
+    getTypeOption = () => {
+        const { typeTree } = this.state
+        if (Array.isArray(typeTree)) {
+            return typeTree.reduce((pre, item) => {
+                if (Array.isArray(item.children) && item.children.length > 0) {
+                    pre.push((
+                        <OptGroup label={item.label} key={item.value}>
+                            {
+                                item.children.reduce((p, i) => {
+                                    p.push((
+                                        <Option key={i.value} value={i.value}>{i.label}</Option>
+                                    ))
+                                    return p
+                                }, [])
+                            }
+                        </OptGroup>
+                    ))
+                }
+                return pre
+            }, [])
+        }
+    }
+    getType = async () => {
+        const res = await reqTeaType()
+        if (res.data.data) {
+            const typeTree = res.data.data
+            this.setState({ typeTree })
+        }
+    }
+    typeFilterOption = (input, option) =>{
+        if(option.children){
+            return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }else{
+            return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
     }
     render() {
         return (<div>
@@ -59,34 +96,36 @@ export default class AddTea extends React.Component {
                 <Form.Item name="name" label="茶叶名" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-
-                <Form.Item name="name" label="茶叶类型" rules={[{ required: true }]}>
-                    <Select
-                        showSearch
-                        placeholder="请选择茶叶类型"
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        {this.getOption()}
-                    </Select>
-                </Form.Item>
-                <Form.Item name="name" label="茶叶批次">
-                    <Input />
-                </Form.Item>
-                <Form.Item name="name" label="所属产品" rules={[{ required: true }]}>
+                <Form.Item name="typeId" label="茶叶类型" rules={[{ required: true }]}>
                     <Select
                         showSearch
                         placeholder="请选择所属产品"
                         optionFilterProp="children"
+                        filterOption={this.typeFilterOption}
+                    >
+                        {this.getTypeOption()}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="batch" label="茶叶批次" rules={[{ required: true }]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item name="produce" label="所属产品" rules={[{ required: true }]}>
+                    <Select
+                        showSearch
+                        placeholder="请选择所属产品"
+                        optionFilterProp="children"
+                        onChange={this.onChange}
                         filterOption={(input, option) =>
                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
                     >
-                        {this.getOption()}
+                        {this.getProduceOption()}
                     </Select>
                 </Form.Item>
+                <Form.Item name= {['plant', 'place']} label="产地" rules={[{ required: true }]}>
+                    <Input />
+                </Form.Item>
+               
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                     <Button type="primary" htmlType="submit">提交 </Button>
                     <Button type="link" onClick={this.props.hideModal}>取消</Button>

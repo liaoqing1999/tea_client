@@ -2,9 +2,7 @@ import {ajax1,ajax2} from "./ajax";
 import jsonp from 'jsonp'
 import { message } from "antd";
 
-/*包含应用中所以接口请求函数的模块 */
-
-
+/*包含应用中所有接口请求函数的模块 */
 //登录
 export const reqLogin = (name,password) => ajax2('/staff/login',{name,password},'GET')
 
@@ -33,6 +31,9 @@ export const reqGetPlant = (page,rows,userId,finish) =>ajax2('/tea/getPlant',{pa
 //获取茶叶种植阶段信息
 export const reqUpdatePlant = (tea) =>ajax2('/tea/updatePlant',tea,'POST')
 
+//添加茶叶
+export const reqAddTea = (tea) =>ajax2('/tea/add',tea,'POST')
+
 //获取验证码
 export const reqVerify = () =>ajax2('/verify/getVerify',{},'GET')
 
@@ -44,6 +45,12 @@ export const reqDictionaryByCond = (typeCode,valueId) =>ajax2('/dictionary/getBy
 
 //获取字典类型list
 export const reqDictType = (typeCodes) =>ajax2('/dictionary/getByType',{typeCodes},'GET')
+
+//获取茶叶类型
+export const reqTeaType = () =>ajax2('/dictionary/getType',{},'GET')
+
+//获取机构产品
+export const reqOrgProduce = (org) =>ajax2('/produce/getOrg',{org},'GET')
 
 //机构入住
 export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
