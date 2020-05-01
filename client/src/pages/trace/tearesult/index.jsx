@@ -177,17 +177,6 @@ export default class TeaResult extends Component {
         if (activeKey.indexOf("plant") !== -1) {
             if (!this.state.plant) {
                 const plant = await this.state.contract.methods.getPlant(id).call();
-                if(plant.place){
-                    const place = await reqDictionaryByCond("place_origin", plant.place);
-                    const placeP = await reqDictionaryByCond("place", plant.place);
-                    if (place.data.data.length > 0) {
-                        plant.place = place.data.data[0].valueName;
-                    }
-                    if (placeP.data.data.length > 0) {
-                        plant.place = placeP.data.data[0].valueName + "-" + plant.place
-                    }
-                   
-                }
                 const pesticide = await this.state.contract.methods.getPesticide(id).call();
                 if(Array.isArray(pesticide)&&pesticide.length>0){
                     for (let i = 0; i < pesticide.name.length; i++) {
@@ -216,16 +205,6 @@ export default class TeaResult extends Component {
         if (activeKey.indexOf("storage") !== -1) {
             if (!this.state.storage) {
                 const storage = await this.state.contract.methods.getStorage(id).call();
-                if(storage.place){
-                    const splace = await reqDictionaryByCond("warehouse", storage.place);
-                    const splaceP = await reqDictionaryByCond("place", storage.place);
-                    if (splace.data.data.length > 0) {
-                        storage.place = splace.data.data[0].valueName;
-                    }
-                    if (splaceP.data.data.length > 0) {
-                        storage.place = splaceP.data.data[0].valueName + "-" + storage.place
-                    }
-                }
                 this.setState({ storage: storage })
             }
         }

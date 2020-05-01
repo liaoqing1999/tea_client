@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Row, Col, Descriptions, Table, Spin } from 'antd';
 import { reqServer } from '../../../../api';
-import sessionUtils from '../../../../utils/sessionUtils';
 const columns = [
     {
         title: '盘符路径',
@@ -31,7 +30,7 @@ const columns = [
         title: '已用百分比',
         dataIndex: 'usage',
         render: (text) =>
-            <span style={{ color: text > 80 ? "red" : "black"}}>{text}%</span>
+            <span style={{ color: text > 80 ? "red" : "black" }}>{text}%</span>
         ,
     }
 ]
@@ -43,18 +42,12 @@ export default class Server extends Component {
         const res = await reqServer()
         if (res.data.data.cpu) {
             const server = res.data.data
-            sessionUtils.save("server",server)
             this.setState({ server })
         }
-        
+
     }
     componentDidMount = () => {
-        const server = sessionUtils.get("server")
-        if(server){
-            this.setState({ server })
-        }else{
-            this.getServer()
-        }
+        this.getServer()
     }
     render() {
         const { server } = this.state
@@ -112,7 +105,7 @@ export default class Server extends Component {
                                 </Descriptions>
                             </Card>
                             <Card style={{ marginTop: "10px" }} hoverable bodyStyle={{ padding: "0px 0px 10px 0px" }} title="磁盘状态" bordered={false} >
-                                <Table columns={columns}  rowKey="dirName" dataSource ={sysFiles}></Table>
+                                <Table columns={columns} rowKey="dirName" dataSource={sysFiles}></Table>
                             </Card>
                         </div>
                     ) : ("")}
