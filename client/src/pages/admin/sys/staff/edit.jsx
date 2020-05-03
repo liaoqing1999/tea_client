@@ -1,10 +1,24 @@
 import React, { Component } from "react";
 import { Select, Form, Button, Input } from 'antd'
 import { GetOrgSelect, GetRoleSelect } from './orgRoleSelect'
+import { reqStaffName } from "../../../../api";
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
+const validfunc = async (rule, value) => {
+    if (value) {
+        const res = await reqStaffName(value)
+        if (res.data.data==='') {
+            
+        }else{
+            throw new Error('用户名已存在!');
+        }
+    } else {
+        throw new Error('角色名是必须的!');
+    }
+
+}
 const validateMessages = {
     required: '${label} 是必须的!',
     types: {
@@ -34,7 +48,7 @@ export default class EditStaff extends Component {
             "email": user.email,
             "role": user.role,
             "state": user.state,
-            "password":user.password
+            "password": user.password
         });
     }
     getOption = () => {
@@ -53,38 +67,47 @@ export default class EditStaff extends Component {
         return (<div>
             <Form {...layout} ref={this.form} onFinish={this.props.onFinish} validateMessages={validateMessages}
                 initialValues={{
-                    staff:user
+                    'name': user.name,
+                    "realName": user.realName,
+                    "phone": user.phone,
+                    "card": user.card,
+                    "work": user.work,
+                    "org": user.org,
+                    "email": user.email,
+                    "role": user.role,
+                    "state": user.state,
+                    "password": user.password
                 }}>
-                <Form.Item name={[ 'staff', 'name']} label="用户名" rules={[{ required: true }]}>
+                <Form.Item name='name' label="用户名" rules={[{ validator: validfunc }]}>
                     <Input disabled={this.props.type === 'edit'} />
                 </Form.Item>
                 {this.props.type === 'edit' ? ("") :
-                    (<Form.Item name={[ 'staff', 'password']} label="密码">
-                        <Input.Password/>
+                    (<Form.Item name='password' label="密码">
+                        <Input.Password />
                     </Form.Item>
                     )}
-                <Form.Item name={[ 'staff', 'realName']} label="真实姓名">
+                <Form.Item name='realName' label="真实姓名">
                     <Input />
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'phone']} label="电话号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号' }]}>
+                <Form.Item name='phone' label="电话号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'card']} label="身份证号码">
+                <Form.Item name='card' label="身份证号码">
                     <Input />
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'work']} label="工作">
+                <Form.Item name='work' label="工作">
                     <Input />
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'org']} label="机构">
+                <Form.Item name='org' label="机构">
                     <GetOrgSelect></GetOrgSelect>
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'email']} label="电子邮箱" rules={[{ type: 'email' }]}>
+                <Form.Item name='email' label="电子邮箱" rules={[{ type: 'email' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'role']} label="角色" rules={[{ required: true }]}>
+                <Form.Item name='role' label="角色" rules={[{ required: true }]}>
                     <GetRoleSelect></GetRoleSelect>
                 </Form.Item>
-                <Form.Item name={[ 'staff', 'state']} label="状态" rules={[{ required: true }]}>
+                <Form.Item name='state' label="状态" rules={[{ required: true }]}>
                     <Select
                         showSearch
                         placeholder="请选择用户状态"

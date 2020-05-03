@@ -121,11 +121,11 @@ export default class Role extends Component {
         }
     }
     handleDelete = async (record) => {
-        console.log(record)
         if(record.name ==='superAdmin'){
             message.error("不能删除超级管理员")
         }else{
             await reqDeleteRole(record.id)
+            message.success("删除成功")
             this.getDate(this.state.current, this.state.pageSize)
         }
       

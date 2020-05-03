@@ -1,24 +1,10 @@
 import React, { Component } from 'react'
-import { Form, Modal, Input, Card, Button, Table, Popconfirm, message, Row, Divider } from 'antd'
-import { reqFindRoleByName, reqAddStaff, reqAddRole, reqStaffPage, reqDictType, reqUpdateStaff } from '../../../../api'
+import { Modal, Card, Button, Table, Popconfirm, message, Row, Divider, Input, Select, Col, Tag } from 'antd'
+import { reqAddStaff, reqStaffPage, reqDictType, reqUpdateStaff, reqDeleteStaff, reqUpdatePassword } from '../../../../api'
 import EditStaff from './edit';
 import { formateDate } from '../../../../utils/dateUtils';
-const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 16 },
-};
-const validfunc = async (rule, value) => {
-    if (value) {
-        const res = await reqFindRoleByName(value)
-        if (res.data.data.length) {
-            throw new Error('角色名已存在!');
-        }
-    } else {
-        throw new Error('角色名是必须的!');
-    }
-
-}
-let cond = {}
+import { GetOrgSelect, GetRoleSelect } from './orgRoleSelect';
+const { Option } = Select;
 export default class Staff extends Component {
     state = {
         staff: {},
@@ -28,6 +14,7 @@ export default class Staff extends Component {
         addVisible: false,
         editVisible: false,
         dict: [],
+        cond: {}
     }
     componentDidMount() {
         this.getDate(1, 10)
@@ -37,11 +24,12 @@ export default class Staff extends Component {
     onSelectChange = (selectedRowKeys, selectedRows) => {
         this.setState({ selectedRowKeys, user: selectedRows[0] });
     };
-    getDate = async (page, rows, user) => {
-        const res = await reqStaffPage(page, rows, user)
+    getDate = async (page, rows, cond) => {
+        const res = await reqStaffPage(page, rows, cond)
         if (res.data.data) {
             const staff = res.data.data
-            this.setState({ staff })
+            cond = cond ? cond : {}
+            this.setState({ staff, user: {}, selectedRowKeys: [], cond })
         }
     }
     getDict = async (typeCode) => {
@@ -65,35 +53,57 @@ export default class Staff extends Component {
         showQuickJumper: true,
         showTotal: () => `共${this.state.staff.total}条`,
         total: this.state.staff.totals,
-        onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-        onChange: (current) => this.changePage(current),
+        onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, this.state.cond),
+        onChange: (current) => this.getDate(current, this.state.staff.rows, this.state.cond),
     };
-    changePage = (current) => {
-        this.getDate(current, this.state.staff.rows, cond)
-    }
     onFinish = async (values) => {
-        const { type ,user} = this.state
+        const { type, user } = this.state
         if (type === 'add') {
             values.createTime = new Date()
             const res = await reqAddStaff(values)
             if (res.data.data) {
-                this.getDate(this.state.staff.page, this.state.staff.rows, cond)
+                this.getDate(this.state.staff.page, this.state.staff.rows, this.state.cond)
                 this.setState({ editVisible: false })
                 message.success("增加成功")
             }
         } else {
-            console.log(values,user,type)
-            // const res = await reqUpdateStaff(values)
-            // if (res.data.data) {
-            //     this.getDate(this.state.staff.page, this.state.staff.rows, cond)
-            //     this.setState({ editVisible: false })
-            //     message.success("修改成功")
-            // }
+            values.id = user.id
+            values.password = user.password
+            values.img = user.img
+            values.createTime = user.createTime
+            const res = await reqUpdateStaff(values)
+            if (res.data.data) {
+                this.getDate(this.state.staff.page, this.state.staff.rows, this.state.cond)
+                this.setState({ editVisible: false })
+                message.success("修改成功")
+            }
         }
-      
+
+    }
+    getOption = () => {
+        const { dict } = this.state
+        let i = 0
+        if (dict["state"]) {
+            return dict["state"].reduce((pre, item) => {
+                pre.push((
+                    <Option key={i} value={item.valueId}>{item.valueName}</Option>
+                ))
+                i++
+                return pre
+            }, [])
+        }
+
     }
     handleDelete = async (record) => {
-        console.log(record)
+        await reqDeleteStaff(record.id)
+        message.success("删除成功")
+        this.getDate(this.state.staff.page, this.state.staff.rows, this.state.cond)
+    }
+    resetPassword = async () => {
+        const { user } = this.state
+        await reqUpdatePassword(user.id, "123456")
+        message.success("重置成功")
+        this.getDate(this.state.staff.page, this.state.staff.rows, this.state.cond)
     }
     render() {
         const columns = [
@@ -126,28 +136,34 @@ export default class Staff extends Component {
             {
                 title: '机构',
                 dataIndex: 'staffOrg',
-                render: (text, record) => <span>{Array.isArray(text) ? text[0].name : ""}</span>
+                render: (text, record) => <span>{text.length ? text[0].name : ""}</span>
             },
             {
                 title: '角色',
                 dataIndex: 'staffRole',
-                render: (text, record) => <span>{Array.isArray(text) ? text[0].name : ""}</span>
+                render: (text, record) => <span>{text.length ? text[0].name : ""}</span>
             },
             {
                 title: '操作',
-                dataIndex: 'operation',
+                dataIndex: 'staffRole',
                 width: 180,
-                render: (text, record) =>
-                    <Row>
-                        <Button size="middle" onClick={() => this.setState({ editVisible: true, user: record, type: 'edit' })}>编辑</Button>
-                        <Divider type="vertical"></Divider>
-                        <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record)}>
-                            <Button size="middle" type="danger">删除</Button>
-                        </Popconfirm>
-                    </Row>
+                render: (text, record) => {
+                    if (text.length && text[0].name !== 'superAdmin') {
+                        return( <Row>
+                            <Button size="middle" onClick={() => this.setState({ editVisible: true, user: record, type: 'edit' })}>编辑</Button>
+                            <Divider type="vertical"></Divider>
+                            <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record)}>
+                                <Button size="middle" type="danger">删除</Button>
+                            </Popconfirm>
+                        </Row>)
+                    }else{
+                        return (<Tag color="warning">超级管理员不允许操作</Tag>)
+                    }
+                }
+
             },
         ]
-        const { staff, editVisible, user, selectedRowKeys, type, dict } = this.state
+        const { staff, editVisible, user, selectedRowKeys, type, dict, cond } = this.state
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
@@ -155,9 +171,35 @@ export default class Staff extends Component {
         };
         const title = (
             <div>
+                <Row justify="space-between" gutter={30} style={{ marginBottom: "10px" }}>
+                    <Col span={4}><Input allowClear onChange={({ target: { value } }) => cond.name = value} defaultValue={cond.name} placeholder="请输入用户名"></Input></Col>
+                    <Col span={4}> <GetOrgSelect style={{ width: "100%" }} onChange={(value) => cond.org = value} value={cond.org}></GetOrgSelect></Col>
+                    <Col span={4}> <GetRoleSelect style={{ width: "100%" }} onChange={(value) => cond.role = value} value={cond.role}></GetRoleSelect></Col>
+                    <Col span={4}>
+                        <Select
+                            showSearch
+                            allowClear
+                            style={{ width: "100%" }}
+                            placeholder="请选择用户状态"
+                            optionFilterProp="children"
+                            defaultValue={cond.state}
+                            onChange={(value) => cond.state = value}
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                        >
+                            {this.getOption()}
+                        </Select>
+                    </Col>
+                    <Col span={5}>
+                        <Button type="primary" onClick={() => this.getDate(this.state.staff.page, this.state.staff.rows, cond)} style={{ marginRight: "20px" }}>查询</Button>
+                        <Button onClick={() => this.getDate(this.state.staff.page, this.state.staff.rows, {})}>重置查询</Button>
+                    </Col>
+                </Row>
                 <Button type="primary" onClick={() => this.setState({ editVisible: true, user: {}, type: 'add' })} style={{ marginRight: "20px" }}>新增用户</Button>
-                <Button type="primary" onClick={this.showEditModal} disabled={!this.state.selectedRowKeys.length}>重置密码</Button>
-            </div>)
+                <Button type="primary" onClick={this.resetPassword} disabled={!selectedRowKeys.length}>重置密码</Button>
+            </div>
+        )
         return (
             <div className="role">
                 <Card title={title}>

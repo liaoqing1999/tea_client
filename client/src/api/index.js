@@ -65,13 +65,21 @@ export const reqOrgAll = (state) =>ajax2('/org/getAll',{state},'GET')
 export const reqOrgPage = (page,rows,place) =>ajax2('/org/getPage',{page,rows,place},'GET')
 
 //用户分页
-export const reqStaffPage = (page,rows,staff) =>ajax2('/staff/getPage',{page,rows,staff},'GET')
+export const reqStaffPage = (page,rows,cond) =>{
+    cond = JSON.stringify(cond)
+    return ajax2('/staff/getPage',{page,rows,cond},'GET')
+}
+//检测用户名是否已存在
+export const reqStaffName = (name) =>ajax2('/staff/name',{name},'GET')
 
 //更新用户
 export const reqUpdateStaff = (staff) =>ajax2('/staff/update',staff,'POST')
 
 //增加用户
 export const reqAddStaff = (staff) =>ajax2('/staff/add',staff,'POST')
+
+//更新用户密码
+export const reqUpdatePassword = (id,password) =>ajax2('/staff/password',{id,password},'GET')
 
 //删除用户
 export const reqDeleteStaff = (id) =>ajax2('/staff/delete',{id},'GET')
