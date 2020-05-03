@@ -56,16 +56,31 @@ export const reqOrgProduce = (org) =>ajax2('/produce/getOrg',{org},'GET')
 export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
 
 //获取机构
-export const reqOrg = (id) =>ajax2('/org/getOrg',{id},'GET')
+export const reqOrg = (id) =>ajax2('/org/get',{id},'GET')
+
+//获取所有机构
+export const reqOrgAll = (state) =>ajax2('/org/getAll',{state},'GET')
 
 //机构分页
 export const reqOrgPage = (page,rows,place) =>ajax2('/org/getPage',{page,rows,place},'GET')
 
+//用户分页
+export const reqStaffPage = (page,rows,staff) =>ajax2('/staff/getPage',{page,rows,staff},'GET')
+
 //更新用户
 export const reqUpdateStaff = (staff) =>ajax2('/staff/update',staff,'POST')
 
+//增加用户
+export const reqAddStaff = (staff) =>ajax2('/staff/add',staff,'POST')
+
+//删除用户
+export const reqDeleteStaff = (id) =>ajax2('/staff/delete',{id},'GET')
+
 //角色分页
 export const reqRolePage = (page,rows) =>ajax2('/role/getPage',{page,rows},'GET')
+
+//获取所有角色
+export const reqRoleAll = () =>ajax2('/role/getAll',{},'GET')
 
 //删除角色
 export const reqDeleteRole = (id) =>ajax2('/role/delete',{id},'GET')
