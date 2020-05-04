@@ -39,7 +39,7 @@ export default class Role extends Component {
     componentDidMount() {
         this.getDate(this.state.current, this.state.pageSize)
     }
- 
+
     //表行选中触发事件
     onSelectChange = (selectedRowKeys, selectedRows) => {
         this.setState({ selectedRowKeys, role: selectedRows[0] });
@@ -58,16 +58,10 @@ export default class Role extends Component {
         }
 
     }
-    paginationProps = {
-        showSizeChanger: true,
-        showQuickJumper: true,
-        showTotal: () => `共${this.state.total}条`,
-        total: this.state.totals,
-        onShowSizeChange: (current, pageSize) => this.changePageSize(pageSize, current),
-        onChange: (current) => this.changePage(current),
-    };
-    changePage = (current) => {
-        this.getDate(current, this.state.pageSize)
+
+    changePage = (current, pageSize) => {
+
+        this.getDate(current, pageSize)
     }
     onRow = (role) => {
         const _this = this
@@ -121,14 +115,14 @@ export default class Role extends Component {
         }
     }
     handleDelete = async (record) => {
-        if(record.name ==='superAdmin'){
+        if (record.name === 'superAdmin') {
             message.error("不能删除超级管理员")
-        }else{
+        } else {
             await reqDeleteRole(record.id)
             message.success("删除成功")
             this.getDate(this.state.current, this.state.pageSize)
         }
-      
+
     }
     initColumn = () => {
         const columns = [
@@ -169,11 +163,19 @@ export default class Role extends Component {
         this.setState({ columns: columns })
     }
     render() {
-        const { roles, role, columns, selectedRowKeys } = this.state
+        const { roles, role, columns, selectedRowKeys ,total} = this.state
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
             type: "radio"
+        };
+        const paginationProps = {
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: () => `共${total}条`,
+            total: total,
+            onShowSizeChange: (current, pageSize) => this.changePage(current, pageSize),
+            onChange: (current, pageSize) => this.changePage(current, pageSize),
         };
         const title = (
             <div>
@@ -188,7 +190,7 @@ export default class Role extends Component {
                         rowKey="id"
                         dataSource={roles}
                         columns={columns}
-                        pagination={this.paginationProps}
+                        pagination={paginationProps}
                         rowSelection={rowSelection}
                         onRow={this.onRow}
                     />
@@ -222,7 +224,7 @@ export default class Role extends Component {
                     bodyStyle={{ backgroundColor: "white" }}
                     onCancel={this.hideEditModal}
                 >
-                    <EditRole getDate={this.getDate} hideEditModal={this.hideEditModal}  role ={role}></EditRole>
+                    <EditRole getDate={this.getDate} hideEditModal={this.hideEditModal} role={role}></EditRole>
                 </Modal>
             </div>
         )

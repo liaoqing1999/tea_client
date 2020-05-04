@@ -27,7 +27,6 @@ function getBase64(file) {
 }
 export default class Plant extends Component {
     state = {
-        fPlant: {},
         ufPlant: {},
         org: {},
         dict: {},
@@ -317,7 +316,7 @@ export default class Plant extends Component {
     }
     render() {
         const user = memoryUtils.user
-        const { imgFileList, ufPlant, fPlant, editImg,org, addTeaVisible,
+        const { imgFileList, ufPlant, editImg,org, addTeaVisible,
             pesticideVisible, visible, img, dict, tea } = this.state
         const operations = org.staffProduce?(<Button type="primary" onClick={() =>this.setState({addTeaVisible:true})}>新增待办</Button>):("")
         const uploadButton = (

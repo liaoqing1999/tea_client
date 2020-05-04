@@ -55,14 +55,23 @@ export const reqOrgProduce = (org) =>ajax2('/produce/getOrg',{org},'GET')
 //机构入住
 export const reqOrgJoin = (org,staff) =>ajax2('/org/join',{org,staff},'POST')
 
+//新增机构
+export const reqOrgAdd = (org) =>ajax2('/org/add',org,'POST')
+
+//更新机构
+export const reqOrgUpdate = (org) =>ajax2('/org/update',org,'POST')
+
 //获取机构
 export const reqOrg = (id) =>ajax2('/org/get',{id},'GET')
+
+//审核机构
+export const reqOrgAuth = (id,state) =>ajax2('/org/auth',{id,state},'GET')
 
 //获取所有机构
 export const reqOrgAll = (state) =>ajax2('/org/getAll',{state},'GET')
 
 //机构分页
-export const reqOrgPage = (page,rows,place) =>ajax2('/org/getPage',{page,rows,place},'GET')
+export const reqOrgPage = (page,rows,place,state) =>ajax2('/org/getPage',{page,rows,place,state},'GET')
 
 //用户分页
 export const reqStaffPage = (page,rows,cond) =>{

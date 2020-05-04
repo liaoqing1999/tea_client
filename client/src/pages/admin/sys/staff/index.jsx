@@ -82,13 +82,11 @@ export default class Staff extends Component {
     }
     getOption = () => {
         const { dict } = this.state
-        let i = 0
         if (dict["state"]) {
             return dict["state"].reduce((pre, item) => {
                 pre.push((
-                    <Option key={i} value={item.valueId}>{item.valueName}</Option>
+                    <Option key={item.id} value={item.valueId}>{item.valueName}</Option>
                 ))
-                i++
                 return pre
             }, [])
         }

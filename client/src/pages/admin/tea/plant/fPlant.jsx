@@ -1,14 +1,8 @@
 import React from "react";
 import { FileImageTwoTone } from '@ant-design/icons';
-import { Table, Menu, Descriptions, Button, Carousel, Modal, Row, Col } from 'antd'
+import { Table, Descriptions, Button, Carousel, Modal, Row, Col } from 'antd'
 import { reqGetPlant } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
-const menu = (
-    <Menu>
-        <Menu.Item>Action 1</Menu.Item>
-        <Menu.Item>Action 2</Menu.Item>
-    </Menu>
-);
 export default class FPlant extends React.Component {
     state = {
         fPlant: {},
@@ -73,7 +67,8 @@ export default class FPlant extends React.Component {
     paginationProps = {
         showQuickJumper: true,
         showTotal: () => `共${this.state.fPlant.total}条`,
-        total: this.state.fPlant.totals,
+        total: this.state.fPlant.total,
+        pageSize:3,
         onChange: (current) => this.getPlant(current,3,true),
     };
     componentDidMount = () => {

@@ -6,19 +6,7 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
-const validfunc = async (rule, value) => {
-    if (value) {
-        const res = await reqStaffName(value)
-        if (res.data.data==='') {
-            
-        }else{
-            throw new Error('用户名已存在!');
-        }
-    } else {
-        throw new Error('角色名是必须的!');
-    }
 
-}
 const validateMessages = {
     required: '${label} 是必须的!',
     types: {
@@ -64,6 +52,21 @@ export default class EditStaff extends Component {
     }
     render() {
         const { user } = this.props
+        const validfunc = async (rule, value) => {
+            if(!user.name){
+                if (value) {
+                    const res = await reqStaffName(value)
+                    if (res.data.data==='') {
+                        
+                    }else{
+                        throw new Error('用户名已存在!');
+                    }
+                } else {
+                    throw new Error('用户名是必须的!');
+                }
+            }
+           
+        }
         return (<div>
             <Form {...layout} ref={this.form} onFinish={this.props.onFinish} validateMessages={validateMessages}
                 initialValues={{
@@ -82,7 +85,7 @@ export default class EditStaff extends Component {
                     <Input disabled={this.props.type === 'edit'} />
                 </Form.Item>
                 {this.props.type === 'edit' ? ("") :
-                    (<Form.Item name='password' label="密码">
+                    (<Form.Item name='password' label="密码" rules={[{ required: true }]}>
                         <Input.Password />
                     </Form.Item>
                     )}

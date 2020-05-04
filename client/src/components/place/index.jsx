@@ -53,8 +53,9 @@ export default class Place extends Component {
         return <Cascader
             options={this.state.options}
             onChange={this.onPlaceChange}
-            placeholder="Please select"
+            placeholder="请选择地点"
             changeOnSelect
+            defaultValue={this.props.value}
             showSearch={this.filter}
         />
     }

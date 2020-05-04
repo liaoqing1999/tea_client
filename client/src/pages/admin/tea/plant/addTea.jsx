@@ -1,6 +1,6 @@
 import React from "react";
-import { Select, Form, Input, Button, TreeSelect, message } from 'antd'
-import { reqUpdatePlant, reqTeaType,reqOrgProduce } from "../../../../api";
+import { Select, Form, Input, Button } from 'antd'
+import { reqTeaType,reqOrgProduce } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 const layout = {
     labelCol: { span: 8 },

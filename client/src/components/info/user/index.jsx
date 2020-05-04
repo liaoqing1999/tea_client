@@ -80,8 +80,8 @@ export default class User extends Component {
                     }}>
                     <Row>
                         <Col span={8}>
-                            <Form.Item name='name' label="用户名" rules={[{ required: true }]}>
-                                <Input />
+                            <Form.Item name='name' label="用户名"  rules={[{ required: true }]}>
+                                <Input disabled/>
                             </Form.Item>
                             <Form.Item name='email' label="邮箱" rules={[{ type: 'email' }]}>
                                 <Input />
