@@ -3,11 +3,6 @@ import { Form, Input, Button, message, Tree, Row, Col } from 'antd'
 import { menuList } from '../../../../config/menuConfig';
 import { reqUpdateRole } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
-const treeData = [{
-    title: '后台权限',
-    key: '/admin',
-    children: menuList
-}]
 export default class EditRole extends Component {
     constructor(props) {
         super(props)
@@ -40,6 +35,11 @@ export default class EditRole extends Component {
     }
     render() {
         const { checkedKeys } = this.state
+        const treeData = [{
+            title: '后台权限',
+            key: '/admin',
+            children: menuList
+        }]
         const { role } = this.props
         return (<div><Form>
             <Form.Item label="角色名">
@@ -49,7 +49,6 @@ export default class EditRole extends Component {
             <Tree
                 checkable
                 checkedKeys={checkedKeys}
-                defaultExpandAll={true}
                 onCheck={this.onCheck}
                 treeData={treeData}
                 
