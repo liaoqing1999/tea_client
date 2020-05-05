@@ -22,8 +22,9 @@ import Org from "../pages/admin/sys/org";
 import Staff from "../pages/admin/sys/staff";
 import Role from "../pages/admin/sys/role";
 import Produce from "../pages/admin/sys/produce";
-import Dict from "../pages/admin/sys/dict";
 import NewsManage from "../pages/admin/sys/news";
+import Dict from "../pages/admin/sys/dict";
+import DictDetail from "../pages/admin/sys/dict/detail";
 const menuList = [
     {
         title: '个人中心',
@@ -187,6 +188,15 @@ const menuList = [
                 key: '/admin/dict',
                 icon: <DatabaseOutlined />,
                 component:Dict,
+                hideChildren:true,
+                children: [
+                    {
+                        title: '字段详情',
+                        key: '/admin/dict/detail',
+                        icon: <DatabaseOutlined />,
+                        component:DictDetail,
+                    }
+                ]
             },
             {
                 title: '资讯管理',

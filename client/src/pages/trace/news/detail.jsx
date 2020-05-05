@@ -16,7 +16,6 @@ export default class NewsDetail extends Component {
     }
     componentDidMount() {
         const user = memoryUtils.user
-        console.log(user)
         if (user && user.id) {
             this.getNewsDetail(user.id)
         }

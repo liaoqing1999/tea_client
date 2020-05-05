@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Select, Form, Button, Input } from 'antd'
-import { reqStaffName } from "../../../../api";
 import Place from "../../../../components/place";
 const layout = {
     labelCol: { span: 8 },

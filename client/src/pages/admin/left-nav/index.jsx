@@ -52,7 +52,7 @@ class LeftNav extends Component {
         const path = this.props.location.pathname
         return menuList.reduce((pre, item) => {
             if (this.hashAuth(item)) {
-                if (!item.children) {
+                if (!item.children||item.hideChildren) {
                     pre.push((
                         <Menu.Item key={item.key}>
                             <Link to={item.key}>
@@ -62,11 +62,10 @@ class LeftNav extends Component {
                         </Menu.Item>
                     ))
                 } else {
-                    const citem = item.children.find(citem => citem.key === path)
+                    const citem = item.children.find(citem => path.indexOf(citem.key) !==-1)
                     if (citem) {
                         this.openKey = item.key;
                     }
-
                     pre.push((
                         <SubMenu key={item.key} title={
                             <span>
@@ -94,8 +93,8 @@ class LeftNav extends Component {
             title = "喝好茶后台管理"
         }
         //得到当前路由路径
-        const path = this.props.location.pathname
-
+        let path = this.props.location.pathname
+        path = path.indexOf('/admin/dict')===0?"/admin/dict":path
         return (
             <div className="left-nav">
                 <Link to="/admin" className='left-nav-header'>

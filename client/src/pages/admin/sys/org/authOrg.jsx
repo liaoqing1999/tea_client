@@ -1,6 +1,6 @@
 import React from "react";
-import { Table, Form, Descriptions, Button, Carousel, Modal, Row, Popconfirm, Divider, message, Col, Input, Select } from 'antd'
-import { reqOrgPage, reqDictType,reqOrgUpdate,reqOrgAdd} from "../../../../api";
+import { Table, Form, Descriptions, Button, Carousel, Modal, Row, Popconfirm, Divider, message, Col, Select } from 'antd'
+import { reqOrgPage, reqDictType,reqOrgUpdate,reqOrgAdd, reqOrgDelete} from "../../../../api";
 import province from "../../../../components/place/province";
 import EditOrg from "./edit";
 const { Option } = Select;
@@ -111,8 +111,11 @@ export default class AuthOrg extends React.Component {
         }
 
     }
-    handleDelete = (record) =>{
-
+    handleDelete =async (record) =>{
+        const {cond,org} = this.state
+        await reqOrgDelete(record.id)
+        message.success("删除成功")
+        this.getOrg(org.page, org.rows, cond.place,cond.state)
     }
     componentDidMount = () => {
         this.getOrg(1, 3,"","all")

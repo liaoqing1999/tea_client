@@ -46,8 +46,38 @@ export const reqDictionaryByCond = (typeCode,valueId) =>ajax2('/dictionary/getBy
 //获取字典类型list
 export const reqDictType = (typeCodes) =>ajax2('/dictionary/getByType',{typeCodes},'GET')
 
+//获取字典类型
+export const reqDictTypePage = (cond) =>{
+    cond = JSON.stringify(cond)
+    return ajax2('/dictionary/getType',{cond},'GET')
+}
+
+//获取字典类型
+export const reqDictPage = (typeCode,valueId) =>ajax2('/dictionary/get',{typeCode,valueId},'GET')
+
+//新增字典类型
+export const reqDictTypeAdd = (dictionary) =>ajax2('/dictionary/addType',dictionary,'POST')
+
+//新增字典
+export const reqDictAdd = (dictionary) =>ajax2('/dictionary/add',dictionary,'POST')
+
+//更新字典类型
+export const reqDictTypeUpdate = (typeCode,typeName) =>ajax2('/dictionary/updateType',{typeCode,typeName},'GET')
+
+//更新字典
+export const reqDictUpdate = (dictionary) =>ajax2('/dictionary/update',dictionary,'POST')
+
+//删除字典类型
+export const reqDictTypeDelete = (typeCode) => ajax2('/dictionary/deleteType',{typeCode},'GET')
+
+//删除字典
+export const reqDictDelete = (id) => ajax2('/dictionary/delete',{id},'GET')
+
+//检测字典名是否已存在
+export const reqDictTypeName = (typeCode,valueId) =>ajax2('/dictionary/name',{typeCode,valueId},'GET')
+
 //获取茶叶类型
-export const reqTeaType = () =>ajax2('/dictionary/getType',{},'GET')
+export const reqTeaType = () =>ajax2('/dictionary/getTeaType',{},'GET')
 
 //获取机构产品
 export const reqOrgProduce = (org) =>ajax2('/produce/getOrg',{org},'GET')
@@ -60,6 +90,9 @@ export const reqOrgAdd = (org) =>ajax2('/org/add',org,'POST')
 
 //更新机构
 export const reqOrgUpdate = (org) =>ajax2('/org/update',org,'POST')
+
+//删除机构
+export const reqOrgDelete = (id) =>ajax2('/org/delete',{id},'GET')
 
 //获取机构
 export const reqOrg = (id) =>ajax2('/org/get',{id},'GET')

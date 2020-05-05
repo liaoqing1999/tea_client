@@ -38,15 +38,22 @@ class Admin extends Component {
     this.setState({ collapsed });
   };
   getRouter = (menuList) => {
-    if(Array.isArray(menuList)){
+    if (Array.isArray(menuList)) {
       return menuList.reduce((pre, item) => {
-        if (!item.children&&item.component) {
+        if (!item.children) {
+          if (item.component) {
+            pre.push((
+              <Route path={item.key} component={item.component}></Route>
+            ))
+          }
+        } else {
+          if (item.component && item.hideChildren) {
+            pre.push((
+              <Route exact path={item.key} component={item.component}></Route>
+            ))
+          }
           pre.push((
-            <Route path={item.key} component={item.component}></Route>
-          ))
-        } else{
-          pre.push((
-              this.getRouter(item.children)
+            this.getRouter(item.children)
           ))
         }
         return pre
