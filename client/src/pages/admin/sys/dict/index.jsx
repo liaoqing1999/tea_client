@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { reqDictTypePage, reqDictTypeName, reqDictTypeAdd, reqDictTypeUpdate, reqDictTypeDelete } from '../../../../api'
 import { Table, Button, Row, Divider, Popconfirm, Modal, Form, Input, message } from 'antd';
-import DictDetail from './detail';
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },

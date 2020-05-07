@@ -148,7 +148,19 @@ export const reqFindRole = (id) =>ajax2('/role/find',{id},'GET')
 export const reqUpdateRole = (role) =>ajax2('/role/update',role,'POST')
 
 //资讯分页
-export const reqNewsPage = (page,rows,type) =>ajax2('/news/getPage',{page,rows,type},'GET')
+export const reqNewsPage = (page,rows,cond) =>{
+    cond = JSON.stringify(cond)
+    return ajax2('/news/getPage',{page,rows,cond},'GET')
+}
+
+//增加资讯
+export const reqAddNews = (news) =>ajax2('/news/add',news,'POST')
+
+//更新资讯
+export const reqUpdateNews = (news) =>ajax2('/news/update',news,'POST')
+
+//更新资讯
+export const reqDeleteNews = (id) =>ajax2('/news/delete',{id},'GET')
 
 //增加资讯记录
 export const reqAddNewsDetail = (newsDetail) =>ajax2('/newsDetail/add',newsDetail,'POST')

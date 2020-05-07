@@ -99,7 +99,7 @@ export default class DictDetail extends Component {
     render() {
         const { state } = this.props.location
         if (!state) {
-            this.props.history.replace('/admin/dict')
+            this.props.history.goBack()
         }
         const { dict, type, record, editVisible } = this.state
         const validfunc = async (rule, value) => {

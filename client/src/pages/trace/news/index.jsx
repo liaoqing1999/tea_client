@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Spin,Rate, Tabs, List, Avatar, Button } from 'antd';
+import { Spin, Rate, Tabs, List, Avatar, Button, Empty } from 'antd';
 import { EyeOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 import SearchTea from '../searchtea';
 import { reqDictionaryByCond, reqNewsPage } from '../../../api';
@@ -27,7 +27,7 @@ export default class News extends Component {
     }
     getNewsData = async (page, activeKey) => {
         const title = this.state.title
-        const res = await reqNewsPage(page, 3, title[activeKey].valueId)
+        const res = await reqNewsPage(page, 3, { type: title[activeKey].valueId })
         title[activeKey].news = res.data.data
         this.setState({
             title: title
@@ -66,45 +66,57 @@ export default class News extends Component {
         const news = title[i].news
         if (news) {
             const newsList = news.content
-            return newsList.reduce((pre, item) => {
-                pre.push((
-                    <List.Item
-                        key={item.id}
-                        actions={[
-                            <IconText icon={LikeOutlined} text={item.up} key="list-vertical-like-o" />,
-                            <IconText icon={DislikeOutlined} text={item.down} key="list-vertical-star-o" />,
-                            <IconText icon={EyeOutlined} text={item.read} key="list-vertical-star-o" />,
-                            <Rate character="好" allowHalf disabled value={item.rate} />,
-                            <span>{"参评人数:" + item.rateNum}</span>,
-                            <span>{'发布时间:' + formateDate(item.date)}</span>,
-                        ]}
-                        extra={
-                            <img
-                                width={272}
-                                alt="cover"
-                                src={global.ipfs.uri + item.cover}
+            if (Array.isArray(newsList)&& newsList.length) {
+                return newsList.reduce((pre, item) => {
+                    pre.push((
+                        <List.Item
+                            key={item.id}
+                            actions={[
+                                <IconText icon={LikeOutlined} text={item.up} key="list-vertical-like-o" />,
+                                <IconText icon={DislikeOutlined} text={item.down} key="list-vertical-star-o" />,
+                                <IconText icon={EyeOutlined} text={item.read} key="list-vertical-star-o" />,
+                                <Rate character="好" allowHalf disabled value={item.rate} />,
+                                <span>{"参评人数:" + item.rateNum}</span>,
+                                <span>{'发布时间:' + formateDate(item.date)}</span>,
+                            ]}
+                            extra={
+                                <img
+                                    style={{height:"140px"}}
+                                    alt="cover"
+                                    src={global.ipfs.uri + item.cover}
+                                />
+                            }
+                        >
+                            <List.Item.Meta
+                                avatar={<Avatar src={global.ipfs.uri + item.avatar} />}
+                                title={<a href={item.href}>{item.title}</a>}
+                                description={item.desc}
                             />
-                        }
-                    >
-                        <List.Item.Meta
-                            avatar={<Avatar src={global.ipfs.uri + item.avatar} />}
-                            title={<a href={item.href}>{item.title}</a>}
-                            description={item.desc}
-                        />
 
-                        <span>作者：</span>{item.writer}
-                        <span style={{ marginLeft: "10px" }}>发布人：</span>{item.publisher}
-                        {item.org ? (<span style={{ marginLeft: "10px" }}>所属机构：{item.org}</span>) : ("")}
-                        <Button type="link" onClick={(event) => this.viewNews(item)}>查看详情>></Button>
-                    </List.Item>
-                ))
-                i++
-                return pre
-            }, [])
+                            <span>作者：</span>{item.writer}
+                            <span style={{ marginLeft: "10px" }}>发布人：</span>{item.publisher}
+                            {item.orgName ? (<span style={{ marginLeft: "10px" }}>所属机构：{item.orgName}</span>) : ("")}
+                            <Button type="link" onClick={(event) => this.viewNews(item)}>查看详情>></Button>
+                        </List.Item>
+                    ))
+                    i++
+                    return pre
+                }, [])
+            }else{
+                return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            }
+
+        } else {
+            return <Spin tip="正在查询中..." style={{ textAlign: "center" }} />
         }
     }
     viewNews = (news) => {
-        this.props.history.push("/main/news/detail",{news})
+        if(news.href){
+            window.open(news.href);
+        }else{
+            this.props.history.push("/main/news/detail", { news })
+        }
+       
     }
     componentDidMount() {
         this.getTabTitleDate()
@@ -113,7 +125,7 @@ export default class News extends Component {
         const res = await reqDictionaryByCond('news_type')
         const title = res.data.data
         if (title.length) {
-            const r = await reqNewsPage(1, 3, title[0].valueId)
+            const r = await reqNewsPage(1, 3, { type: title[0].valueId })
             title[0].news = r.data.data
             this.setState({ title, text: title[0].valueName })
         }
@@ -133,10 +145,10 @@ export default class News extends Component {
                     </div>
                 </div>
                 <div className="about-center">
-                    {title.length===0?(<Spin tip="正在查询中..." style={{ textAlign: "center" }} />):
-                    ( <Tabs defaultActiveKey="0" tabPosition="left" onChange={this.onChange}>
-                        {this.getContent()}
-                    </Tabs>)}
+                    {title.length === 0 ? (<Spin tip="正在查询中..." style={{ textAlign: "center" }} />) :
+                        (<Tabs defaultActiveKey="0" tabPosition="left" onChange={this.onChange}>
+                            {this.getContent()}
+                        </Tabs>)}
                 </div>
             </div>
         )

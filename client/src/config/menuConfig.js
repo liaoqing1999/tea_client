@@ -25,6 +25,7 @@ import Produce from "../pages/admin/sys/produce";
 import NewsManage from "../pages/admin/sys/news";
 import Dict from "../pages/admin/sys/dict";
 import DictDetail from "../pages/admin/sys/dict/detail";
+import EditNews from "../pages/admin/sys/news/edit";
 const menuList = [
     {
         title: '个人中心',
@@ -191,7 +192,7 @@ const menuList = [
                 hideChildren:true,
                 children: [
                     {
-                        title: '字段详情',
+                        title: '字典详情',
                         key: '/admin/dict/detail',
                         icon: <DatabaseOutlined />,
                         component:DictDetail,
@@ -203,6 +204,21 @@ const menuList = [
                 key: '/admin/news',
                 icon: <FileTextOutlined />,
                 component:NewsManage,
+                hideChildren:true,
+                children: [
+                    {
+                        title: '资讯编辑',
+                        key: '/admin/news/edit',
+                        icon: <FileTextOutlined />,
+                        component:EditNews,
+                    },
+                    {
+                        title: '资讯详情',
+                        key: '/admin/news/detail',
+                        icon: <FileTextOutlined />,
+                        component:DictDetail,
+                    }
+                ]
             },
         ]
     },

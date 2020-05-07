@@ -139,8 +139,13 @@ export default class Join extends Component {
             const index = state.permitFileList.indexOf(file);
             const newFileList = state.permitFileList.slice();
             newFileList.splice(index, 1);
+            const f = state.permitFile.find(item =>item.uid === file.uid)
+            const i= state.permitFile.indexOf(f);
+            const permitFile = state.permitFile.slice();
+            permitFile.splice(i, 1);
             return {
                 permitFileList: newFileList,
+                permitFile
             };
         });
     }
@@ -159,8 +164,13 @@ export default class Join extends Component {
             const index = state.codePermitFileList.indexOf(file);
             const newFileList = state.codePermitFileList.slice();
             newFileList.splice(index, 1);
+            const f = state.codePermitFile.find(item =>item.uid === file.uid)
+            const i= state.codePermitFile.indexOf(f);
+            const codePermitFile = state.codePermitFile.slice();
+            codePermitFile.splice(i, 1);
             return {
                 codePermitFileList: newFileList,
+                codePermitFile
             };
         });
     }
@@ -179,8 +189,13 @@ export default class Join extends Component {
             const index = state.trademarkFileList.indexOf(file);
             const newFileList = state.trademarkFileList.slice();
             newFileList.splice(index, 1);
+            const f = state.trademarkFile.find(item =>item.uid === file.uid)
+            const i= state.trademarkFile.indexOf(f);
+            const trademarkFile = state.trademarkFile.slice();
+            trademarkFile.splice(i, 1);
             return {
                 trademarkFileList: newFileList,
+                trademarkFile
             };
         });
     }

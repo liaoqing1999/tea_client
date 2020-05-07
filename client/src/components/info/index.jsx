@@ -4,6 +4,7 @@ import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
 import {  Menu, Dropdown, Modal, Avatar, Button } from 'antd';
 import { UserOutlined, LogoutOutlined,MessageOutlined} from '@ant-design/icons';
+import sessionUtils from '../../utils/sessionUtils';
 class Info extends Component {
     logout = () => {
         Modal.confirm({
@@ -17,6 +18,7 @@ class Info extends Component {
                 memoryUtils.user = {};
                 storageUtils.removeRole();
                 memoryUtils.role = {};
+                sessionUtils.remove('org')
                 this.props.history.push('/login')
             },
             onCancel() {

@@ -140,7 +140,7 @@ export default class NewsDetail extends Component {
                         <Col>
                             <span>作者：</span>{news.writer}
                             <span style={{ marginLeft: "10px" }}>发布人：</span>{news.publisher}
-                            {news.org ? (<span style={{ marginLeft: "10px" }}>所属机构：{news.org}</span>) : ("")}
+                            {news.orgName ? (<span style={{ marginLeft: "10px" }}>所属机构：{news.orgName}</span>) : ("")}
                         </Col>
                         <Col>
                             <Tooltip title={upText}>
@@ -155,7 +155,7 @@ export default class NewsDetail extends Component {
                         </Col>
                     </Row>
                     <Divider ></Divider>
-                    {news.content}
+                    <div dangerouslySetInnerHTML={{__html:news.content}}></div>
                     <Divider ></Divider>
                     <Row>
                         <Button style={{ padding: "0" }} type="link">已经到底了，点个赞呗</Button>

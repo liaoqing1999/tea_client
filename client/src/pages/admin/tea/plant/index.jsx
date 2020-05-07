@@ -154,8 +154,13 @@ export default class Plant extends Component {
             const index = state.imgFileList.indexOf(file);
             const newFileList = state.imgFileList.slice();
             newFileList.splice(index, 1);
+            const f = state.imgFile.find(item =>item.uid === file.uid)
+            const i= state.imgFile.indexOf(f);
+            const imgFile = state.imgFile.slice();
+            imgFile.splice(i, 1);
             return {
                 imgFileList: newFileList,
+                imgFile
             };
         });
     }

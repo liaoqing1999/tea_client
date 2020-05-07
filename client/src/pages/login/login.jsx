@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import './login.less';
 import logo from '../../assets/GREEN_TEA.svg'
 import { Form, Checkbox, Input, Button, message } from 'antd';
-import { reqLogin, reqFindRole } from '../../api/index'
+import { reqLogin, reqFindRole, reqOrg } from '../../api/index'
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import sessionUtils from "../../utils/sessionUtils";
 const creatHistory = require("history").createBrowserHistory
 const history = creatHistory();
 export class Login extends Component {
@@ -23,6 +24,9 @@ export class Login extends Component {
             const role = r.data.data
             memoryUtils.role = role
             storageUtils.savaRole(role)
+            const o = await reqOrg(user.org)
+            const org = o.data.data
+            sessionUtils.save('org',org)
             let rem = {}
             rem.name = user.name
             rem.remember = remember
