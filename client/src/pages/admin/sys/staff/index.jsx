@@ -18,7 +18,8 @@ export default class Staff extends Component {
     }
     componentDidMount() {
         this.getDate(1, 10)
-        this.getDict("state")
+        let typeCode=['state','sex']
+        this.getDict(typeCode)
     }
     //表行选中触发事件
     onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -203,7 +204,7 @@ export default class Staff extends Component {
                 <Card title={title}>
                     <Table
                         bordered
-                        rowKey="_id"
+                        rowKey="id"
                         dataSource={staff.content}
                         columns={columns}
                         size="middle"

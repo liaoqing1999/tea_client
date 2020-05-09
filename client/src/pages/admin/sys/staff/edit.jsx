@@ -34,19 +34,18 @@ export default class EditStaff extends Component {
             "work": user.work,
             "org": user.org,
             "email": user.email,
+            "sex": user.sex,
             "role": user.role,
             "state": user.state,
             "password": user.password
         });
     }
-    getOption = () => {
+    getOption = (name) => {
         const dict = this.props.dict
-        let i = 0
-        return dict["state"].reduce((pre, item) => {
+        return dict[name].reduce((pre, item) => {
             pre.push((
-                <Option key={i} value={item.valueId}>{item.valueName}</Option>
+                <Option key={item.id} value={item.valueId}>{item.valueName}</Option>
             ))
-            i++
             return pre
         }, [])
     }
@@ -78,6 +77,7 @@ export default class EditStaff extends Component {
                     "org": user.org,
                     "email": user.email,
                     "role": user.role,
+                    "sex": user.sex,
                     "state": user.state,
                     "password": user.password
                 }}>
@@ -91,6 +91,18 @@ export default class EditStaff extends Component {
                     )}
                 <Form.Item name='realName' label="真实姓名">
                     <Input />
+                </Form.Item>
+                <Form.Item name='sex' label="性别" >
+                    <Select
+                        showSearch
+                        placeholder="请选择性别"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {this.getOption('sex')}
+                    </Select>
                 </Form.Item>
                 <Form.Item name='phone' label="电话号码" rules={[{ required: true }, { pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"), message: '请输入正确的手机号' }]}>
                     <Input />
@@ -119,7 +131,7 @@ export default class EditStaff extends Component {
                             option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
                     >
-                        {this.getOption()}
+                        {this.getOption("state")}
                     </Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
