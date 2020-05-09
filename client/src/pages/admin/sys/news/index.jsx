@@ -9,9 +9,8 @@ export default class NewsManage extends Component {
         org: "",
         news: {},
         selectedRowKeys: [],
-        addVisible: false,
         editVisible: false,
-        dict: [],
+        dict: {},
         cond: {}
     }
     form = React.createRef();

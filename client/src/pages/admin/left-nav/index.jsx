@@ -86,6 +86,20 @@ class LeftNav extends Component {
     UNSAFE_componentWillMount() {
         this.menuNodes = this.getMenuNodes_r(menuList);
     }
+    getKeys = (path,menuList) =>{
+        let key=""
+        menuList.forEach(item => {
+            if(item.key === path){
+                key = item.key
+            }else if(path.indexOf(item.key)===0&&item.hideChildren){
+                key = item.key
+            }else if(item.children&&!item.hideChildren){
+                const k = this.getKeys(path,item.children)
+                key = k?k:key
+            }
+        });
+        return key
+    }
     render() {
         const { collapsed } = this.props
         let title = ''
@@ -94,7 +108,9 @@ class LeftNav extends Component {
         }
         //得到当前路由路径
         let path = this.props.location.pathname
-        path = path.indexOf('/admin/dict')===0?"/admin/dict":path
+        
+        path = this.getKeys(path,menuList)
+        console.log(path)
         return (
             <div className="left-nav">
                 <Link to="/admin" className='left-nav-header'>
