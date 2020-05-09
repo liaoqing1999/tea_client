@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Modal, Card, Button, Table, Popconfirm, Descriptions, message, Row, Divider, Input, Select, Col, Carousel, Form, DatePicker } from 'antd'
-import { reqAddStaff, reqStaffPage, reqDictType, reqUpdateStaff, reqDeleteStaff, reqUpdatePassword, reqNewsPage, reqDeleteNews } from '../../../../api'
-import EditStaff from './edit';
+import { Modal, Card, Button, Table, Popconfirm, Descriptions, message, Row, Divider, Select, Col, Carousel, Form, DatePicker } from 'antd'
+import { reqDictType, reqDeleteNews, reqNewsPage } from '../../../../api'
 import { formateDate } from '../../../../utils/dateUtils';
 const { Option } = Select;
 export default class NewsManage extends Component {
@@ -84,6 +83,9 @@ export default class NewsManage extends Component {
         onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, this.state.cond),
         onChange: (current) => this.getDate(current, this.state.newsList.rows, this.state.cond),
     };
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+        this.setState({ selectedRowKeys, news: selectedRows[0] });
+    };
     getOption = (name) => {
         const { dict } = this.state
         if (Array.isArray(dict[name])) {
@@ -96,9 +98,13 @@ export default class NewsManage extends Component {
           }
 
     }
-    addEdit = (record, type) => {
+    ViewNewsDetail = () =>{
+        const {news} = this.state
+        this.props.history.push("/admin/news/detail", { news: news })
+    }
+    addEdit = (news, type) => {
         const { dict } = this.state
-        this.props.history.push("/admin/news/edit", { news: record, type, dict, editType: 'sys' })
+        this.props.history.push("/admin/news/edit", { news: news, type, dict, editType: 'sys' })
     }
     handleDelete = async (record) => {
         await reqDeleteNews(record.id)
@@ -151,8 +157,12 @@ export default class NewsManage extends Component {
 
             },
         ]
-        const { newsList, editVisible, visible, img, news, selectedRowKeys, type, dict, cond } = this.state
-
+        const { newsList, visible,selectedRowKeys, img } = this.state
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+            type: "radio"
+        };
         const title = (
             <div>
                 <Form ref={this.form} onFinish={(values) => this.getDate(this.state.newsList.page, this.state.newsList.rows, values)}>
@@ -204,6 +214,7 @@ export default class NewsManage extends Component {
                     </Row>
                 </Form>
                 <Button type="primary" onClick={() => this.addEdit({}, 'add')} style={{ marginRight: "20px" }}>新增资讯</Button>
+                <Button type="primary" onClick={this.ViewNewsDetail} disabled={!selectedRowKeys.length}>查看用户记录</Button>
             </div>
         )
         return (
@@ -214,6 +225,7 @@ export default class NewsManage extends Component {
                         className="components-table-demo-nested"
                         columns={columns}
                         rowKey="id"
+                        rowSelection={rowSelection}
                         expandable={{ expandedRowRender: this.expandedRowRender }}
                         pagination={this.paginationProps}
                         dataSource={newsList.content}

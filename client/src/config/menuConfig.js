@@ -26,6 +26,7 @@ import NewsManage from "../pages/admin/sys/news";
 import Dict from "../pages/admin/sys/dict";
 import DictDetail from "../pages/admin/sys/dict/detail";
 import EditNews from "../pages/admin/sys/news/edit";
+import NewsDetail from "../pages/admin/sys/news/detail";
 const menuList = [
     {
         title: '个人中心',
@@ -216,7 +217,7 @@ const menuList = [
                         title: '资讯详情',
                         key: '/admin/news/detail',
                         icon: <FileTextOutlined />,
-                        component:DictDetail,
+                        component:NewsDetail,
                     }
                 ]
             },
