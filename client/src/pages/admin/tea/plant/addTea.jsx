@@ -2,6 +2,7 @@ import React from "react";
 import { Select, Form, Input, Button } from 'antd'
 import { reqTeaType,reqOrgProduce } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
+import TeaType from "../../../../components/teaType/index";
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -97,14 +98,7 @@ export default class AddTea extends React.Component {
                     <Input />
                 </Form.Item>
                 <Form.Item name="typeId" label="茶叶类型" rules={[{ required: true }]}>
-                    <Select
-                        showSearch
-                        placeholder="请选择所属产品"
-                        optionFilterProp="children"
-                        filterOption={this.typeFilterOption}
-                    >
-                        {this.getTypeOption()}
-                    </Select>
+                   <TeaType> </TeaType>
                 </Form.Item>
                 <Form.Item name="batch" label="茶叶批次" rules={[{ required: true }]}>
                     <Input />

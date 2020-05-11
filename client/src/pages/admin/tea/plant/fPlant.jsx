@@ -64,13 +64,7 @@ export default class FPlant extends React.Component {
             }
         }
     }
-    paginationProps = {
-        showQuickJumper: true,
-        showTotal: () => `共${this.state.fPlant.total}条`,
-        total: this.state.fPlant.total,
-        pageSize:3,
-        onChange: (current) => this.getPlant(current,3,true),
-    };
+  
     componentDidMount = () => {
         this.getPlant(1, 3, true)
     }
@@ -85,6 +79,13 @@ export default class FPlant extends React.Component {
             { title: '二维码', dataIndex: 'qr', key: 'qr', render: (text) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}><FileImageTwoTone /></Button> },
             { title: '产品图', dataIndex: 'img', key: 'img', render: (text) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}><FileImageTwoTone /></Button> },
         ];
+        const paginationProps = {
+            showQuickJumper: true,
+            showTotal: () => `共${fPlant.total}条`,
+            total: fPlant.total,
+            pageSize:3,
+            onChange: (current) => this.getPlant(current,3,true),
+        };
         return (
             <div>
                 <Table
@@ -92,7 +93,7 @@ export default class FPlant extends React.Component {
                     columns={columns}
                     rowKey="id"
                     expandable={{expandedRowRender:this.expandedRowRender}}
-                    pagination={this.paginationProps}
+                    pagination={paginationProps}
                     dataSource={fPlant.content}
                 />
                 <Modal

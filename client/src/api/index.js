@@ -25,14 +25,28 @@ export const reqWeather = (city) => {
 //获取所有茶叶信息
 export const reqTea = () => ajax2('/tea/getAll', {}, 'GET')
 
-//获取茶叶种植阶段信息
-export const reqGetPlant = (page, rows, userId, finish) => ajax2('/tea/getPlant', { page, rows, userId, finish }, 'GET')
-
-//获取茶叶种植阶段信息
-export const reqUpdatePlant = (tea) => ajax2('/tea/updatePlant', tea, 'POST')
+//获取茶叶分页
+export const reqPageTea = (page, rows, cond) => {
+    cond = JSON.stringify(cond)
+    return ajax2('/tea/getPage', { page, rows, cond }, 'GET')
+}
 
 //添加茶叶
 export const reqAddTea = (tea) => ajax2('/tea/add', tea, 'POST')
+
+//更新茶叶
+export const reqUpdateTea = (tea) => ajax2('/tea/update', tea, 'POST')
+
+//删除茶叶
+export const reqDeleteTea = (id) => ajax2('/tea/delete', id, 'GET')
+
+
+//获取茶叶种植阶段信息
+export const reqGetPlant = (page, rows, userId, finish) => ajax2('/tea/getPlant', { page, rows, userId, finish }, 'GET')
+
+//更新茶叶种植阶段信息
+export const reqUpdatePlant = (tea) => ajax2('/tea/updatePlant', tea, 'POST')
+
 
 //获取验证码
 export const reqVerify = () => ajax2('/verify/getVerify', {}, 'GET')
@@ -90,6 +104,9 @@ export const reqProducePage = (page, rows, cond) => {
 
 //新增产品
 export const reqProduceAdd = (produce) => ajax2('/produce/add', produce, 'POST')
+
+//新增产品
+export const reqProduceName = (name,org) => ajax2('/produce/name', { name,org }, 'GET')
 
 //更新产品
 export const reqProducUpdate = (produce) => ajax2('/produce/update', produce, 'POST')

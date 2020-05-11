@@ -6,10 +6,8 @@ const { Option } = Select;
 export default class NewsManage extends Component {
     state = {
         newsList: {},
-        org: "",
         news: {},
         selectedRowKeys: [],
-        editVisible: false,
         dict: {},
         cond: {}
     }
@@ -19,7 +17,7 @@ export default class NewsManage extends Component {
         this.getDict(["state", "news_type"])
     }
     expandedRowRender = (record) => {
-        const span = record.orgName ? 3 : 1
+        const span = record.orgName ? 1: 1.5
         return (
             <Descriptions column={3} >
                 <Descriptions.Item label="阅读人数">{record.read}</Descriptions.Item>
@@ -30,7 +28,7 @@ export default class NewsManage extends Component {
                 <Descriptions.Item label="跳转链接">{record.href ? (<Button type="link" onClick={() => window.open(record.href)}>点击跳转</Button>) : ("无")}</Descriptions.Item>
                 {record.orgName ? (<Descriptions.Item label="所属机构">{record.orgName}</Descriptions.Item>) : ("")}
                 <Descriptions.Item label="头像" span={span}> <Button style={{ padding: "0" }} type="link" onClick={() => this.setState({ visible: true, img: record.avatar })}>查看详情</Button></Descriptions.Item>
-                <Descriptions.Item label="封面" span={3}>  <Button style={{ padding: "0" }} type="link" onClick={() => this.setState({ visible: true, img: record.cover })}>查看详情</Button></Descriptions.Item>
+                <Descriptions.Item label="封面" span={span}>  <Button style={{ padding: "0" }} type="link" onClick={() => this.setState({ visible: true, img: record.cover })}>查看详情</Button></Descriptions.Item>
                 <Descriptions.Item label="描述" span={3}>{record.desc}</Descriptions.Item>
             </Descriptions>
         );
@@ -74,14 +72,7 @@ export default class NewsManage extends Component {
             }
         }
     }
-    paginationProps = {
-        showSizeChanger: true,
-        showQuickJumper: true,
-        showTotal: () => `共${this.state.newsList.total}条`,
-        total: this.state.newsList.totals,
-        onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, this.state.cond),
-        onChange: (current) => this.getDate(current, this.state.newsList.rows, this.state.cond),
-    };
+  
     onSelectChange = (selectedRowKeys, selectedRows) => {
         this.setState({ selectedRowKeys, news: selectedRows[0] });
     };
@@ -111,6 +102,20 @@ export default class NewsManage extends Component {
         this.getDate(this.state.newsList.page, this.state.newsList.rows, this.state.cond)
     }
     render() {
+        const { newsList, visible,selectedRowKeys, img,cond } = this.state
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+            type: "radio"
+        };
+        const paginationProps = {
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: () => `共${newsList.total}条`,
+            total: newsList.total,
+            onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, cond),
+            onChange: (current) => this.getDate(current, newsList.rows, cond),
+        };
         const columns = [
             {
                 title: '标题',
@@ -156,12 +161,7 @@ export default class NewsManage extends Component {
 
             },
         ]
-        const { newsList, visible,selectedRowKeys, img } = this.state
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-            type: "radio"
-        };
+      
         const title = (
             <div>
                 <Form ref={this.form} onFinish={(values) => this.getDate(this.state.newsList.page, this.state.newsList.rows, values)}>
@@ -226,7 +226,7 @@ export default class NewsManage extends Component {
                         rowKey="id"
                         rowSelection={rowSelection}
                         expandable={{ expandedRowRender: this.expandedRowRender }}
-                        pagination={this.paginationProps}
+                        pagination={paginationProps}
                         dataSource={newsList.content}
                     />
                 </Card>

@@ -38,7 +38,7 @@ class GetOrgSelect extends Component {
             allowClear
             style={{width:"100%"}}
             placeholder="请选择机构"
-            defaultValue={this.props.value}
+            value={this.props.value}
             onChange={this.onChange}
             optionFilterProp="children"
             filterOption={(input, option) =>
@@ -81,9 +81,9 @@ class GetRoleSelect extends Component {
         return <Select
             showSearch
             allowClear
-            style={{width:"100%"}}
+            stylve={{width:"100%"}}
             placeholder="请选择角色"
-            defaultValue={this.props.value}
+            value={this.props.value}
             onChange={this.onChange}
             optionFilterProp="children"
             filterOption={(input, option) =>

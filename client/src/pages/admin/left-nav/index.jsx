@@ -108,9 +108,7 @@ class LeftNav extends Component {
         }
         //得到当前路由路径
         let path = this.props.location.pathname
-        
         path = this.getKeys(path,menuList)
-        console.log(path)
         return (
             <div className="left-nav">
                 <Link to="/admin" className='left-nav-header'>

@@ -164,7 +164,7 @@ export default class EditNews extends Component {
   onFinish = async (values) => {
     const { state } = this.props.location
     const { cover } = this.state
-    const { news, type, dict, editType } = state
+    const { news, type, editType } = state
     const org = sessionUtils.get('org')
     const user = memoryUtils.user
     values.cover = cover
@@ -209,7 +209,6 @@ export default class EditNews extends Component {
         this.props.history.goBack()
       }
     }
-    console.log(values)
   }
   componentDidMount() {
     const { state } = this.props.location

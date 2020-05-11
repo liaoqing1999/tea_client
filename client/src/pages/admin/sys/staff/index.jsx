@@ -49,14 +49,7 @@ export default class Staff extends Component {
             }
         }
     }
-    paginationProps = {
-        showSizeChanger: true,
-        showQuickJumper: true,
-        showTotal: () => `共${this.state.staff.total}条`,
-        total: this.state.staff.totals,
-        onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, this.state.cond),
-        onChange: (current) => this.getDate(current, this.state.staff.rows, this.state.cond),
-    };
+ 
     onFinish = async (values) => {
         const { type, user } = this.state
         if (type === 'add') {
@@ -105,6 +98,20 @@ export default class Staff extends Component {
         this.getDate(this.state.staff.page, this.state.staff.rows, this.state.cond)
     }
     render() {
+        const { staff, editVisible, user, selectedRowKeys, type, dict, cond } = this.state
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+            type: "radio"
+        };
+        const paginationProps = {
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: () => `共${staff.total}条`,
+            total: staff.totals,
+            onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, cond),
+            onChange: (current) => this.getDate(current, staff.rows,cond),
+        };
         const columns = [
             {
                 title: '用户名',
@@ -162,12 +169,7 @@ export default class Staff extends Component {
 
             },
         ]
-        const { staff, editVisible, user, selectedRowKeys, type, dict, cond } = this.state
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-            type: "radio"
-        };
+       
         const title = (
             <div>
                 <Row justify="space-between" gutter={30} style={{ marginBottom: "10px" }}>
@@ -208,7 +210,7 @@ export default class Staff extends Component {
                         dataSource={staff.content}
                         columns={columns}
                         size="middle"
-                        pagination={this.paginationProps}
+                        pagination={paginationProps}
                         rowSelection={rowSelection}
                     />
                 </Card>

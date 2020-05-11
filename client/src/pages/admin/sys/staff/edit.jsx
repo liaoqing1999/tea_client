@@ -81,7 +81,7 @@ export default class EditStaff extends Component {
                     "state": user.state,
                     "password": user.password
                 }}>
-                <Form.Item name='name' label="用户名" rules={[{ validator: validfunc }]}>
+                <Form.Item name='name' label="用户名"validateTrigger="onBlur" rules={[{ validator: validfunc }]}>
                     <Input disabled={this.props.type === 'edit'} />
                 </Form.Item>
                 {this.props.type === 'edit' ? ("") :

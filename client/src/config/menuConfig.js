@@ -27,6 +27,8 @@ import Dict from "../pages/admin/sys/dict";
 import DictDetail from "../pages/admin/sys/dict/detail";
 import EditNews from "../pages/admin/sys/news/edit";
 import NewsDetail from "../pages/admin/sys/news/detail";
+import EditProduce from "../pages/admin/sys/produce/edit";
+import Tea from "../pages/admin/sys/produce/tea";
 const menuList = [
     {
         title: '个人中心',
@@ -184,6 +186,21 @@ const menuList = [
                 key: '/admin/produce',
                 icon: <InsertRowRightOutlined />,
                 component:Produce,
+                hideChildren:true,
+                children: [
+                    {
+                        title: '产品编辑',
+                        key: '/admin/produce/edit',
+                        icon: <InsertRowRightOutlined />,
+                        component:EditProduce,
+                    },
+                    {
+                        title: '产品详情',
+                        key: '/admin/produce/detail',
+                        icon: <InsertRowRightOutlined />,
+                        component:Tea,
+                    }
+                ]
             },
             {
                 title: '字典管理',

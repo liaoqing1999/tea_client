@@ -8,7 +8,6 @@ export default class Place extends Component {
     state = {
         options,
     };
-   
     getProvince = (province) => {
         return province.map(item => {
             item.label = item.name
@@ -25,10 +24,10 @@ export default class Place extends Component {
             item.label = item.name
             item.value = item.name
             item.isLeaf = false
-            if(area[item.id]){
+            if (area[item.id]) {
                 item.children = this.getArea(area[item.id])
             }
-           
+
             return item
         })
     }
@@ -55,7 +54,7 @@ export default class Place extends Component {
             onChange={this.onPlaceChange}
             placeholder="请选择地点"
             changeOnSelect
-            defaultValue={this.props.value}
+            value={this.props.value}
             showSearch={this.filter}
         />
     }

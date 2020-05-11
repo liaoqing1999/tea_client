@@ -53,7 +53,7 @@ export default class Brand extends Component {
             let pre = []
             for (let i = 0; i < 4; i++) {
                 pre.push((
-                    <Row justify="space-between" key={i}>
+                    <Row gutter={30} key={i}>
                         {this.gerOrgCardCol(i)}
                     </Row>
                 ))
