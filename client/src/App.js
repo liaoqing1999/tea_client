@@ -12,6 +12,7 @@ import Result500 from './components/result/500'
 import "./config/config"
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
+import { Register } from "./pages/login/register";
 /*
 应用的根组件
 */
@@ -23,6 +24,7 @@ export default class App extends Component {
                     <Switch>
                         <Route exact path='/' component={Trace}></Route>
                         <Route exact path='/login' component={Login}></Route>
+                        <Route exact path='/register' component={Register}></Route>
                         <Route path='/admin' component={Admin}></Route>
                         <Route path='/main' component={Main}></Route>
                         <Route path='/404' component={Result404}></Route>

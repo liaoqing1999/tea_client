@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import './login.less';
 import logo from '../../assets/GREEN_TEA.svg'
-import { Form, Checkbox, Input, Button, message } from 'antd';
+import { Form, Checkbox, Input, Button, message, Row } from 'antd';
 import { reqLogin, reqFindRole, reqOrg } from '../../api/index'
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import sessionUtils from "../../utils/sessionUtils";
-const creatHistory = require("history").createBrowserHistory
-const history = creatHistory();
 export class Login extends Component {
     handleSubmit = async (values) => {
         //阻止事件的默认行为
@@ -26,13 +24,13 @@ export class Login extends Component {
             storageUtils.savaRole(role)
             const o = await reqOrg(user.org)
             const org = o.data.data
-            sessionUtils.save('org',org)
+            sessionUtils.save('org', org)
             let rem = {}
             rem.name = user.name
             rem.remember = remember
             rem.password = remember ? user.password : ''
             storageUtils.savaRemeber(rem)
-            history.goBack();
+            this.props.history.goBack()
         } else {
             message.error(res.data.data)
         }
@@ -42,7 +40,7 @@ export class Login extends Component {
         //如果用户已经登录，自动跳转到首页
         const user = memoryUtils.user
         if (user && user.id) {
-            history.goBack();
+            this.props.history.goBack()
         }
         const rem = storageUtils.getRemeber()
         return (
@@ -76,19 +74,21 @@ export class Login extends Component {
                                 />
                             </Form.Item>
                             <Form.Item>
-                                <Form.Item name="remember" valuePropName="checked" noStyle>
-                                    <Checkbox>记住密码</Checkbox>
-                                </Form.Item>
-                                <Button type="link" size="small" onClick={() => { }}>忘记密码</Button>
+                                <Row justify="space-between">
+                                    <Form.Item name="remember" valuePropName="checked" noStyle>
+                                        <Checkbox>记住密码</Checkbox>
+                                    </Form.Item>
+                                    <Button type="link" size="small" onClick={() => { }}>忘记密码</Button>
+                                </Row>
                             </Form.Item>
 
                             <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-form-button">
+                                <Button  type="primary" style={{width:"100%"}} htmlType="submit" className="login-form-button">
                                     登录
-                            </Button>
-                              <Button type="link" size="small" onClick={() => { }}>立即注册!</Button>
-                            </Form.Item>                          
-                        </Form>                       
+                                </Button>
+                            </Form.Item>
+                            <Button type="link" size="small" onClick={() => {this.props.history.replace("/register") }}>立即注册!</Button>
+                        </Form>
                     </div>
                 </section>
             </div>

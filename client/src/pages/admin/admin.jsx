@@ -20,7 +20,15 @@ class Admin extends Component {
   }
   role(props) {
     const pathname = props.location.pathname
+    const u = memoryUtils.user
     const role = memoryUtils.role
+    if (role.name === "user") {
+      return <Redirect to='/403' />
+    }
+    if (!u || !u.id) {
+      //自动跳转到登录
+      return <Redirect to='/login' />
+    }
     if (role.name === "superAdmin") {
 
     } else {
