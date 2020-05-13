@@ -339,9 +339,6 @@ export default class EditNews extends Component {
             <Button type="primary" htmlType="submit" style={{ marginRight: '20px' }}>
               提交
             </Button>
-            <Button htmlType="button" onClick={() => this.setState({ editVisible: false })}>
-              取消
-            </Button>
           </Form.Item>
         </Form>
         <Modal bodyStyle={{ backgroundColor: "white" }} visible={this.state.previewVisible} footer={null} onCancel={() => this.setState({ previewVisible: false })}>

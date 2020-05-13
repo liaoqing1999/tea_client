@@ -30,7 +30,7 @@ export default class NewsDetail extends Component {
             let news = state.news
             news.up = up
             news.down = down
-            news.rate = rate
+            news.rate = rate?rate:0
             news.rateNum = rateNum
             reqUpdateNewsUser(news)
         }   
@@ -98,8 +98,8 @@ export default class NewsDetail extends Component {
         const { news } = state
         const res = await reqNewsDetailUser(news.id, userId)
         const newsDetail = res.data.data
-        if (newsDetail.length) {
-            this.setState({ newsDetail: newsDetail[0] })
+        if (newsDetail.id) {
+            this.setState({ newsDetail: newsDetail })
         }
     }
     render() {

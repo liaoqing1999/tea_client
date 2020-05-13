@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import SearchTea from '../searchtea';
-import {Pagination, Radio, Card, Col, Spin, Row } from 'antd';
+import { Pagination, Radio, Card, Col, Spin, Row } from 'antd';
 import { reqOrgPage } from '../../../api';
 import xzdq from '../image/xzdq_01.jpg'
 import province from '../../../components/place/province';
@@ -11,7 +11,7 @@ export default class Brand extends Component {
         total: 0,
         current: 1,
         pageSize: 16,
-        place:''
+        place: ''
     }
     componentDidMount() {
         this.getDate(this.state.current, this.state.pageSize)
@@ -38,7 +38,7 @@ export default class Brand extends Component {
     }
     placeOnChange = (e) => {
         this.getDate(1, this.state.pageSize, e.target.value)
-        this.setState({place: e.target.value})
+        this.setState({ place: e.target.value })
     }
     currentOnChange = (page, pageSize) => {
         this.getDate(page, pageSize, this.state.place)
@@ -63,18 +63,18 @@ export default class Brand extends Component {
             return <h1>暂无数据</h1>
         }
     }
-    onClick = (org) =>{
-        this.props.history.push("/main/brand/detail",{org})
+    onClick = (org) => {
+        this.props.history.push("/main/brand/detail", { org })
     }
     gerOrgCardCol = (i) => {
         const orgs = this.state.orgs
-        const size = orgs.length > (i+1)*4 ? 4 : orgs.length - 4 * i
+        const size = orgs.length > (i + 1) * 4 ? 4 : orgs.length - 4 * i
         if (orgs.length > 0) {
             if (i * 4 < orgs.length) {
                 let col = []
                 for (let j = 0; j < size; j++) {
                     col.push((
-                        <Col key={orgs[4 * i + j].id}>
+                        <Col key={orgs[4 * i + j].id} span={6} >
                             <Card
                                 style={{ textAlign: 'center' }}
                                 hoverable
@@ -91,7 +91,7 @@ export default class Brand extends Component {
         }
     }
     render() {
-        const { total,current,pageSize} = this.state
+        const { total, current, pageSize } = this.state
         return (
             <div className="about" style={{ width: "80%" }}>
                 <div className="about-top">
@@ -104,7 +104,7 @@ export default class Brand extends Component {
                         <SearchTea></SearchTea>
                     </div>
                 </div>
-                <div className="about-center" style={{ padding: "10px" }}>
+                <div className="about-center" style={{ padding: "10px"}}>
                     <Row>
                         <Col span={3}>
                             <img style={{ height: "130px", width: "130px" }} alt="" src={xzdq}></img>
@@ -116,9 +116,10 @@ export default class Brand extends Component {
                             </Radio.Group>
                         </Col>
                     </Row>
-                    <h1 style={{fontSize:"200%",marginTop:"10px"}}>企业品牌</h1>
+                    <h1 style={{ fontSize: "200%", marginTop: "10px" }}>企业品牌</h1>
+                    
                     {this.gerOrgCard()}
-                    <Pagination style={{textAlign:"center",marginTop:"15px"}} hideOnSinglePage={true}onChange={this.currentOnChange} current={current} pageSize={pageSize} total={total} />
+                    <Pagination style={{ textAlign: "center", marginTop: "15px" }} hideOnSinglePage={true} onChange={this.currentOnChange} current={current} pageSize={pageSize} total={total} />
                 </div>
             </div>
         )

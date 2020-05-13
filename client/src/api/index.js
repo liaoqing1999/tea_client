@@ -102,10 +102,14 @@ export const reqProducePage = (page, rows, cond) => {
     return ajax2('/produce/getPage', { page, rows, cond }, 'GET')
 }
 
+//产品分页
+export const reqProduceLike = (typeId,org) =>  ajax2('/produce/getLike', { typeId,org }, 'GET')
+
+
 //新增产品
 export const reqProduceAdd = (produce) => ajax2('/produce/add', produce, 'POST')
 
-//新增产品
+//根据产品查询是否重复
 export const reqProduceName = (name,org) => ajax2('/produce/name', { name,org }, 'GET')
 
 //更新产品
@@ -203,7 +207,7 @@ export const reqNewsDetailByCond = (cond) => {
     return ajax2('/newsDetail/getByCond', { cond }, 'GET')
 }
 //获取用户资讯记录
-export const reqNewsDetailUser = (newsId, userId) => ajax2('/newsDetail/getUser', { newsId, userId }, 'GET')
+export const reqNewsDetailUser = (news, user) => ajax2('/newsDetail/getUser', { news, user}, 'GET')
 
 //更新用户资讯记录
 export const reqUpdateNewsDetail = (newsDetail) => ajax2('/newsDetail/updateUser', newsDetail, 'POST')

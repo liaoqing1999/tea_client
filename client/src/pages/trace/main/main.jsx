@@ -18,6 +18,7 @@ import TeaResult from "../tearesult";
 import UserInfo from "../info";
 import OrgDetail from "../brand/detail";
 import NewsDetail from "../news/detail";
+import ProduceDetail from "../shop/detail";
 const {  Content, Footer } = Layout;
 
 export default class Main extends Component{
@@ -46,7 +47,8 @@ export default class Main extends Component{
                     <Route path='/main/brand/detail' component={OrgDetail}></Route>
                     <Route path='/main/news'exact component={News}></Route>
                     <Route path='/main/news/detail' component={NewsDetail}></Route>
-                    <Route path='/main/shop' component={Shop}></Route>
+                    <Route path='/main/shop'exact component={Shop}></Route>
+                    <Route path='/main/shop/detail' component={ProduceDetail}></Route>
                     <Route path='/main/join' component={Join}></Route>
                     <Route path='/main/clause' component={Clause}></Route>
                     <Route path='/main/about' component={About}></Route>

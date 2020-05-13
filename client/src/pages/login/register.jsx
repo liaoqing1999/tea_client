@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import './login.less';
 import logo from '../../assets/GREEN_TEA.svg'
-import { Form, Select, Input, Button, message, Row } from 'antd';
-import { reqLogin, reqFindRole, reqOrg, reqStaffName, reqAddStaff, reqFindRoleByName } from '../../api/index'
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
+import { Form, Select, Input, Button, message } from 'antd';
+import { reqStaffName, reqAddStaff, reqFindRoleByName } from '../../api/index'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import sessionUtils from "../../utils/sessionUtils";
 const { Option } = Select;
 
 const selectBefore = (

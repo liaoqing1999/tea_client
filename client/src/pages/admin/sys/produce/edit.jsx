@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, PageHeader, Form, Input, Select, Upload, Modal, message } from 'antd';
+import { Button, PageHeader, Form, Input, Select, Upload, Modal, message, InputNumber } from 'antd';
 import { GetOrgSelect } from '../staff/orgRoleSelect';
 import { addImg } from '../../../../api/ipfs';
 import sessionUtils from '../../../../utils/sessionUtils';
@@ -212,7 +212,7 @@ export default class EditProduce extends Component {
         );
         const validfunc = async (rule, value) => {
             const org = this.form.current.getFieldValue("org")
-            if(org){
+            if(org&&type==='add'){
                 if (value) {
                     const res = await reqProduceName(value,org)
                     if (res.data.data==='') {
@@ -249,7 +249,7 @@ export default class EditProduce extends Component {
                         "state": produce.state,
                     }}>
                     <Form.Item name='name' label="产品名" validateTrigger="onBlur" rules={[{ validator: validfunc }]}>
-                        <Input />
+                        <Input  disabled={type === 'edit'}/>
                     </Form.Item>
                     <Form.Item name='grade' label="等级" rules={[{ required: true }]}>
                         <Select
@@ -277,10 +277,13 @@ export default class EditProduce extends Component {
                         <Input />
                     </Form.Item>
                     <Form.Item name='price' label="价格">
-                        <Input />
+                        <InputNumber 
+                          formatter={value => `￥${value}`}
+                          parser={value => value.replace('￥', '')}
+                        />
                     </Form.Item>
                     <Form.Item name='reserve' label="存量">
-                        <Input />
+                        <InputNumber />
                     </Form.Item>
                     <Form.Item name="img" label="图片" valuePropName="fileList"
                         getValueFromEvent={normFile} >
