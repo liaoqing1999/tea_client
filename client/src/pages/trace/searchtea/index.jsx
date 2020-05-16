@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { Input, message} from 'antd';
+import { Input, message, Button} from 'antd';
 import Tea from "../../../contracts/Tea.json";
 import getWeb3 from "../../../getWeb3";
 import { reqTea } from '../../../api';
@@ -62,21 +62,22 @@ const { Search } = Input;
       const process = tea.process;
       const storage = tea.storage;
       const check = tea.check;
-      console.log(tea);
-      console.log(new Date(pesticide[0].date).valueOf())
-      await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
-      await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.grade,tea.period,tea.store,tea.img,tea.qr).send({ from: this.state.accounts[0] });
-      await this.state.contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img).send({ from: this.state.accounts[0] });
-      for(let i = 0;i<pesticide.length;i++){
-        await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
-      }
+      console.log(this.state.contract);
+      console.log()
+      //await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
+      await this.state.contract.methods.setProductSenior(tea.id,tea.grade,tea.period,tea.store,tea.img,tea.qr).send({ from: this.state.accounts[0] });
+      //await this.state.contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.grade,tea.period,tea.store,tea.img,tea.qr).send({ from: this.state.accounts[0] });
+      //await this.state.contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img,plant.finish).send({ from: this.state.accounts[0] });
+      // for(let i = 0;i<pesticide.length;i++){
+      //   await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
+      // }
       for(let i = 0;i<process.length;i++){
         console.log(process[i].img)
-        await this.state.contract.methods.setProcess(tea.id,process[i].method,new Date(process[i].startDate).valueOf(),new Date(process[i].endDate).valueOf(),process[i].processer,process[i].img).send({ from: this.state.accounts[0] });
+        await this.state.contract.methods.setProcess(tea.id,process[i].method,new Date(process[i].startDate).valueOf(),new Date(process[i].endDate).valueOf(),process[i].processer,process[i].img,process[i].finish).send({ from: this.state.accounts[0] });
       }
-      await this.state.contract.methods.setStorage(tea.id,storage.place,new Date(storage.startDate).valueOf(),new Date(storage.endDate).valueOf(),storage.storageer,storage.img).send({ from: this.state.accounts[0] });
+      await this.state.contract.methods.setStorage(tea.id,storage.place,new Date(storage.startDate).valueOf(),new Date(storage.endDate).valueOf(),storage.storageer,storage.img,storage.finish).send({ from: this.state.accounts[0] });
       for(let i = 0;i<check.length;i++){
-        await this.state.contract.methods.setCheck(tea.id,check[i].typeId,new Date(check[i].date).valueOf(),check[i].result,check[i].info,check[i].checker).send({ from: this.state.accounts[0] });
+        await this.state.contract.methods.setCheck(tea.id,check[i].typeId,new Date(check[i].date).valueOf(),check[i].result,check[i].info,check[i].checker,check[i].finish).send({ from: this.state.accounts[0] });
       }
      }
     render(){
@@ -88,6 +89,7 @@ const { Search } = Input;
             onSearch={this.onSearch}
             style={{ width: 300 }}
             />
+            {/* <Button onClick={()=>{this.onClick()}}>设置</Button> */}
             </div>
         )
     }
