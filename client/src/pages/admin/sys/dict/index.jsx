@@ -79,7 +79,7 @@ export default class Dict extends Component {
                 title: '类型Code',
                 dataIndex: '_id',
                 key: 'id',
-                render: (text,record) => <Button onClick={() =>  this.props.history.push("/admin/dict/detail",{dictType:record})} type="link">{text}</Button>
+                render: (text,record) => <Button onClick={() =>  this.props.history.push("/admin/dictMag/detail",{dictType:record})} type="link">{text}</Button>
             },
             {
                 title: '类型名',

@@ -22,6 +22,8 @@ class Admin extends Component {
     const pathname = props.location.pathname
     const u = memoryUtils.user
     const role = memoryUtils.role
+    
+    const r = routeList()
     if (role.name === "user") {
       return <Redirect to='/403' />
     }
@@ -32,7 +34,7 @@ class Admin extends Component {
     if (role.name === "superAdmin") {
 
     } else {
-      if (routeList.indexOf(pathname) !== -1 && role.menu.indexOf(pathname) === -1 && pathname !== '/admin/403') {
+      if (r.indexOf(pathname) !== -1 && role.menu.indexOf(pathname) === -1 && pathname !== '/admin/403') {
         this.props.history.replace('/admin/403')
       }
     }

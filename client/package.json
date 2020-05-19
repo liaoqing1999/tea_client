@@ -12,6 +12,8 @@
     "babel-plugin-import": "^1.13.0",
     "customize-cra": "^0.9.1",
     "draftjs-to-html": "^0.9.1",
+    "echarts": "^4.7.0",
+    "echarts-for-react": "^2.0.15-beta.1",
     "ethereumjs-util": "^6.2.0",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^42.0.0",

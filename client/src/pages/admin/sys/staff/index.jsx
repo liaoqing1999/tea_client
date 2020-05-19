@@ -108,7 +108,7 @@ export default class Staff extends Component {
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: () => `共${staff.total}条`,
-            total: staff.totals,
+            total: staff.total,
             onShowSizeChange: (current, pageSize) => this.getDate(current, pageSize, cond),
             onChange: (current) => this.getDate(current, staff.rows,cond),
         };
@@ -141,20 +141,20 @@ export default class Staff extends Component {
             },
             {
                 title: '机构',
-                dataIndex: 'staffOrg',
-                render: (text, record) => <span>{text.length ? text[0].name : ""}</span>
+                dataIndex: 'orgName',
+                render: (text, record) => <span>{text}</span>
             },
             {
                 title: '角色',
-                dataIndex: 'staffRole',
-                render: (text, record) => <span>{text.length ? text[0].name : ""}</span>
+                dataIndex: 'roleName',
+                render: (text, record) => <span>{text}</span>
             },
             {
                 title: '操作',
-                dataIndex: 'staffRole',
+                dataIndex: 'roleName',
                 width: 180,
                 render: (text, record) => {
-                    if (text.length && text[0].name !== 'superAdmin') {
+                    if (text.length && text !== 'superAdmin') {
                         return( <Row>
                             <Button size="middle" onClick={() => this.setState({ editVisible: true, user: record, type: 'edit' })}>编辑</Button>
                             <Divider type="vertical"></Divider>

@@ -165,38 +165,38 @@ const menuList = [
         children: [
             {
                 title: '机构管理',
-                key: '/admin/org',
+                key: '/admin/orgMag',
                 icon: <GoldOutlined />,
                 component:Org,
             },
             {
                 title: '用户管理',
-                key: '/admin/staff',
+                key: '/admin/staffMag',
                 icon: <TeamOutlined />,
                 component:Staff,
             },
             {
                 title: '角色管理',
-                key: '/admin/role',
+                key: '/admin/roleMag',
                 icon: <TrademarkOutlined />,
                 component:Role,
             },
             {
                 title: '产品管理',
-                key: '/admin/produce',
+                key: '/admin/produceMag',
                 icon: <InsertRowRightOutlined />,
                 component:Produce,
                 hideChildren:true,
                 children: [
                     {
                         title: '产品编辑',
-                        key: '/admin/produce/edit',
+                        key: '/admin/produceMag/edit',
                         icon: <InsertRowRightOutlined />,
                         component:EditProduce,
                     },
                     {
                         title: '产品详情',
-                        key: '/admin/produce/detail',
+                        key: '/admin/produceMag/detail',
                         icon: <InsertRowRightOutlined />,
                         component:Tea,
                     }
@@ -204,14 +204,14 @@ const menuList = [
             },
             {
                 title: '字典管理',
-                key: '/admin/dict',
+                key: '/admin/dictMag',
                 icon: <DatabaseOutlined />,
                 component:Dict,
                 hideChildren:true,
                 children: [
                     {
                         title: '字典详情',
-                        key: '/admin/dict/detail',
+                        key: '/admin/dictMag/detail',
                         icon: <DatabaseOutlined />,
                         component:DictDetail,
                     }
@@ -219,20 +219,20 @@ const menuList = [
             },
             {
                 title: '资讯管理',
-                key: '/admin/news',
+                key: '/admin/newsMag',
                 icon: <FileTextOutlined />,
                 component:NewsManage,
                 hideChildren:true,
                 children: [
                     {
                         title: '资讯编辑',
-                        key: '/admin/news/edit',
+                        key: '/admin/newsMag/edit',
                         icon: <FileTextOutlined />,
                         component:EditNews,
                     },
                     {
                         title: '资讯详情',
-                        key: '/admin/news/detail',
+                        key: '/admin/newsMag/detail',
                         icon: <FileTextOutlined />,
                         component:NewsDetail,
                     }
@@ -241,35 +241,22 @@ const menuList = [
         ]
     },
 ]
-const routeList = [
-    '/admin/info',
-    '/admin/info/user',
-    '/admin/info/msg',
-    '/admin/info/password',
-    '/admin/tea',
-    '/admin/plant',
-    '/admin/process',
-    '/admin/storage',
-    '/admin/check',
-    '/admin/chart',
-    '/admin/produceChart',
-    '/admin/newsChart',
-    '/admin/orgChart',
-    '/admin/staffChart',
-    '/admin/server',
-    '/admin/orgSys',
-    '/admin/orgInfo',
-    '/admin/orgStaff',
-    '/admin/orgProduce',
-    '/admin/orgNews',
-    '/admin/sys',
-    '/admin/org',
-    '/admin/staff',
-    '/admin/role',
-    '/admin/produce',
-    '/admin/dict',
-    '/admin/news',
-]
+
+const getRouteList = (list) =>{
+    let routeList = []
+    if(Array.isArray(list)){
+        list.forEach(item => {
+            if(item.children){
+               const r =  getRouteList(item.children)
+               routeList.push.apply(routeList,r);
+            }
+            routeList.push(item.key)
+        });
+    }
+    return routeList
+}
+const routeList = ()=> getRouteList(menuList)
+
 const topMenu = [
     {
         title: '首页',

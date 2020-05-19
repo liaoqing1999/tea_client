@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Modal, Card, Button, Table, Popconfirm, Descriptions, message, Row, Divider, Select, Col, Carousel, Form, DatePicker } from 'antd'
+import { Modal, Card, Button, Table, Popconfirm, Descriptions, message, Row, Divider, Select, Col, Carousel, Form } from 'antd'
 import { reqDictType, reqProducePage, reqProducDelete } from '../../../../api'
 import TeaType from '../../../../components/teaType';
 import { GetOrgSelect } from '../staff/orgRoleSelect';
@@ -83,11 +83,11 @@ export default class Produce extends Component {
     }
     ViewNewsDetail = () => {
         const { produce } = this.state
-        this.props.history.push("/admin/produce/detail", { produce: produce })
+        this.props.history.push("/admin/produceMag/detail", { produce: produce })
     }
     addEdit = (produce, type) => {
         const { dict } = this.state
-        this.props.history.push("/admin/produce/edit", { produce: produce, type, dict, editType: 'sys' })
+        this.props.history.push("/admin/produceMag/edit", { produce: produce, type, dict, editType: 'sys' })
     }
     handleDelete = async (record) => {
         await reqProducDelete(record.id)

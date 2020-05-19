@@ -90,11 +90,11 @@ export default class NewsManage extends Component {
     }
     ViewNewsDetail = () =>{
         const {news} = this.state
-        this.props.history.push("/admin/news/detail", { news: news })
+        this.props.history.push("/admin/newsMag/detail", { news: news })
     }
     addEdit = (news, type) => {
         const { dict } = this.state
-        this.props.history.push("/admin/news/edit", { news: news, type, dict, editType: 'sys' })
+        this.props.history.push("/admin/newsMag/edit", { news: news, type, dict, editType: 'sys' })
     }
     handleDelete = async (record) => {
         await reqDeleteNews(record.id)
