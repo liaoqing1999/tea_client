@@ -52,19 +52,19 @@ export default class EditStaff extends Component {
     render() {
         const { user } = this.props
         const validfunc = async (rule, value) => {
-            if(!user.name){
+            if (!user.name) {
                 if (value) {
                     const res = await reqStaffName(value)
-                    if (res.data.data==='') {
-                        
-                    }else{
+                    if (res.data.data === '') {
+
+                    } else {
                         throw new Error('用户名已存在!');
                     }
                 } else {
                     throw new Error('用户名是必须的!');
                 }
             }
-           
+
         }
         return (<div>
             <Form {...layout} ref={this.form} onFinish={this.props.onFinish} validateMessages={validateMessages}
@@ -81,7 +81,7 @@ export default class EditStaff extends Component {
                     "state": user.state,
                     "password": user.password
                 }}>
-                <Form.Item name='name' label="用户名"validateTrigger="onBlur" rules={[{ validator: validfunc }]}>
+                <Form.Item name='name' label="用户名" validateTrigger="onBlur" rules={[{ validator: validfunc }]}>
                     <Input disabled={this.props.type === 'edit'} />
                 </Form.Item>
                 {this.props.type === 'edit' ? ("") :
@@ -113,9 +113,11 @@ export default class EditStaff extends Component {
                 <Form.Item name='work' label="工作">
                     <Input />
                 </Form.Item>
-                <Form.Item name='org' label="机构">
-                    <GetOrgSelect></GetOrgSelect>
-                </Form.Item>
+                {this.props.editType === 'sys' ? (
+                    <Form.Item name='org' label="机构">
+                        <GetOrgSelect></GetOrgSelect>
+                    </Form.Item>)
+                :("")}
                 <Form.Item name='email' label="电子邮箱" rules={[{ type: 'email' }]}>
                     <Input />
                 </Form.Item>

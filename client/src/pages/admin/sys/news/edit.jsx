@@ -267,9 +267,7 @@ export default class EditNews extends Component {
           <Form.Item name='writer' label="作者" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          {editType === 'sys' ? (
-            <div>
-              <Form.Item name='type' label="类型" rules={[{ required: true }]}>
+          <Form.Item name='type' label="类型" rules={[{ required: true }]}>
                 <Select
                   showSearch
                   placeholder="请选择类型"
@@ -281,6 +279,8 @@ export default class EditNews extends Component {
                   {this.getOption('news_type')}
                 </Select>
               </Form.Item>
+          {editType === 'sys' ? (
+            <div>
               <Form.Item name='org' label="所属机构">
                 <GetOrgSelect></GetOrgSelect>
               </Form.Item>

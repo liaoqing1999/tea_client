@@ -221,7 +221,7 @@ export default class Staff extends Component {
                     bodyStyle={{ backgroundColor: "white" }}
                     onCancel={() => { this.setState({ editVisible: false }) }}
                 >
-                    <EditStaff dict={dict} type={type} onFinish={this.onFinish} user={user} hideModal={() => { this.setState({ editVisible: false }) }}></EditStaff>
+                    <EditStaff editType={'sys'} dict={dict} type={type} onFinish={this.onFinish} user={user} hideModal={() => { this.setState({ editVisible: false }) }}></EditStaff>
                 </Modal>
 
                 <Modal

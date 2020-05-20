@@ -81,7 +81,7 @@ class GetRoleSelect extends Component {
         return <Select
             showSearch
             allowClear
-            stylve={{width:"100%"}}
+            style={{width:"100%"}}
             placeholder="请选择角色"
             value={this.props.value}
             onChange={this.onChange}
