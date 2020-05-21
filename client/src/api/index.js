@@ -55,6 +55,11 @@ export const reqGetProcess = (page, rows, userId, finish) => ajax2('/tea/getProc
 //更新加工种植阶段信息
 export const reqUpdateProcess = (tea) => ajax2('/tea/updateProcess', tea, 'POST')
 
+//获取仓储种植阶段信息
+export const reqGetStorage = (page, rows, userId, finish) => ajax2('/tea/getStorage', { page, rows, userId, finish }, 'GET')
+
+//更新检测种植阶段信息
+export const reqUpdateStorage = (tea) => ajax2('/tea/updateStorage', tea, 'POST')
 
 //获取验证码
 export const reqVerify = () => ajax2('/verify/getVerify', {}, 'GET')

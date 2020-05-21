@@ -19,8 +19,6 @@ export default class EditProcess extends React.Component {
         const { tea, index } = nextProps
         let process = {}
         if (index === -1) {
-            process.startDate = new Date()
-            process.endDate = new Date()
         } else {
             if (Array.isArray(tea.process)) {
                 process = tea.process[index] ? tea.process[index] : {}
@@ -30,8 +28,8 @@ export default class EditProcess extends React.Component {
         }
         this.form.current.setFieldsValue({
             'method': process.method,
-            'startDate': moment(process.startDate, 'YYYY-MM-DD'),
-            'endDate': moment(process.endDate, 'YYYY-MM-DD'),
+            'startDate':process.startDate ? moment(process.startDate, 'YYYY-MM-DD') : "", 
+            'endDate':process.endDate ? moment(process.endDate, 'YYYY-MM-DD') : "", 
             'finish': process.finish,
         });
     }
@@ -40,7 +38,9 @@ export default class EditProcess extends React.Component {
         const user = memoryUtils.user
         process.method = values.method
         process.startDate = new Date(values.startDate.valueOf())
-        process.endDate = new Date(values.endDate.valueOf())
+        if(values.endDate){
+            process.endDate = new Date(values.endDate.valueOf())
+        }
         process.finish = values.finish
         process.processer = user.id
         const { tea, index } = this.props
@@ -49,6 +49,7 @@ export default class EditProcess extends React.Component {
             tea.process.push(process)
             msg = "新增成功！"
         } else {
+            process.img = tea.process[index].img
             tea.process[index] = process
             msg = "修改成功！"
         }
@@ -73,8 +74,6 @@ export default class EditProcess extends React.Component {
         const { tea, index } = this.props
         let process = {}
         if (index === -1) {
-            process.startDate = new Date()
-            process.endDate = new Date()
         } else {
             if (Array.isArray(tea.process)) {
                 process = tea.process[index] ? tea.process[index] : {}
@@ -86,8 +85,8 @@ export default class EditProcess extends React.Component {
             <Form {...layout} ref={this.form} onFinish={this.onFinish}
                 initialValues={{
                     'method': process.method,
-                    'startDate': moment(process.startDate, 'YYYY-MM-DD'),
-                    'endDate': moment(process.endDate, 'YYYY-MM-DD'),
+                    'startDate':process.startDate ? moment(process.startDate, 'YYYY-MM-DD') : "", 
+                    'endDate':process.endDate ? moment(process.endDate, 'YYYY-MM-DD') : "", 
                     'finish': process.finish,
                 }}>
                 <Form.Item name="method" label="加工方法" rules={[{ required: true, message: '加工方法是必填的' }]}>
@@ -102,11 +101,11 @@ export default class EditProcess extends React.Component {
                         {this.getOption()}
                     </Select>
                 </Form.Item>
-                <Form.Item name="startDate" label="开始时间">
+                <Form.Item name="startDate" label="开始时间" rules={[{ required: true, message: '开始时间是必填的' }]}>
                     <DatePicker />
                 </Form.Item>
                 <Form.Item name="endDate" label="结束时间"
-                    rules={[{ required: true },
+                    rules={[
                     ({ getFieldValue }) => ({
                         validator(rule, value) {
                             if (!value || getFieldValue("startDate") < value) {
@@ -119,7 +118,7 @@ export default class EditProcess extends React.Component {
                 >
                     <DatePicker />
                 </Form.Item>
-                <Form.Item name="finish" label="是否完成" rules={[{ required: true, message: '农药名是必填的' }]}>
+                <Form.Item name="finish" label="是否完成" rules={[{ required: true, message: '是否完成是必填的' }]}>
                     <Select
                         showSearch
                         placeholder="请选择是否完成"

@@ -1,6 +1,6 @@
 import React from "react";
 import { Select, Form, Input, Button, message } from 'antd'
-import { reqGetTea, reqUpdateProcess } from "../../../../api";
+import { reqGetTea, reqUpdateProcess, reqUpdateStorage } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 const layout = {
     labelCol: { span: 8 },
@@ -17,7 +17,7 @@ const validateMessages = {
     },
 };
 const { Option } = Select;
-export default class AddUFProcess extends React.Component {
+export default class AddUFStorage extends React.Component {
     state = {
         tea: {}
     }
@@ -26,26 +26,31 @@ export default class AddUFProcess extends React.Component {
         const res = await reqGetTea(values.id)
         if (res.data.data) {
             const tea = res.data.data
-            if (tea.processFinish) {
-                message.error("id为" + values.id + "的茶叶的加工阶段已经完成")
+            values.startDate = new Date()
+            const user = memoryUtils.user
+            if (values.storageer) {
+
             } else {
-                const user = memoryUtils.user
-                tea.process = tea.process ? tea.process : []
-                values.startDate = new Date()
-                if (values.processer) {
-
-                } else {
-                    values.processer = user.id
-                }
-                values.finish = false
-                tea.process.push(values)
-                await reqUpdateProcess(tea)
-
-                message.success("添加成功")
-                this.props.hideModal()
-                this.props.addRefresh()
+                values.storageer = user.id
             }
-
+            values.finish = false
+            if (tea.storage) {
+                if (tea.storage.storageer && tea.storage.storageer !== user.id) {
+                    message.error("id为" + values.id + "的茶叶的仓储阶段已经分配负责人")
+                    return
+                } else if (tea.storage.finish) {
+                    message.error("id为" + values.id + "的茶叶的仓储阶段已经完成")
+                    return
+                } else {
+                    tea.storage = values
+                }
+            } else {
+                tea.storage = values
+            }
+            await reqUpdateStorage(tea)
+            message.success("增加成功")
+            this.props.hideModal()
+            this.props.addRefresh()
         } else {
             message.error("没有找到id为" + values.id + "的茶叶")
         }
@@ -61,20 +66,9 @@ export default class AddUFProcess extends React.Component {
         const { id } = nextProps
         this.form.current.setFieldsValue({
             'id': id,
-            'method': "",
-            'processer':""
+            'place': "",
+            'storageer': ""
         });
-    }
-    getOption = () => {
-        const dict = this.props.dict
-        let i = 0
-        return dict["process"].reduce((pre, item) => {
-            pre.push((
-                <Option key={i} value={item.valueId}>{item.valueName}</Option>
-            ))
-            i++
-            return pre
-        }, [])
     }
     render() {
         const { id } = this.props
@@ -82,23 +76,14 @@ export default class AddUFProcess extends React.Component {
             <Form {...layout} ref={this.form} onFinish={this.onFinish} validateMessages={validateMessages}
                 initialValues={{
                     'id': id,
-                    'method': "",
-                    'processer':""
+                    'place': "",
+                    'storageer': ""
                 }}>
                 <Form.Item name="id" label="茶叶id" validateTrigger='onSubmit' rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="method" label="加工方法" rules={[{ required: true }]}>
-                    <Select
-                        showSearch
-                        placeholder="请选择加工方法"
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        {this.getOption()}
-                    </Select>
+                <Form.Item name="place" label="仓储地点" rules={[{ required: true }]}>
+                    <Input></Input>
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
