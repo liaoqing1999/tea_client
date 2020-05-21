@@ -58,8 +58,14 @@ export const reqUpdateProcess = (tea) => ajax2('/tea/updateProcess', tea, 'POST'
 //获取仓储种植阶段信息
 export const reqGetStorage = (page, rows, userId, finish) => ajax2('/tea/getStorage', { page, rows, userId, finish }, 'GET')
 
-//更新检测种植阶段信息
+//更新仓储种植阶段信息
 export const reqUpdateStorage = (tea) => ajax2('/tea/updateStorage', tea, 'POST')
+
+//获取检测种植阶段信息
+export const reqGetCheck = (page, rows, userId, finish) => ajax2('/tea/getCheck', { page, rows, userId, finish }, 'GET')
+
+//更新检测种植阶段信息
+export const reqUpdateCheck = (tea) => ajax2('/tea/updateCheck', tea, 'POST')
 
 //获取验证码
 export const reqVerify = () => ajax2('/verify/getVerify', {}, 'GET')

@@ -1,13 +1,13 @@
 import React from "react";
 import moment from 'moment';
-import { Table,Tag, Descriptions, Button, Collapse, Pagination, Row, Upload, Alert, Popconfirm, Divider, Modal, Carousel, message } from 'antd'
-import { reqGetProcess, reqUpdateProcess } from "../../../../api";
+import { Table, Tag, Descriptions, Button, Collapse, Pagination, Row, Upload, Alert, Popconfirm, Divider, Modal, Carousel, message } from 'antd'
+import { reqUpdateCheck, reqGetCheck } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons';
 import { addImg } from "../../../../api/ipfs";
 import getWeb3 from '../../../../getWeb3';
 import Tea from "../../../../contracts/Tea.json";
-import EditProcess from "./editProcess";
+import EditCheck from "./editCheck";
 const { Panel } = Collapse;
 
 function getBase64(file) {
@@ -18,9 +18,9 @@ function getBase64(file) {
         reader.onerror = error => reject(error);
     });
 }
-export default class UFProcess extends React.Component {
+export default class UFCheck extends React.Component {
     state = {
-        ufProcess: {},
+        ufCheck: {},
         img: [],
         index: 0,
         visible: false,
@@ -28,91 +28,91 @@ export default class UFProcess extends React.Component {
         editImg: false,
         imgFileList: [],
         imgFile: [],
-        web3: null, 
-        accounts: null, 
+        web3: null,
+        accounts: null,
         contract: null,
     }
     componentDidMount = () => {
-        this.getProcess(1, 3, false)
+        this.getCheck(1, 3, false)
         this.getWeb3Tea()
     }
     componentWillReceiveProps(nextProps) {
-        this.getProcess(1, 3, false)
+        this.getCheck(1, 3, false)
     }
-    getWeb3Tea =async () =>{
+    getWeb3Tea = async () => {
         try {
             const web3 = await getWeb3();
             const accounts = await web3.eth.getAccounts();
             const networkId = await web3.eth.net.getId();
             const deployedNetwork = Tea.networks[networkId];
             const instance = new web3.eth.Contract(
-              Tea.abi,
-              deployedNetwork && deployedNetwork.address,
+                Tea.abi,
+                deployedNetwork && deployedNetwork.address,
             );
             this.setState({ web3, accounts, contract: instance });
-          } catch (error) {
+        } catch (error) {
             alert(
-              `Failed to load web3, accounts, or contract. Check console for details.`,
+                `Failed to load web3, accounts, or contract. Check console for details.`,
             );
             console.error(error);
-          }
+        }
     }
-    finishProcess = async (tea) => {
-        tea.processFinish = true
-        const res = await reqUpdateProcess(tea)
+    finishCheck = async (tea) => {
+        tea.checkFinish = true
+        const res = await reqUpdateCheck(tea)
         if (res.data.data.id) {
-            const {contract} = this.state
+            const { contract } = this.state
             const tea = res.data.data
-            const process =tea.process;
-            if(Array.isArray(process)&&process.length>0){
-                for(let i = 0;i<process.length;i++){
-                    process[i].method = process[i].method?process[i].method:""
-                    process[i].startDate = process[i].startDate?process[i].startDate:new Date()
-                    process[i].endDate = process[i].endDate?process[i].endDate:new Date()
-                    process[i].processer = process[i].processer? process[i].processer:""
-                    process[i].img =   process[i].img?  process[i].img:[]
-                    process[i].finish =  process[i].finish? process[i].finish:true
-                    await contract.methods.setProcess(tea.id,process[i].method,new Date(process[i].startDate).valueOf(),new Date(process[i].endDate).valueOf(),process[i].processer,process[i].img,process[i].finish).send({ from: this.state.accounts[0] });
+            const check = tea.check;
+            if (Array.isArray(check) && check.length > 0) {
+                for (let i = 0; i < check.length; i++) {
+                    check[i].typeId = check[i].typeId ? check[i].typeId : ""
+                    check[i].date = check[i].date ? check[i].date : new Date()
+                    check[i].result = check[i].result ? check[i].result : ""
+                    check[i].info = check[i].info ? check[i].info : ""
+                    check[i].checker = check[i].checker ? check[i].checker : ""
+                    check[i].finish = check[i].finish ? check[i].finish : true
+                    await contract.methods.setCheck(tea.id, check[i].typeId, new Date(check[i].date).valueOf(), check[i].result, check[i].info, check[i].checker, check[i].finish).send({ from: this.state.accounts[0] });
                 }
-            }   
+            }
             this.props.addRefresh()
             message.success("任务完成！")
         }
     }
-    getProcess = async (page, rows, finish) => {
+    getCheck = async (page, rows, finish) => {
         const user = memoryUtils.user
-        const res = await reqGetProcess(page, rows, user.id, finish)
-        const ufProcess = res.data.data
-        this.setState({ ufProcess })
+        const res = await reqGetCheck(page, rows, user.id, finish)
+        const ufCheck = res.data.data
+        this.setState({ ufCheck })
     }
     getUFProcess = () => {
-        const { ufProcess } = this.state
+        const { ufCheck } = this.state
         const user = memoryUtils.user
-        if (ufProcess) {
-            if (Array.isArray(ufProcess.content)) {
-                return ufProcess.content.reduce((pre, item) => {
+        if (ufCheck) {
+            if (Array.isArray(ufCheck.content)) {
+                return ufCheck.content.reduce((pre, item) => {
                     const extra = (
                         <div>
                             <span style={{ marginRight: "10px" }}>批次:{item.batch}</span>
                             <Popconfirm title="确定完成此任务吗?" onConfirm={() => {
-                                this.finishProcess(item)
+                                this.finishCheck(item)
                             }}>
                                 <Button type="primary">完成</Button>
                             </Popconfirm>
                         </div>
                     )
                     const columns = [
-                        { title: '加工方法', dataIndex: 'method', key: 'method', render: (text) => this.getDictValue('process', text) },
-                        { title: '开始时间', dataIndex: 'startDate', key: 'batstartDatech', render: (text) =>text? moment(text).format("lll"):"" },
-                        { title: '结束时间', dataIndex: 'endDate', key: 'endDate', render: (text) =>text? moment(text).format("lll"):""},
+                        { title: '检测类型', dataIndex: 'typeId', key: 'typeId', render: (text) => this.getDictValue('check', text) },
+                        { title: '时间', dataIndex: 'date', key: 'date', render: (text) => text ? moment(text).format("lll") : "" },
+                        { title: '结果', dataIndex: 'result', key: 'result', render: (text) => this.getDictValue('result', text) },
                         { title: '是否完成', dataIndex: 'finish', key: 'finish', render: (text) => text ? "是" : "否" },
-                        { title: '阶段图', dataIndex: 'img', key: 'img', render: (text, record, index) => <Button type="link" onClick={() => this.imgView(item, index)}>查看详情</Button> },
+                        { title: '具体详情', dataIndex: 'info', key: 'img', render: (text, record, index) => <Button type="link" onClick={() => this.imgView(item, index)}>查看详情</Button> },
                         {
                             title: '操作',
-                            dataIndex: 'processer',
+                            dataIndex: 'checker',
                             width: 180,
                             render: (text, record, index) => {
-                                if(text===user.id){
+                                if (text === user.id) {
                                     return (<Row>
                                         <Button size="middle" onClick={() => this.setState({ editVisible: true, tea: item, index })}>编辑</Button>
                                         <Divider type="vertical"></Divider>
@@ -120,10 +120,10 @@ export default class UFProcess extends React.Component {
                                             <Button size="middle" type="danger">删除</Button>
                                         </Popconfirm>
                                     </Row>)
-                                }else{
+                                } else {
                                     return (<Tag color="warning">负责人不同，无法操作</Tag>)
                                 }
-                                
+
                             }
                         },
                     ];
@@ -134,18 +134,18 @@ export default class UFProcess extends React.Component {
                                 <Descriptions.Item label="类型">{this.getDictValue("type", item.typeId.slice(0, 4) + "00") + "-" + this.getDictValue("type", item.typeId)}</Descriptions.Item>
                                 <Descriptions.Item label="批次">{item.batch}</Descriptions.Item>
                                 <Descriptions.Item label="产地">{item.plant.place}</Descriptions.Item>
-                                <Descriptions.Item label="加工次数">{item.process ? item.process.length : 0}</Descriptions.Item>
+                                <Descriptions.Item label="检测次数">{item.check ? item.check.length : 0}</Descriptions.Item>
                             </Descriptions>
                             <Table
                                 className="components-table-demo-nested"
                                 title={(c) =>
                                     <Row justify="space-between" >
-                                        <span>加工记录</span>
+                                        <span>检测记录</span>
                                         <Button onClick={() => { this.setState({ editVisible: true, tea: item, index: -1 }) }} type="primary">新增</Button>
                                     </Row>}
                                 columns={columns}
-                                rowKey="startDate"
-                                dataSource={item.process}
+                                rowKey="date"
+                                dataSource={item.check}
                             />
                         </Panel>
                     ))
@@ -155,11 +155,11 @@ export default class UFProcess extends React.Component {
         }
     }
     handleDelete = async (item, index) => {
-        item.process.splice(index, 1)
-        const res = await reqUpdateProcess(item)
+        item.check.splice(index, 1)
+        const res = await reqUpdateCheck(item)
         if (res.data.data.id) {
             message.success("删除成功！")
-            this.getProcess(1, 3, false)
+            this.getCheck(1, 3, false)
             this.setState({ tea: item })
         }
     }
@@ -232,19 +232,18 @@ export default class UFProcess extends React.Component {
         let edit = false
         let imgList = []
         imgFileList.forEach(item => {
-            const res = tea.process[index].img.find(i => i === item.name)
-            if (!res) {
-                edit = true
-            } else {
+            if (item.name === tea.check[index].info) {
                 imgList.push(item.name)
+            } else {
+                edit = true
             }
         });
-        if (imgFileList.length !== tea.process[index].img.length || edit) {
+        if (imgFileList.length === 0 || edit) {
             const img = await this.ipfsUpload(imgFile)
             if (img) {
                 imgList = imgList.concat(img)
-                tea.process[index].img = imgList
-                const res = await reqUpdateProcess(tea)
+                tea.check[index].info = imgList[0]
+                const res = await reqUpdateCheck(tea)
                 if (res.data.data.id) {
                     message.success("修改成功")
                 }
@@ -253,22 +252,20 @@ export default class UFProcess extends React.Component {
         this.setState({ visible: false, editImg: false, tea })
     }
     imgView = (tea, index) => {
-        if (Array.isArray(tea.process)) {
-            tea.process[index].img = tea.process[index].img ? tea.process[index].img : []
+        if (Array.isArray(tea.check)) {
         } else {
-            tea.process = []
-            tea.process[index].img = []
+            tea.check = []
         }
-        const img = tea.process[index].img
+        const img = tea.check[index].info
         let imgFileList = []
-        img.forEach((item, i) => {
+        if (img) {
             let file = {}
-            file.uid = i
-            file.name = img[i]
+            file.uid = index
+            file.name = img
             file.status = 'done'
-            file.url = global.ipfs.uri + img[i]
+            file.url = global.ipfs.uri + img
             imgFileList.push(file)
-        });
+        }
         this.setState({ visible: true, index, imgFileList, img, tea, imgFile: [] })
     }
     getCarousel(img) {
@@ -282,8 +279,10 @@ export default class UFProcess extends React.Component {
                 ))
                 return pre
             }, [])
-        } else {
+        } else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
+        } else {
+            return <div>暂无图片</div>
         }
     }
     getDictValue = (name, id) => {
@@ -297,14 +296,14 @@ export default class UFProcess extends React.Component {
             }
         }
     }
-    ufProcessCurrentChange = page => {
+    ufCheckCurrentChange = page => {
         const user = memoryUtils.user
         this.getPlant(page, 3, user.id, false)
     }
 
     render() {
-        const { ufProcess, visible, img, editImg, imgFileList, editVisible, tea, index } = this.state
-        const ufText = ufProcess.total ? "您有" + ufProcess.total + "条待办" : "暂无信息"
+        const { ufCheck, visible, img, editImg, imgFileList, editVisible, tea, index } = this.state
+        const ufText = ufCheck.total ? "您有" + ufCheck.total + "条待办" : "暂无信息"
         const uploadButton = (
             <div>
                 <PlusOutlined />
@@ -322,7 +321,7 @@ export default class UFProcess extends React.Component {
                 >
                     {this.getUFProcess()}
                 </Collapse>
-                <Pagination hideOnSinglePage style={{ marginTop: "10px", textAlign: "right" }} pageSize={3} current={ufProcess.page} onChange={this.ufProcessCurrentChange} total={ufProcess.total} />
+                <Pagination hideOnSinglePage style={{ marginTop: "10px", textAlign: "right" }} pageSize={3} current={ufCheck.page} onChange={this.ufCheckCurrentChange} total={ufCheck.total} />
                 <Modal
                     title="详情图"
                     visible={visible}
@@ -350,7 +349,7 @@ export default class UFProcess extends React.Component {
                         onPreview={this.handlePreview}
                         onChange={this.handleChange}
                     >
-                        {imgFileList.length >= 3 ? null : uploadButton}
+                        {imgFileList.length >= 1 ? null : uploadButton}
                     </Upload>) : ("")}
 
                 </Modal>
@@ -365,10 +364,10 @@ export default class UFProcess extends React.Component {
                     footer={null}
                     onCancel={() => this.setState({ editVisible: false })}
                 >
-                    <EditProcess tea={tea} index={index} dict={this.props.dict} hideModal={() => {
+                    <EditCheck tea={tea} index={index} dict={this.props.dict} hideModal={() => {
                         this.setState({ editVisible: false })
-                        this.getProcess(1, 3, false)
-                    }}></EditProcess>
+                        this.getCheck(1, 3, false)
+                    }}></EditCheck>
                 </Modal>
             </div>
         )

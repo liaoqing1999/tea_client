@@ -2,38 +2,37 @@ import React from "react";
 import { FileImageTwoTone } from '@ant-design/icons';
 import { Table, Button, Carousel, Modal, } from 'antd'
 import moment from 'moment';
-import { reqGetProcess } from "../../../../api";
+import { reqGetCheck } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
-export default class FProcess extends React.Component {
+export default class FCheck extends React.Component {
     state = {
         fProcess: {},
         img: [],
         visible: false,
     }
     componentDidMount = () => {
-        this.getProcess(1, 3, true)
+        this.getCheck(1, 3, true)
     }
     componentWillReceiveProps(nextProps) {
-        this.getProcess(1, 3, true)
+        this.getCheck(1, 3, true)
     }
-    getProcess = async (page, rows, finish) => {
+    getCheck = async (page, rows, finish) => {
         const user = memoryUtils.user
-        const res = await reqGetProcess(page, rows, user.id, finish)
+        const res = await reqGetCheck(page, rows, user.id, finish)
         const fProcess = res.data.data
         this.setState({ fProcess })
     }
     expandedRowRender = (record) => {
         const columns = [
-            { title: '加工方法', dataIndex: 'method', key: 'method', render: (text) => this.getDictValue('process', text) },
-            { title: '开始时间', dataIndex: 'startDate', key: 'batstartDatech', render: (text) =>text? moment(text).format("lll"):"" },
-            { title: '结束时间', dataIndex: 'endDate', key: 'endDate', render: (text) =>text? moment(text).format("lll"):"" },
+            { title: '检测类型', dataIndex: 'typeId', key: 'typeId', render: (text) => this.getDictValue('check', text) },
+            { title: '时间', dataIndex: 'date', key: 'date', render: (text) => text ? moment(text).format("lll") : "" },
+            { title: '结果', dataIndex: 'result', key: 'result', render: (text) => this.getDictValue('result', text) },
             { title: '是否完成', dataIndex: 'finish', key: 'finish', render: (text) => text ? "是" : "否" },
-            { title: '阶段图', dataIndex: 'img', key: 'img', render: (text) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}>查看详情</Button> },
-
+            { title: '具体详情', dataIndex: 'info', key: 'img', render: (text, record, index) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}>查看详情</Button> },
         ];
-        const process = record.process ? record.process : []
+        const check = record.check ? record.check : []
         return (
-            <Table title={(c) => "加工记录"} rowKey="startDate" columns={columns} dataSource={process} pagination={false} />
+            <Table title={(c) => "加工记录"} rowKey="date" columns={columns} dataSource={check} pagination={false} />
         );
     };
     getCarousel(img) {
@@ -47,9 +46,9 @@ export default class FProcess extends React.Component {
                 ))
                 return pre
             }, [])
-        } else if(img) {
+        }  else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
-        }else{
+        } else {
             return <div>暂无图片</div>
         }
     }
@@ -71,7 +70,7 @@ export default class FProcess extends React.Component {
             { title: '茶叶名', dataIndex: 'name', key: 'name' },
             { title: '批次', dataIndex: 'batch', key: 'batch' },
             { title: '保质期', dataIndex: 'period', key: 'period' },
-            { title: '产品等级', dataIndex: 'grade', key: 'grade',render: (text) => this.getDictValue('grade', text) },
+            { title: '产品等级', dataIndex: 'grade', key: 'grade', render: (text) => this.getDictValue('grade', text) },
             { title: '存储条件', dataIndex: 'store', key: 'store' },
             { title: '二维码', dataIndex: 'qr', key: 'qr', render: (text) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}><FileImageTwoTone /></Button> },
             { title: '产品图', dataIndex: 'img', key: 'img', render: (text) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}><FileImageTwoTone /></Button> },

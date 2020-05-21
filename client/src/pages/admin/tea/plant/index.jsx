@@ -81,10 +81,16 @@ export default class Plant extends Component {
             const pesticide = plant.pesticide;
             this.getPlant(1, 3, user.id, false)
             if(plant.place){
+                plant.place = plant.place? plant.place:""
+                plant.planter =  plant.planter? plant.planter:""
+                plant.img =  plant.img? plant.img:[]
+                plant.finish = plant.finish?plant.finish:true
                 await contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img,plant.finish).send({ from: this.state.accounts[0] });
             }
             if(Array.isArray(pesticide)&&pesticide.length>0){
                 for(let i = 0;i<pesticide.length;i++){
+                    pesticide[i].name = pesticide[i].name?pesticide[i].name:""
+                    pesticide[i].date =pesticide[i].name ?pesticide[i].name:new Date()
                     await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
                 }
             }
@@ -98,6 +104,11 @@ export default class Plant extends Component {
             tea = res.data.data
             const {contract} = this.state
             const user = memoryUtils.user
+            tea.id =  tea.id? tea.id:""
+            tea.name =  tea.name? tea.name:""
+            tea.typeId = tea.typeId? tea.typeId:""
+            tea.batch = tea.batch?tea.batch:""
+            tea.produce = tea.produce?tea.produce:""
             await contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
             this.getPlant(1, 3, user.id, false)
             message.success("添加茶叶成功！")
