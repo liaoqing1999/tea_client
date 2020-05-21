@@ -31,6 +31,9 @@ export const reqPageTea = (page, rows, cond) => {
     return ajax2('/tea/getPage', { page, rows, cond }, 'GET')
 }
 
+//获取茶叶
+export const reqGetTea = (id) => ajax2('/tea/get', {id}, 'GET')
+
 //添加茶叶
 export const reqAddTea = (tea) => ajax2('/tea/add', tea, 'POST')
 
@@ -38,14 +41,19 @@ export const reqAddTea = (tea) => ajax2('/tea/add', tea, 'POST')
 export const reqUpdateTea = (tea) => ajax2('/tea/update', tea, 'POST')
 
 //删除茶叶
-export const reqDeleteTea = (id) => ajax2('/tea/delete', id, 'GET')
-
+export const reqDeleteTea = (id) => ajax2('/tea/delete', {id}, 'GET')
 
 //获取茶叶种植阶段信息
 export const reqGetPlant = (page, rows, userId, finish) => ajax2('/tea/getPlant', { page, rows, userId, finish }, 'GET')
 
 //更新茶叶种植阶段信息
 export const reqUpdatePlant = (tea) => ajax2('/tea/updatePlant', tea, 'POST')
+
+//获取加工种植阶段信息
+export const reqGetProcess = (page, rows, userId, finish) => ajax2('/tea/getProcess', { page, rows, userId, finish }, 'GET')
+
+//更新加工种植阶段信息
+export const reqUpdateProcess = (tea) => ajax2('/tea/updateProcess', tea, 'POST')
 
 
 //获取验证码

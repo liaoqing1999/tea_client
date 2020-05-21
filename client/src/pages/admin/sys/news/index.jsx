@@ -157,8 +157,6 @@ export default class NewsManage extends Component {
                         </Popconfirm>
                     </Row>)
                 }
-
-
             },
         ]
       

@@ -228,6 +228,7 @@ export default class Plant extends Component {
         this.setState({ visible: false, editImg: false, tea })
     }
     imgView = (tea) => {
+        tea.plant.img = tea.plant.img?tea.plant.img:[]
         const img = tea.plant.img
         let imgFileList = []
         img.forEach((item, index) => {
@@ -243,7 +244,7 @@ export default class Plant extends Component {
     componentDidMount = () => {
         const user = memoryUtils.user
         this.getPlant(1, 3, user.id, false)
-        let typeCodes = ["type", "pesticide"]
+        let typeCodes = ["type", "pesticide","grade"]
         this.getDict(typeCodes)
         this.getOrg()
         this.getWeb3Tea()
