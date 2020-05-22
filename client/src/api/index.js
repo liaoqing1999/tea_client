@@ -239,6 +239,11 @@ export const reqStaffChart = (cond) =>{
     cond = JSON.stringify(cond)
    return ajax2('/staff/chart', {cond}, 'GET')
 } 
+//获取用户分析
+export const reqOrgChart = (cond) =>{
+    cond = JSON.stringify(cond)
+   return ajax2('/org/chart', {cond}, 'GET')
+} 
 
 //获取系统监控
 export const reqServer = () => ajax2('/monitor/server', {}, 'GET')
