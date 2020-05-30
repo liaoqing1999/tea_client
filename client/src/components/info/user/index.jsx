@@ -119,7 +119,6 @@ export default class User extends Component {
                                     this.state.img ?
                                         (<Avatar size={80} src={global.ipfs.uri + this.state.img} />) :
                                         (user.img ? (<Avatar size={80} src={global.ipfs.uri + user.img} />) : (<Avatar size={80} icon={<UserOutlined />} />))
-
                                 }
                             </Row>
                             <Upload

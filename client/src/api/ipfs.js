@@ -5,7 +5,7 @@
 // or connect with multiaddr
 //const ipfs = ipfsClient('/ip4/127.0.0.1/tcp/5001')
 const ipfsAPI = require('ipfs-api');
-const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
+const ipfs = ipfsAPI({host: '39.105.81.9', port: '5001', protocol: 'http'});
 // or using options
 //const ipfs = ipfsClient({ host: 'localhost', port: '5001', protocol: 'http' })
 

@@ -32,7 +32,7 @@ export default class FCheck extends React.Component {
         ];
         const check = record.check ? record.check : []
         return (
-            <Table title={(c) => "加工记录"} rowKey="date" columns={columns} dataSource={check} pagination={false} />
+            <Table title={(c) => "检测记录"} rowKey="date" columns={columns} dataSource={check} pagination={false} />
         );
     };
     getCarousel(img) {

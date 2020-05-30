@@ -79,7 +79,7 @@ export default class Brand extends Component {
                                 style={{ textAlign: 'center' }}
                                 hoverable
                                 onClick={() => this.onClick(orgs[4 * i + j])}
-                                cover={<img alt={orgs[4 * i + j].name} style={{ margin: "10px", width: "180px", height: "150px" }} src={global.ipfs.uri + orgs[4 * i + j].trademark} />}
+                                cover={<img alt={orgs[4 * i + j].name} style={{ margin: "10px auto", width: "180px", height: "150px" }} src={global.ipfs.uri + orgs[4 * i + j].trademark} />}
                             >
                                 <Meta title={orgs[4 * i + j].name} />
                             </Card>

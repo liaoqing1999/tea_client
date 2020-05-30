@@ -239,10 +239,22 @@ export const reqStaffChart = (cond) =>{
     cond = JSON.stringify(cond)
    return ajax2('/staff/chart', {cond}, 'GET')
 } 
-//获取用户分析
+//获取机构分析
 export const reqOrgChart = (cond) =>{
     cond = JSON.stringify(cond)
    return ajax2('/org/chart', {cond}, 'GET')
+} 
+
+//获取资讯分析
+export const reqNewsChart = (cond) =>{
+    cond = JSON.stringify(cond)
+   return ajax2('/news/chart', {cond}, 'GET')
+} 
+
+//获取资讯分析
+export const reqProduceChart = (cond) =>{
+    cond = JSON.stringify(cond)
+   return ajax2('/produce/chart', {cond}, 'GET')
 } 
 
 //获取系统监控

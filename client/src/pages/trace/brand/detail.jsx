@@ -26,14 +26,14 @@ export default class OrgDetail extends Component {
     getPorduce = (id) => {
         const { produce } = this.state
         if (Array.isArray(produce)) {
-            return produce.reduce((pre, item) => {
+            return produce.reduce((pre, item,index) => {
                 item.img = item.img ? item.img : [""]
                 pre.push((
-                    <Col>
+                    <Col key={index}>
                         <Card
                             style={{ textAlign: 'center' }}
                             hoverable
-                            onClick={() => { }}
+                            onClick={() => {this.props.history.push("/main/shop/detail", { produce:item })  }}
                             cover={<img alt={item.name} style={{ margin: "10px", width: "180px", height: "150px" }} src={global.ipfs.uri + item.img[0]} />}
                         >
                             <Meta title={item.name} />

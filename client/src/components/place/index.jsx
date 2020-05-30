@@ -49,12 +49,22 @@ export default class Place extends Component {
         return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
     }
     render() {
+        let place = this.props.value? this.props.value: this.props.place
+        if(place){
+            if(Array.isArray(place)){
+                place = place
+            }else{
+                place = place.split('-')
+            }
+        }else{
+            place = ""
+        }
         return <Cascader
             options={this.state.options}
             onChange={this.onPlaceChange}
             placeholder="请选择地点"
             changeOnSelect
-            value={this.props.value}
+            value={place}
             showSearch={this.filter}
         />
     }

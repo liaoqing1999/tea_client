@@ -38,7 +38,7 @@ export  function ajax2(url,data={},type='GET'){
              if(window.location.href.indexOf('admin')!==-1){
                 window.location.href='/admin/500'
              }else{
-               // window.location.href='/500'
+               window.location.href='/500'
              }
              message.error('请求出错了:'+error.message)
          })

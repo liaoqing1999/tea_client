@@ -79,7 +79,6 @@ export default class Produce extends Component {
                 return pre
             }, [])
         }
-
     }
     ViewNewsDetail = () => {
         const { produce } = this.state

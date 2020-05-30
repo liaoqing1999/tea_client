@@ -1,3 +1,3 @@
 global.ipfs = {
-   uri:"http://localhost:8080/ipfs/"
+   uri:"http://39.105.81.9:8080/ipfs/"
 };
