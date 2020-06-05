@@ -4,7 +4,7 @@ import { Button, PageHeader, Form, Input, Select, Upload, Modal, message, InputN
 import { GetOrgSelect } from '../staff/orgRoleSelect';
 import { addImg } from '../../../../api/ipfs';
 import sessionUtils from '../../../../utils/sessionUtils';
-import {reqProduceAdd,reqProduceName, reqProducUpdate } from '../../../../api';
+import { reqProduceAdd, reqProduceName, reqProducUpdate } from '../../../../api';
 import TeaType from '../../../../components/teaType';
 const { Option } = Select
 const validateMessages = {
@@ -84,7 +84,6 @@ export default class EditProduce extends Component {
     };
     handleChange = ({ fileList }) => this.setState({ imgFileList: fileList });
     onRemove = (file) => {
-        console.log(this.state.img)
         this.setState(state => {
             const index = state.imgFileList.indexOf(file);
             const newFileList = state.imgFileList.slice();
@@ -105,7 +104,7 @@ export default class EditProduce extends Component {
             // 上传数据到IPFS
             let hash = await addImg(reader);
             const imgFileList = this.state.imgFileList
-            imgFileList[imgFileList.length-1].hash = hash
+            imgFileList[imgFileList.length - 1].hash = hash
             this.setState(state => ({
                 img: [...state.img, hash],
                 imgFileList
@@ -168,7 +167,7 @@ export default class EditProduce extends Component {
     componentDidMount() {
         const { state } = this.props.location
         const imgFileList = this.getFile(state.produce.img)
-        this.setState({ imgFileList, img: state.produce.img?state.produce.img:[] })
+        this.setState({ imgFileList, img: state.produce.img ? state.produce.img : [] })
     }
     getFile = (img) => {
         let file = []
@@ -212,19 +211,19 @@ export default class EditProduce extends Component {
         );
         const validfunc = async (rule, value) => {
             const org = this.form.current.getFieldValue("org")
-            if(org&&type==='add'){
+            if (org && type === 'add') {
                 if (value) {
-                    const res = await reqProduceName(value,org)
-                    if (res.data.data==='') {
-                        
-                    }else{
+                    const res = await reqProduceName(value, org)
+                    if (res.data.data === '') {
+
+                    } else {
                         throw new Error(res.data.data);
                     }
                 } else {
                     throw new Error('产品名是必须的!');
                 }
             }
-           
+
         }
         return (
             <div>
@@ -249,12 +248,12 @@ export default class EditProduce extends Component {
                         "state": produce.state,
                     }}>
                     <Form.Item name='name' label="产品名" validateTrigger="onBlur" rules={[{ validator: validfunc }]}>
-                        <Input  disabled={type === 'edit'}/>
+                        <Input disabled={type === 'edit'} />
                     </Form.Item>
                     <Form.Item name='grade' label="等级" rules={[{ required: true }]}>
                         <Select
                             showSearch
-                            placeholder="请选择类型"
+                            placeholder="请选择等级"
                             optionFilterProp="children"
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -277,9 +276,9 @@ export default class EditProduce extends Component {
                         <Input />
                     </Form.Item>
                     <Form.Item name='price' label="价格">
-                        <InputNumber 
-                          formatter={value => `￥${value}`}
-                          parser={value => value.replace('￥', '')}
+                        <InputNumber
+                            formatter={value => `￥${value}`}
+                            parser={value => value.replace('￥', '')}
                         />
                     </Form.Item>
                     <Form.Item name='reserve' label="存量">
@@ -319,10 +318,10 @@ export default class EditProduce extends Component {
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 2 }}>
                         <Button type="primary" htmlType="submit" style={{ marginRight: '20px' }}>
                             提交
-            </Button>
+                        </Button>
                         <Button htmlType="button" onClick={() => this.setState({ editVisible: false })}>
                             取消
-            </Button>
+                        </Button>
                     </Form.Item>
                 </Form>
                 <Modal bodyStyle={{ backgroundColor: "white" }} visible={this.state.previewVisible} footer={null} onCancel={() => this.setState({ previewVisible: false })}>

@@ -3,7 +3,7 @@ import memoryUtils from '../../../../utils/memoryUtils'
 import { PlusOutlined } from '@ant-design/icons';
 import {
     List, Alert, Collapse, Popconfirm, Button, Modal, Carousel, Descriptions,
-    Tabs,Row, message, Upload, Pagination
+    Tabs, Row, message, Upload, Pagination
 } from 'antd'
 import { CaretRightOutlined } from '@ant-design/icons';
 import { reqGetPlant, reqDictType, reqUpdatePlant, reqOrg, reqAddTea } from '../../../../api';
@@ -37,10 +37,10 @@ export default class Plant extends Component {
         editImg: false,
         imgFileList: [],
         imgFile: [],
-        web3: null, 
-        accounts: null, 
+        web3: null,
+        accounts: null,
         contract: null,
-        addTeaVisible:false,
+        addTeaVisible: false,
     }
     ufPlantCurrentChange = page => {
         const user = memoryUtils.user
@@ -51,67 +51,77 @@ export default class Plant extends Component {
         const ufPlant = res.data.data
         this.setState({ ufPlant })
     }
-    getWeb3Tea =async () =>{
+    getWeb3Tea = async () => {
         try {
             const web3 = await getWeb3();
             const accounts = await web3.eth.getAccounts();
             const networkId = await web3.eth.net.getId();
             const deployedNetwork = Tea.networks[networkId];
             const instance = new web3.eth.Contract(
-              Tea.abi,
-              deployedNetwork && deployedNetwork.address,
+                Tea.abi,
+                deployedNetwork && deployedNetwork.address,
             );
             this.setState({ web3, accounts, contract: instance });
-          } catch (error) {
+        } catch (error) {
             alert(
-              `Failed to load web3, accounts, or contract. Check console for details.`,
+                `Failed to load web3, accounts, or contract. Check console for details.`,
             );
             console.error(error);
-          }
-    }
-    finishPlant = async (tea) => {
-        tea.plant.finish = true
-        const res = await reqUpdatePlant(tea)
-        if (res.data.data.id) {
-            const {contract} = this.state
-            message.success("任务完成！")
-            const user = memoryUtils.user
-            const tea = res.data.data
-            const plant =tea.plant;
-            const pesticide = plant.pesticide;
-            this.getPlant(1, 3, user.id, false)
-            if(plant.place){
-                plant.place = plant.place? plant.place:""
-                plant.planter =  plant.planter? plant.planter:""
-                plant.img =  plant.img? plant.img:[]
-                plant.finish = plant.finish?plant.finish:true
-                await contract.methods.setPlant(tea.id,plant.place,plant.planter,plant.img,plant.finish).send({ from: this.state.accounts[0] });
-            }
-            if(Array.isArray(pesticide)&&pesticide.length>0){
-                for(let i = 0;i<pesticide.length;i++){
-                    pesticide[i].name = pesticide[i].name?pesticide[i].name:""
-                    pesticide[i].date =pesticide[i].name ?pesticide[i].name:new Date()
-                    await this.state.contract.methods.setPesticide(tea.id,pesticide[i].name,new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
-                }
-            }
         }
     }
-    addTea =async (tea) =>{
-        tea.plant.planter = memoryUtils.user.id
-        tea.plant.pesticide =[]
-        const res = await reqAddTea(tea)
-        if(res.data.data){
-            tea = res.data.data
-            const {contract} = this.state
-            const user = memoryUtils.user
-            tea.id =  tea.id? tea.id:""
-            tea.name =  tea.name? tea.name:""
-            tea.typeId = tea.typeId? tea.typeId:""
-            tea.batch = tea.batch?tea.batch:""
-            tea.produce = tea.produce?tea.produce:""
-            await contract.methods.setProduct(tea.id,tea.name,tea.typeId,tea.batch,tea.produce).send({ from: this.state.accounts[0] });
-            this.getPlant(1, 3, user.id, false)
-            message.success("添加茶叶成功！")
+    finishPlant = async (tea) => {
+        const { contract, web3 } = this.state
+        if (contract && web3) {
+            tea.plant.finish = true
+            const res = await reqUpdatePlant(tea)
+            if (res.data.data.id) {
+                const { contract } = this.state
+                message.success("任务完成！")
+                const user = memoryUtils.user
+                const tea = res.data.data
+                const plant = tea.plant;
+                const pesticide = plant.pesticide;
+                this.getPlant(1, 3, user.id, false)
+                if (plant.place) {
+                    plant.place = plant.place ? plant.place : ""
+                    plant.planter = plant.planter ? plant.planter : ""
+                    plant.img = plant.img ? plant.img : []
+                    plant.finish = plant.finish ? plant.finish : true
+                    await contract.methods.setPlant(tea.id, plant.place, plant.planter, plant.img, plant.finish).send({ from: this.state.accounts[0] });
+                }
+                if (Array.isArray(pesticide) && pesticide.length > 0) {
+                    for (let i = 0; i < pesticide.length; i++) {
+                        pesticide[i].name = pesticide[i].name ? pesticide[i].name : ""
+                        pesticide[i].date = pesticide[i].name ? pesticide[i].name : new Date()
+                        await this.state.contract.methods.setPesticide(tea.id, pesticide[i].name, new Date(pesticide[i].date).valueOf()).send({ from: this.state.accounts[0] });
+                    }
+                }
+            }
+        } else {
+            this.getWeb3Tea()
+        }
+    }
+    addTea = async (tea) => {
+        const { contract, web3 } = this.state
+        if (contract && web3) {
+            tea.plant.planter = memoryUtils.user.id
+            tea.plant.pesticide = []
+            const res = await reqAddTea(tea)
+            if (res.data.data) {
+                tea = res.data.data
+                const user = memoryUtils.user
+                tea.id = tea.id ? tea.id : ""
+                tea.name = tea.name ? tea.name : ""
+                tea.typeId = tea.typeId ? tea.typeId : ""
+                tea.batch = tea.batch ? tea.batch : ""
+                tea.produce = tea.produce ? tea.produce : ""
+                await contract.methods.setProduct(tea.id, tea.name, tea.typeId, tea.batch, tea.produce).send({ from: this.state.accounts[0] });
+                this.setState({addTeaVisible: false })
+                this.getPlant(1, 3, user.id, false)
+                message.success("添加茶叶成功！")
+            }
+        } else {
+            this.getWeb3Tea()
         }
     }
     getOrg = async () => {
@@ -165,8 +175,8 @@ export default class Plant extends Component {
             const index = state.imgFileList.indexOf(file);
             const newFileList = state.imgFileList.slice();
             newFileList.splice(index, 1);
-            const f = state.imgFile.find(item =>item.uid === file.uid)
-            const i= state.imgFile.indexOf(f);
+            const f = state.imgFile.find(item => item.uid === file.uid)
+            const i = state.imgFile.indexOf(f);
             const imgFile = state.imgFile.slice();
             imgFile.splice(i, 1);
             return {
@@ -239,7 +249,7 @@ export default class Plant extends Component {
         this.setState({ visible: false, editImg: false, tea })
     }
     imgView = (tea) => {
-        tea.plant.img = tea.plant.img?tea.plant.img:[]
+        tea.plant.img = tea.plant.img ? tea.plant.img : []
         const img = tea.plant.img
         let imgFileList = []
         img.forEach((item, index) => {
@@ -255,7 +265,7 @@ export default class Plant extends Component {
     componentDidMount = () => {
         const user = memoryUtils.user
         this.getPlant(1, 3, user.id, false)
-        let typeCodes = ["type", "pesticide","grade"]
+        let typeCodes = ["type", "pesticide", "grade"]
         this.getDict(typeCodes)
         this.getOrg()
         this.getWeb3Tea()
@@ -271,8 +281,10 @@ export default class Plant extends Component {
                 ))
                 return pre
             }, [])
+        } else if (img) {
+            return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
         } else {
-            return <img alt="img" src={global.ipfs.uri + img}></img>
+            return <div>暂无图片</div>
         }
     }
     getufPlant = () => {
@@ -297,7 +309,7 @@ export default class Plant extends Component {
                                 <Descriptions.Item label="类型">{this.getDictValue("type", item.typeId.slice(0, 4) + "00") + "-" + this.getDictValue("type", item.typeId)}</Descriptions.Item>
                                 <Descriptions.Item label="批次">{item.batch}</Descriptions.Item>
                                 <Descriptions.Item label="产地">{item.plant.place}</Descriptions.Item>
-                                <Descriptions.Item label="施药次数">{item.plant.pesticide?item.plant.pesticide.length:0}</Descriptions.Item>
+                                <Descriptions.Item label="施药次数">{item.plant.pesticide ? item.plant.pesticide.length : 0}</Descriptions.Item>
                                 <Descriptions.Item label="阶段图">
                                     <Button type="link" onClick={() => { this.imgView(item) }}>查看详情</Button>
                                 </Descriptions.Item>
@@ -308,7 +320,7 @@ export default class Plant extends Component {
                                     this.setState({ pesticideVisible: true, tea: item })
                                 }}>新增</Button></Row>}
                                 bordered
-                                dataSource={item.plant.pesticide?item.plant.pesticide:[]}
+                                dataSource={item.plant.pesticide ? item.plant.pesticide : []}
                                 renderItem={(i, index) => (
                                     <List.Item actions={[<Button type="link" onClick={() => {
                                         item.index = index
@@ -333,9 +345,9 @@ export default class Plant extends Component {
     }
     render() {
         const user = memoryUtils.user
-        const { imgFileList, ufPlant, editImg,org, addTeaVisible,
+        const { imgFileList, ufPlant, editImg, org, addTeaVisible,
             pesticideVisible, visible, img, dict, tea } = this.state
-        const operations = org.staffProduce?(<Button type="primary" onClick={() =>this.setState({addTeaVisible:true})}>新增待办</Button>):("")
+        const operations = org.staffProduce ? (<Button type="primary" onClick={() => this.setState({ addTeaVisible: true })}>新增待办</Button>) : ("")
         const uploadButton = (
             <div>
                 <PlusOutlined />
@@ -394,8 +406,8 @@ export default class Plant extends Component {
                     bodyStyle={{ backgroundColor: "white" }}
                     footer={null}
                     onCancel={() => this.setState({ addTeaVisible: false })}
-                >  
-                   <AddTea  addTea={this.addTea} hideModal={() => this.setState({ addTeaVisible: false })}></AddTea>
+                >
+                    <AddTea addTea={this.addTea}></AddTea>
                 </Modal>
                 {user.org ? (
                     <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>

@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { Button, Table, Select, PageHeader, Modal, Carousel, Collapse, Row, Col, Descriptions, Popconfirm, Divider, message } from 'antd'
-import { reqPageTea, reqDictType, reqDeleteTea } from '../../../../api'
+import { Button, Table, Select, PageHeader, Modal, Carousel, Collapse, Row, Col, Descriptions, Popconfirm, Divider, message, Form, Input } from 'antd'
+import { reqPageTea, reqDictType, reqDeleteTea, reqDownloadQR } from '../../../../api'
 import { FileImageTwoTone } from '@ant-design/icons';
 import Plant from '../../../../assets/plant.svg'
 import Process from '../../../../assets/process.svg'
 import Storage from '../../../../assets/storage.svg'
 import Check from '../../../../assets/check.svg'
 import moment from 'moment';
-const { Option } = Select;
+import EditTea from './editTea';
+import getWeb3 from '../../../../getWeb3';
+import TeaJson from "../../../../contracts/Tea.json";
+import SetTea from './setTea';
 const { Panel } = Collapse;
 export default class Tea extends Component {
     constructor(props) {
@@ -19,6 +22,7 @@ export default class Tea extends Component {
             }
             this.getDate(1, 10, cond)
             this.getDict(["type", "pesticide", "grade", "result", "check", "process"])
+            this.getWeb3Tea()
         } else {
             this.props.history.goBack()
         }
@@ -28,7 +32,16 @@ export default class Tea extends Component {
         searchText: '',
         searchedColumn: '',
         selectedRowKeys: [],
-        dict: {}
+        tea: {},
+        setVisible: false,
+        type: "",
+        editVisible: false,
+        setType: "",
+        dict: {},
+        cond: {},
+        web3: null,
+        accounts: null,
+        contract: null,
     }
     getDate = async (page, rows, cond) => {
         const res = await reqPageTea(page, rows, cond)
@@ -54,6 +67,44 @@ export default class Tea extends Component {
             }
         }
     }
+    getWeb3Tea = async () => {
+        try {
+            const web3 = await getWeb3();
+            const accounts = await web3.eth.getAccounts();
+            const networkId = await web3.eth.net.getId();
+            const deployedNetwork = TeaJson.networks[networkId];
+            const instance = new web3.eth.Contract(
+                TeaJson.abi,
+                deployedNetwork && deployedNetwork.address,
+            );
+            this.setState({ web3, accounts, contract: instance });
+        } catch (error) {
+            alert(
+                `Failed to load web3, accounts, or contract. Check console for details.`,
+            );
+            console.error(error);
+        }
+    }
+    sava =async () => {
+        const { contract, web3 } = this.state
+        if (contract && web3) {
+            const { tea } = this.state
+            tea.id = tea.id ? tea.id : ""
+            tea.name = tea.name ? tea.name : ""
+            tea.typeId = tea.typeId ? tea.typeId : ""
+            tea.batch = tea.batch ? tea.batch : ""
+            tea.produce = tea.produce ? tea.produce : ""
+            tea.grade = tea.grade ? tea.grade : ""
+            tea.period = tea.period ? tea.period : ""
+            tea.store = tea.store ? tea.store : ""
+            tea.img = tea.img ? tea.img :[]
+            tea.qr = tea.qr ? tea.qr : ""
+            await contract.methods.setProduct(tea.id, tea.name, tea.typeId, tea.batch, tea.produce).send({ from: this.state.accounts[0] });
+            await contract.methods.setProductSenior(tea.id, tea.grade, tea.period, tea.store, tea.img, tea.qr).send({ from: this.state.accounts[0] });
+        } else {
+            this.getWeb3Tea()
+        }
+    }
     addEdit = (produce, type) => {
         const { dict } = this.state
         this.props.history.push("/admin/produce/edit", { produce: produce, type, dict, editType: 'sys' })
@@ -64,7 +115,7 @@ export default class Tea extends Component {
         this.getDate(this.state.produceList.page, this.state.produceList.rows, this.state.cond)
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        this.setState({ selectedRowKeys, produce: selectedRows[0] });
+        this.setState({ selectedRowKeys, tea: selectedRows[0] });
     };
     expandedRowRender = (record) => {
         const columns = [
@@ -75,15 +126,21 @@ export default class Tea extends Component {
             { title: '加工方法', dataIndex: 'method', key: 'method', render: (text) => this.getDictValue('process', text) },
             { title: '开始时间', dataIndex: 'startDate', key: 'batstartDatech', render: (text) => text ? moment(text).format("lll") : "" },
             { title: '结束时间', dataIndex: 'endDate', key: 'endDate', render: (text) => text ? moment(text).format("lll") : "" },
+            { title: '负责人账户', dataIndex: 'staffName', key: 'staffName' },
+            { title: '负责人真实姓名', dataIndex: 'staffRealName', key: 'staffRealName' },
             { title: '是否完成', dataIndex: 'finish', key: 'finish', render: (text) => text ? "是" : "否" },
             { title: '阶段图', dataIndex: 'img', key: 'img', render: (text) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}>查看详情</Button> },
+            { title: '操作', dataIndex: 'processer', render: (text, r, index) => <Button type="link" size="middle" onClick={() => this.setState({ setVisible: true, tea: record, setType: 'process', index })}>编辑</Button> }
         ];
         const checkColumns = [
             { title: '检测类型', dataIndex: 'typeId', key: 'typeId', render: (text) => this.getDictValue('check', text) },
             { title: '时间', dataIndex: 'date', key: 'date', render: (text) => text ? moment(text).format("lll") : "" },
             { title: '结果', dataIndex: 'result', key: 'result', render: (text) => this.getDictValue('result', text) },
+            { title: '负责人账户', dataIndex: 'staffName', key: 'staffName' },
+            { title: '负责人真实姓名', dataIndex: 'staffRealName', key: 'staffRealName' },
             { title: '是否完成', dataIndex: 'finish', key: 'finish', render: (text) => text ? "是" : "否" },
             { title: '具体详情', dataIndex: 'info', key: 'img', render: (text, record, index) => <Button type="link" onClick={() => this.setState({ visible: true, img: text })}>查看详情</Button> },
+            { title: '操作', dataIndex: 'checker', render: (text, r, index) => <Button type="link" size="middle" onClick={() => this.setState({ setVisible: true, tea: record, setType: 'check', index })}>编辑</Button> }
         ];
         const plant = record.plant ? record.plant : {}
         const process = record.process ? record.process : []
@@ -95,11 +152,13 @@ export default class Tea extends Component {
                 bordered={false}
                 className="result-center-collapse"
             >
-                <Panel header="种植阶段" key="plant" className="result-center-collapse-custom-panel" extra={<img alt="plant" style={{ height: "20px" }} src={Plant}></img>}>
+                <Panel header="种植阶段" key="plant" className="result-center-collapse-custom-panel" extra={<div> <Button onClick={() => this.setState({ setVisible: true, tea: record, setType: 'plant' })} type="link">设置负责人</Button> <img alt="plant" style={{ height: "20px" }} src={Plant}></img></div>}>
                     <Row>
                         <Col span={12}>
                             <Descriptions column={1} bordered size="small">
                                 <Descriptions.Item label="产地">{plant.place}</Descriptions.Item>
+                                <Descriptions.Item label="负责人账户">{plant.staffName}</Descriptions.Item>
+                                <Descriptions.Item label="负责人真实姓名">{plant.staffRealName}</Descriptions.Item>
                                 <Descriptions.Item label="施药次数">{data.length}</Descriptions.Item>
                                 <Descriptions.Item label="阶段图"> <Button style={{ padding: "0" }} type="link" onClick={() => this.setState({ visible: true, img: plant.img })}>查看详情</Button></Descriptions.Item>
                             </Descriptions>
@@ -109,25 +168,27 @@ export default class Tea extends Component {
                         </Col>
                     </Row>
                 </Panel>
-                <Panel header="加工阶段" key="process" className="result-center-collapse-custom-panel" extra={<img alt="process" style={{ height: "20px" }} src={Process}></img>}>
-                    <Table title={(c) => "加工记录"} rowKey="startDate" columns={processColumns} dataSource={process} pagination={false} />
+                <Panel header="加工阶段" key="process" className="result-center-collapse-custom-panel" extra={<div><Button type="link" onClick={() => this.setState({ setVisible: true, tea: record, setType: 'process', index: -1 })} >新增</Button> <img alt="process" style={{ height: "20px" }} src={Process}></img></div>}>
+                    <Table title={(c) => record.processFinish ? "已完成加工阶段" : "未完成加工阶段"} rowKey="startDate" columns={processColumns} dataSource={process} pagination={false} />
                 </Panel>
-                <Panel header="仓储阶段" key="storage" className="result-center-collapse-custom-panel" extra={<img alt="storage" style={{ height: "20px" }} src={Storage}></img>}>
+                <Panel header="仓储阶段" key="storage" className="result-center-collapse-custom-panel" extra={<div><Button type="link" onClick={() => this.setState({ setVisible: true, tea: record, setType: 'storage' })} >设置负责人</Button> <img alt="storage" style={{ height: "20px" }} src={Storage}></img></div>}>
                     <Descriptions title="仓储记录">
                         <Descriptions.Item label="仓储地点">{storage.place}</Descriptions.Item>
                         <Descriptions.Item label="开始时间">{storage.startDate ? moment(storage.startDate).format("lll") : ""}</Descriptions.Item>
                         <Descriptions.Item label="结束时间">{storage.endDate ? moment(storage.endDate).format("lll") : ""}</Descriptions.Item>
+                        <Descriptions.Item label="负责人账户">{storage.staffName}</Descriptions.Item>
+                        <Descriptions.Item label="负责人真实姓名">{storage.staffRealName}</Descriptions.Item>
                         <Descriptions.Item label="是否完成">{storage.finish ? "是" : "否"}</Descriptions.Item>
                         <Descriptions.Item label="阶段图"><Button type="link" onClick={() => this.setState({ visible: true, img: storage.img })}>查看详情</Button></Descriptions.Item>
                     </Descriptions>
                 </Panel>
-                <Panel header="检测阶段" key="check" className="result-center-collapse-custom-panel" extra={<img alt="check" style={{ height: "20px" }} src={Check}></img>}>
-                    <Table title={(c) => "检测记录"} rowKey="date" columns={checkColumns} dataSource={check} pagination={false} />
+                <Panel header="检测阶段" key="check" className="result-center-collapse-custom-panel" extra={<div><Button type="link" onClick={() => this.setState({ setVisible: true, tea: record, setType: 'check', index: -1 })}>新增</Button><img alt="check" style={{ height: "20px" }} src={Check}></img></div>}>
+                    <Table title={(c) => record.checkFinish ? "已完成检测阶段" : "未完成检测阶段"} rowKey="date" columns={checkColumns} dataSource={check} pagination={false} />
                 </Panel>
             </Collapse>
         );
     };
-    getCarousel = (img) => {
+    getCarousel(img) {
         if (Array.isArray(img)) {
             let i = 0
             return img.reduce((pre, item) => {
@@ -138,33 +199,24 @@ export default class Tea extends Component {
                 ))
                 return pre
             }, [])
-        } else {
+        } else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
-        }
-    }
-    browseFolder = (path) =>{
-        try {
-            var Message = "\u8bf7\u9009\u62e9\u6587\u4ef6\u5939"; //选择框提示信息
-            var Shell = new ActiveXObject("Shell.Application");
-            var Folder = Shell.BrowseForFolder(0, Message, 64, 17); //起始目录为：我的电脑
-            //var Folder = Shell.BrowseForFolder(0, Message, 0); //起始目录为：桌面
-            if (Folder != null) {
-                Folder = Folder.items(); // 返回 FolderItems 对象
-                Folder = Folder.item(); // 返回 Folderitem 对象
-                Folder = Folder.Path; // 返回路径
-                if (Folder.charAt(Folder.length - 1) != "\\") {
-                    Folder = Folder + "\\";
-                }
-                document.getElementById(path).value = Folder;
-                return Folder;
-            }
-        }
-        catch (e) {
-            alert(e.message);
+        } else {
+            return <div>暂无图片</div>
         }
     }
     render() {
-        const { teaList, visible, img, cond, selectedRowKeys, qrVisible } = this.state
+        const { teaList, visible, img, cond, selectedRowKeys, index, tea, type, editVisible, dict, setVisible, setType } = this.state
+        let t = ""
+        if (setType === 'plant') {
+            t = "种植阶段"
+        } else if (setType === 'process') {
+            t = "加工阶段"
+        } else if (setType === 'storage') {
+            t = "仓储阶段"
+        } else if (setType === 'check') {
+            t = "检测阶段"
+        }
         const columns = [
             { title: '茶叶名', dataIndex: 'name', key: 'name' },
             { title: '批次', dataIndex: 'batch', key: 'batch' },
@@ -179,7 +231,7 @@ export default class Tea extends Component {
                 width: 180,
                 render: (text, record) => {
                     return (<Row>
-                        <Button size="middle" onClick={() => this.addEdit(record, 'edit')}>编辑</Button>
+                        <Button size="middle" onClick={() => this.setState({ editVisible: true, tea: record, type: 'edit' })}>编辑</Button>
                         <Divider type="vertical"></Divider>
                         <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record)}>
                             <Button size="middle" type="danger">删除</Button>
@@ -200,9 +252,10 @@ export default class Tea extends Component {
             type: "radio"
         };
         const title = (
-            <div>
-                <Button type="primary" onClick={() => this.addEdit({}, 'add')} style={{ marginRight: "20px" }}>新增茶叶</Button>
-                <Button type="primary" onClick={() => this.setState({ qrVisible: true })} disabled={!selectedRowKeys.length}>生成二维码</Button>
+            <div style={{ margin: "10px 0" }}>
+                <Button type="primary" onClick={() => this.setState({ editVisible: true, tea: {}, type: 'add' })} style={{ marginRight: "20px" }}>新增茶叶</Button>
+                <Button type="primary" href={global.service.uri + 'tea/downloadQR?id=' + tea.id + '&name=' + tea.name + '-' + tea.batch} style={{ marginRight: "20px" }} disabled={!selectedRowKeys.length}>生成二维码</Button>
+                <Button type="primary" onClick={() => this.sava()} style={{ marginRight: "20px" }} disabled={!selectedRowKeys.length}>保存至区块链</Button>
             </div>
         )
         return (
@@ -238,18 +291,29 @@ export default class Tea extends Component {
                 </Modal>
 
                 <Modal
-                    title="生成二维码"
-                    visible={qrVisible}
-                    onCancel={() => this.setState({ qrVisible: false })}
-                    footer={[
-                        <Button key="back" onClick={() => this.setState({ qrVisible: false })}>
-                            确认
-                        </Button>
-                    ]}
+                    title={type === 'add' ? "新增茶叶" : "编辑茶叶"}
+                    visible={editVisible}
+                    footer={null}
                     bodyStyle={{ backgroundColor: "white" }}
+                    onCancel={() => { this.setState({ editVisible: false }) }}
                 >
-                    < input id="path" type="text" name="path" size="30" />
-                    < input type="button" value="选择" οnclick={()=>this.browseFolder('path')} />
+                    <EditTea produce={this.props.location.state.produce} dict={dict} type={type} tea={tea} hideModal={() => {
+                        this.setState({ editVisible: false })
+                        this.getDate(1, 10, this.state.cond)
+                    }}></EditTea>
+                </Modal>
+
+                <Modal
+                    title={t}
+                    visible={setVisible}
+                    footer={null}
+                    bodyStyle={{ backgroundColor: "white" }}
+                    onCancel={() => { this.setState({ setVisible: false }) }}
+                >
+                    <SetTea produce={this.props.location.state.produce} dict={dict} setType={setType} tea={tea} index={index} hideModal={() => {
+                        this.setState({ setVisible: false })
+                        this.getDate(1, 10, this.state.cond)
+                    }}></SetTea>
                 </Modal>
             </div>
         )

@@ -49,8 +49,10 @@ export default class FPlant extends React.Component {
                 ))
                 return pre
             }, [])
-        } else {
+        }  else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
+        } else {
+            return <div>暂无图片</div>
         }
     }
     getDictValue = (name, id) => {    

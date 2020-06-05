@@ -223,16 +223,6 @@ export default class Staff extends Component {
                 >
                     <EditStaff editType={'sys'} dict={dict} type={type} onFinish={this.onFinish} user={user} hideModal={() => { this.setState({ editVisible: false }) }}></EditStaff>
                 </Modal>
-
-                <Modal
-                    title="设置角色权限"
-                    visible={this.state.editVisible1}
-                    footer={null}
-                    bodyStyle={{ backgroundColor: "white" }}
-                    onCancel={this.hideEditModal}
-                >
-
-                </Modal>
             </div>
         )
     }

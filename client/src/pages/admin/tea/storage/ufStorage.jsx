@@ -28,8 +28,8 @@ export default class UFStorage extends React.Component {
         editImg: false,
         imgFileList: [],
         imgFile: [],
-        web3: null, 
-        accounts: null, 
+        web3: null,
+        accounts: null,
         contract: null,
     }
     componentDidMount = () => {
@@ -39,36 +39,41 @@ export default class UFStorage extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.getStorage(1, 3, false)
     }
-    getWeb3Tea =async () =>{
+    getWeb3Tea = async () => {
         try {
             const web3 = await getWeb3();
             const accounts = await web3.eth.getAccounts();
             const networkId = await web3.eth.net.getId();
             const deployedNetwork = Tea.networks[networkId];
             const instance = new web3.eth.Contract(
-              Tea.abi,
-              deployedNetwork && deployedNetwork.address,
+                Tea.abi,
+                deployedNetwork && deployedNetwork.address,
             );
             this.setState({ web3, accounts, contract: instance });
-          } catch (error) {
+        } catch (error) {
             alert(
-              `Failed to load web3, accounts, or contract. Check console for details.`,
+                `Failed to load web3, accounts, or contract. Check console for details.`,
             );
             console.error(error);
-          }
+        }
     }
     finishProcess = async (tea) => {
-        tea.storage = tea.storage?tea.storage:{}
-        tea.storage.finish = true
-        tea.storage.endDate = tea.storage.endDate?tea.storage.endDate:new Date()
-        const res = await reqUpdateStorage(tea)
-        if (res.data.data.id) {
-            const {contract} = this.state
-            const tea = res.data.data
-            const storage =tea.storage;
-            await contract.methods.setStorage(tea.id,storage.place,new Date(storage.startDate).valueOf(),new Date(storage.endDate).valueOf(),storage.storageer,storage.img,storage.finish).send({ from: this.state.accounts[0] });
-            this.props.addRefresh()
-            message.success("任务完成！")
+        const { contract, web3 } = this.state
+        if (contract && web3) {
+            tea.storage = tea.storage ? tea.storage : {}
+            tea.storage.finish = true
+            tea.storage.endDate = tea.storage.endDate ? tea.storage.endDate : new Date()
+            const res = await reqUpdateStorage(tea)
+            if (res.data.data.id) {
+                const { contract } = this.state
+                const tea = res.data.data
+                const storage = tea.storage;
+                await contract.methods.setStorage(tea.id, storage.place, new Date(storage.startDate).valueOf(), new Date(storage.endDate).valueOf(), storage.storageer, storage.img, storage.finish).send({ from: this.state.accounts[0] });
+                this.props.addRefresh()
+                message.success("任务完成！")
+            }
+        } else {
+            this.getWeb3Tea()
         }
     }
     getStorage = async (page, rows, finish) => {
@@ -95,10 +100,10 @@ export default class UFStorage extends React.Component {
                     const title = (
                         <Row justify="space-between">
                             <span>仓储记录</span>
-                            <Button type="primary"  onClick={() => this.setState({ editVisible: true, tea: item })}>编辑</Button>
+                            <Button type="primary" onClick={() => this.setState({ editVisible: true, tea: item })}>编辑</Button>
                         </Row>
                     )
-                    item.storage = item.storage?item.storage:{}
+                    item.storage = item.storage ? item.storage : {}
                     const storage = item.storage
                     pre.push((
                         <Panel header={item.name} extra={extra} key={item.id} className="site-collapse-custom-panel">
@@ -109,11 +114,11 @@ export default class UFStorage extends React.Component {
                                 <Descriptions.Item label="产地">{item.plant.place}</Descriptions.Item>
                                 <Descriptions.Item label="产品等级">{this.getDictValue("grade", item.grade)}</Descriptions.Item>
                             </Descriptions>
-                            <Descriptions  title={title}>
+                            <Descriptions title={title}>
                                 <Descriptions.Item label="仓储地点">{storage.place}</Descriptions.Item>
-                                <Descriptions.Item label="开始时间">{storage.startDate?moment(storage.startDate).format("lll"):"" }</Descriptions.Item>
-                                <Descriptions.Item label="结束时间">{storage.endDate?moment(storage.endDate).format("lll"):"" }</Descriptions.Item>
-                                <Descriptions.Item label="是否完成">{storage.finish? "是" : "否"}</Descriptions.Item>
+                                <Descriptions.Item label="开始时间">{storage.startDate ? moment(storage.startDate).format("lll") : ""}</Descriptions.Item>
+                                <Descriptions.Item label="结束时间">{storage.endDate ? moment(storage.endDate).format("lll") : ""}</Descriptions.Item>
+                                <Descriptions.Item label="是否完成">{storage.finish ? "是" : "否"}</Descriptions.Item>
                                 <Descriptions.Item label="阶段图"><Button type="link" onClick={() => this.imgView(item)}>查看详情</Button></Descriptions.Item>
                             </Descriptions>
                         </Panel>
@@ -213,8 +218,8 @@ export default class UFStorage extends React.Component {
         this.setState({ visible: false, editImg: false, tea })
     }
     imgView = (tea) => {
-        tea.storage = tea.storage?tea.storage:{}
-        tea.storage.img = tea.storage.img?tea.storage.img:[]
+        tea.storage = tea.storage ? tea.storage : {}
+        tea.storage.img = tea.storage.img ? tea.storage.img : []
         const img = tea.storage.img
         let imgFileList = []
         img.forEach((item, index) => {
@@ -238,8 +243,10 @@ export default class UFStorage extends React.Component {
                 ))
                 return pre
             }, [])
-        } else {
+        } else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
+        } else {
+            return <div>暂无图片</div>
         }
     }
     getDictValue = (name, id) => {

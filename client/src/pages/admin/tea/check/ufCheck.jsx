@@ -58,26 +58,31 @@ export default class UFCheck extends React.Component {
         }
     }
     finishCheck = async (tea) => {
-        tea.checkFinish = true
-        const res = await reqUpdateCheck(tea)
-        if (res.data.data.id) {
-            const { contract } = this.state
-            const tea = res.data.data
-            const check = tea.check;
-            if (Array.isArray(check) && check.length > 0) {
-                for (let i = 0; i < check.length; i++) {
-                    check[i].typeId = check[i].typeId ? check[i].typeId : ""
-                    check[i].date = check[i].date ? check[i].date : new Date()
-                    check[i].result = check[i].result ? check[i].result : ""
-                    check[i].info = check[i].info ? check[i].info : ""
-                    check[i].checker = check[i].checker ? check[i].checker : ""
-                    check[i].finish = check[i].finish ? check[i].finish : true
-                    await contract.methods.setCheck(tea.id, check[i].typeId, new Date(check[i].date).valueOf(), check[i].result, check[i].info, check[i].checker, check[i].finish).send({ from: this.state.accounts[0] });
+        const { contract, web3 } = this.state
+        if (contract && web3) {
+            tea.checkFinish = true
+            const res = await reqUpdateCheck(tea)
+            if (res.data.data.id) {
+                const tea = res.data.data
+                const check = tea.check;
+                if (Array.isArray(check) && check.length > 0) {
+                    for (let i = 0; i < check.length; i++) {
+                        check[i].typeId = check[i].typeId ? check[i].typeId : ""
+                        check[i].date = check[i].date ? check[i].date : new Date()
+                        check[i].result = check[i].result ? check[i].result : ""
+                        check[i].info = check[i].info ? check[i].info : ""
+                        check[i].checker = check[i].checker ? check[i].checker : ""
+                        check[i].finish = check[i].finish ? check[i].finish : true
+                        await contract.methods.setCheck(tea.id, check[i].typeId, new Date(check[i].date).valueOf(), check[i].result, check[i].info, check[i].checker, check[i].finish).send({ from: this.state.accounts[0] });
+                    }
                 }
+                this.props.addRefresh()
+                message.success("任务完成！")
             }
-            this.props.addRefresh()
-            message.success("任务完成！")
+        } else {
+            this.getWeb3Tea()
         }
+
     }
     getCheck = async (page, rows, finish) => {
         const user = memoryUtils.user

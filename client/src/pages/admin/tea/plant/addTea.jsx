@@ -25,7 +25,6 @@ export default class AddTea extends React.Component {
     form = React.createRef();
     onFinish = async (values) => {
        this.props.addTea(values)
-       this.props.hideModal()
     }
     componentDidMount = () => {
         const user = memoryUtils.user

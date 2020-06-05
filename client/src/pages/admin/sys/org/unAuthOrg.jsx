@@ -34,8 +34,10 @@ export default class UnAuthOrg extends React.Component {
                 ))
                 return pre
             }, [])
-        } else {
+        }  else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
+        } else {
+            return <div>暂无图片</div>
         }
     }
     oper =async (id,state) =>{

@@ -43,6 +43,9 @@ export const reqUpdateTea = (tea) => ajax2('/tea/update', tea, 'POST')
 //删除茶叶
 export const reqDeleteTea = (id) => ajax2('/tea/delete', {id}, 'GET')
 
+//下载生成二维码
+export const reqDownloadQR = (id,name) => ajax2('/tea/downloadQR', {id,name}, 'GET')
+
 //获取茶叶种植阶段信息
 export const reqGetPlant = (page, rows, userId, finish) => ajax2('/tea/getPlant', { page, rows, userId, finish }, 'GET')
 
@@ -177,6 +180,9 @@ export const reqAddStaff = (staff) => ajax2('/staff/add', staff, 'POST')
 
 //更新用户密码
 export const reqUpdatePassword = (id, password) => ajax2('/staff/password', { id, password }, 'GET')
+
+//获取机构角色用户
+export const reqOrgRoleStaff = (org, role) => ajax2('/staff/getOrgRole', { org, role}, 'GET')
 
 //删除用户
 export const reqDeleteStaff = (id) => ajax2('/staff/delete', { id }, 'GET')

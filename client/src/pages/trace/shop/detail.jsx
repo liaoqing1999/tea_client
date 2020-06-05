@@ -27,7 +27,7 @@ export default class ProduceDetail extends Component {
         }
     }
     carousel = React.createRef();
-    getCarousel = (img) => {
+    getCarousel(img) {
         if (Array.isArray(img)) {
             let i = 0
             return img.reduce((pre, item) => {
@@ -38,6 +38,8 @@ export default class ProduceDetail extends Component {
                 ))
                 return pre
             }, [])
+        }  else if (img) {
+            return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
         } else {
             return <div>暂无图片</div>
         }

@@ -1,6 +1,6 @@
 import React from "react";
 import moment from 'moment';
-import { Table,Tag, Descriptions, Button, Collapse, Pagination, Row, Upload, Alert, Popconfirm, Divider, Modal, Carousel, message } from 'antd'
+import { Table, Tag, Descriptions, Button, Collapse, Pagination, Row, Upload, Alert, Popconfirm, Divider, Modal, Carousel, message } from 'antd'
 import { reqGetProcess, reqUpdateProcess } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons';
@@ -28,8 +28,8 @@ export default class UFProcess extends React.Component {
         editImg: false,
         imgFileList: [],
         imgFile: [],
-        web3: null, 
-        accounts: null, 
+        web3: null,
+        accounts: null,
         contract: null,
     }
     componentDidMount = () => {
@@ -39,44 +39,49 @@ export default class UFProcess extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.getProcess(1, 3, false)
     }
-    getWeb3Tea =async () =>{
+    getWeb3Tea = async () => {
         try {
             const web3 = await getWeb3();
             const accounts = await web3.eth.getAccounts();
             const networkId = await web3.eth.net.getId();
             const deployedNetwork = Tea.networks[networkId];
             const instance = new web3.eth.Contract(
-              Tea.abi,
-              deployedNetwork && deployedNetwork.address,
+                Tea.abi,
+                deployedNetwork && deployedNetwork.address,
             );
             this.setState({ web3, accounts, contract: instance });
-          } catch (error) {
+        } catch (error) {
             alert(
-              `Failed to load web3, accounts, or contract. Check console for details.`,
+                `Failed to load web3, accounts, or contract. Check console for details.`,
             );
             console.error(error);
-          }
+        }
     }
     finishProcess = async (tea) => {
-        tea.processFinish = true
-        const res = await reqUpdateProcess(tea)
-        if (res.data.data.id) {
-            const {contract} = this.state
-            const tea = res.data.data
-            const process =tea.process;
-            if(Array.isArray(process)&&process.length>0){
-                for(let i = 0;i<process.length;i++){
-                    process[i].method = process[i].method?process[i].method:""
-                    process[i].startDate = process[i].startDate?process[i].startDate:new Date()
-                    process[i].endDate = process[i].endDate?process[i].endDate:new Date()
-                    process[i].processer = process[i].processer? process[i].processer:""
-                    process[i].img =   process[i].img?  process[i].img:[]
-                    process[i].finish =  process[i].finish? process[i].finish:true
-                    await contract.methods.setProcess(tea.id,process[i].method,new Date(process[i].startDate).valueOf(),new Date(process[i].endDate).valueOf(),process[i].processer,process[i].img,process[i].finish).send({ from: this.state.accounts[0] });
+        const { contract, web3 } = this.state
+        if (contract && web3) {
+            tea.processFinish = true
+            const res = await reqUpdateProcess(tea)
+            if (res.data.data.id) {
+                const { contract } = this.state
+                const tea = res.data.data
+                const process = tea.process;
+                if (Array.isArray(process) && process.length > 0) {
+                    for (let i = 0; i < process.length; i++) {
+                        process[i].method = process[i].method ? process[i].method : ""
+                        process[i].startDate = process[i].startDate ? process[i].startDate : new Date()
+                        process[i].endDate = process[i].endDate ? process[i].endDate : new Date()
+                        process[i].processer = process[i].processer ? process[i].processer : ""
+                        process[i].img = process[i].img ? process[i].img : []
+                        process[i].finish = process[i].finish ? process[i].finish : true
+                        await contract.methods.setProcess(tea.id, process[i].method, new Date(process[i].startDate).valueOf(), new Date(process[i].endDate).valueOf(), process[i].processer, process[i].img, process[i].finish).send({ from: this.state.accounts[0] });
+                    }
                 }
-            }   
-            this.props.addRefresh()
-            message.success("任务完成！")
+                this.props.addRefresh()
+                message.success("任务完成！")
+            }
+        } else {
+            this.getWeb3Tea()
         }
     }
     getProcess = async (page, rows, finish) => {
@@ -103,8 +108,8 @@ export default class UFProcess extends React.Component {
                     )
                     const columns = [
                         { title: '加工方法', dataIndex: 'method', key: 'method', render: (text) => this.getDictValue('process', text) },
-                        { title: '开始时间', dataIndex: 'startDate', key: 'batstartDatech', render: (text) =>text? moment(text).format("lll"):"" },
-                        { title: '结束时间', dataIndex: 'endDate', key: 'endDate', render: (text) =>text? moment(text).format("lll"):""},
+                        { title: '开始时间', dataIndex: 'startDate', key: 'batstartDatech', render: (text) => text ? moment(text).format("lll") : "" },
+                        { title: '结束时间', dataIndex: 'endDate', key: 'endDate', render: (text) => text ? moment(text).format("lll") : "" },
                         { title: '是否完成', dataIndex: 'finish', key: 'finish', render: (text) => text ? "是" : "否" },
                         { title: '阶段图', dataIndex: 'img', key: 'img', render: (text, record, index) => <Button type="link" onClick={() => this.imgView(item, index)}>查看详情</Button> },
                         {
@@ -112,7 +117,7 @@ export default class UFProcess extends React.Component {
                             dataIndex: 'processer',
                             width: 180,
                             render: (text, record, index) => {
-                                if(text===user.id){
+                                if (text === user.id) {
                                     return (<Row>
                                         <Button size="middle" onClick={() => this.setState({ editVisible: true, tea: item, index })}>编辑</Button>
                                         <Divider type="vertical"></Divider>
@@ -120,10 +125,10 @@ export default class UFProcess extends React.Component {
                                             <Button size="middle" type="danger">删除</Button>
                                         </Popconfirm>
                                     </Row>)
-                                }else{
+                                } else {
                                     return (<Tag color="warning">负责人不同，无法操作</Tag>)
                                 }
-                                
+
                             }
                         },
                     ];
@@ -282,8 +287,10 @@ export default class UFProcess extends React.Component {
                 ))
                 return pre
             }, [])
-        } else {
+        } else if (img) {
             return <div><img alt="img" src={global.ipfs.uri + img}></img> </div>
+        } else {
+            return <div>暂无图片</div>
         }
     }
     getDictValue = (name, id) => {
