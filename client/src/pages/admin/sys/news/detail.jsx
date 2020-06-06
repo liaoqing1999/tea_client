@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import {  Button, Table, Input, Select, Rate, PageHeader } from 'antd'
+import {  Button, Table, Input, Rate, PageHeader } from 'antd'
 import { reqNewsDetailByCond } from '../../../../api'
 import { LikeTwoTone, DislikeTwoTone } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import { SearchOutlined } from '@ant-design/icons';
-const { Option } = Select;
 export default class NewsDetail extends Component {
 
     constructor(props) {

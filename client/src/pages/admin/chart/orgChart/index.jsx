@@ -23,12 +23,9 @@ export default class OrgChart extends Component {
         }
     }
     getPlaceOption = (data) => {
-        const { cond } = this.state
         let xdata = []
         let ydata = []
         if (Array.isArray(data)) {
-            let xMax = 0
-            let str = ""
             data.forEach(item => {
                 if (Array.isArray(item._id)) {
                     xdata.push(item._id[item._id.length - 1])

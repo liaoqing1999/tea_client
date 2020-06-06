@@ -2,7 +2,7 @@ import React from "react";
 import { FileImageTwoTone } from '@ant-design/icons';
 import { Table, Button, Carousel, Modal, Descriptions, } from 'antd'
 import moment from 'moment';
-import { reqGetProcess, reqGetStorage } from "../../../../api";
+import { reqGetStorage } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 export default class FStorage extends React.Component {
     state = {

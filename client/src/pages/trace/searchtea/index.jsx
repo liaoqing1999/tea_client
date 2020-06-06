@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import { Input, message, Button} from 'antd';
+import { Input, message} from 'antd';
 import Tea from "../../../contracts/Tea.json";
 import getWeb3 from "../../../getWeb3";
 import { reqTea } from '../../../api';
@@ -57,8 +57,8 @@ const { Search } = Input;
      onClick = async() =>{
       const data = await reqTea();
       const tea = data.data.data;
-      const plant =tea.plant;
-      const pesticide = plant.pesticide;
+      //const plant =tea.plant;
+      //const pesticide = plant.pesticide;
       const process = tea.process;
       const storage = tea.storage;
       const check = tea.check;

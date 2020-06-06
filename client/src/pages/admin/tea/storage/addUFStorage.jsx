@@ -1,6 +1,6 @@
 import React from "react";
-import { Select, Form, Input, Button, message } from 'antd'
-import { reqGetTea, reqUpdateProcess, reqUpdateStorage } from "../../../../api";
+import { Form, Input, Button, message } from 'antd'
+import { reqGetTea, reqUpdateStorage } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 const layout = {
     labelCol: { span: 8 },
@@ -16,7 +16,6 @@ const validateMessages = {
         range: '${label}必须在 ${min} —— ${max}之间',
     },
 };
-const { Option } = Select;
 export default class AddUFStorage extends React.Component {
     state = {
         tea: {}

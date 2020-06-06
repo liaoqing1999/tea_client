@@ -1,14 +1,13 @@
 import React from "react";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import { Select, Form, Button, DatePicker, message, Input } from 'antd'
+import { Form, Button, DatePicker, message, Input } from 'antd'
 import { reqUpdateStorage } from "../../../../api";
 import memoryUtils from "../../../../utils/memoryUtils";
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
-const { Option } = Select;
 export default class EditStorage extends React.Component {
     state = {
         tea: null

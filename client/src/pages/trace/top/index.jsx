@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import './index.less'
-import { formateDate } from '../../../utils/dateUtils'
 import { withRouter } from 'react-router-dom'
-import { reqWeather } from '../../../api';
 import logo from '../../../assets/GREEN_TEA.svg'
 import { Row, Col } from 'antd';
 import TopNav from "../top-nav";

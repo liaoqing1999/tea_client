@@ -102,7 +102,7 @@ export default class Shop extends Component {
         }
     }
     render() {
-        const { type, key, produceList, cond } = this.state
+        const { type, key, produceList } = this.state
         const current = produceList.page ? produceList.page : 1
         const pageSize = produceList.rows ? produceList.rows : 16
         const total = produceList.total ? produceList.total : 1

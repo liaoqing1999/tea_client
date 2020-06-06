@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import SearchTea from '../searchtea';
-import { Row, Col, Carousel, Descriptions, InputNumber, Button, Space, Tabs, Radio } from 'antd';
+import { Row, Col, Carousel, Descriptions, InputNumber, Button, Tabs, Radio } from 'antd';
 import { CoffeeOutlined, MessageOutlined } from '@ant-design/icons';
 import './index.less'
 import { reqProduceLike } from '../../../api';

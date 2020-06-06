@@ -96,7 +96,6 @@ export default class ProduceChart extends Component {
     }
 
     getOrgOption = (data) => {
-        let orgName = []
         if (data && Array.isArray(data)) {
             data.forEach(item => {
                 if(item.orgName&&Array.isArray(item.orgName)){

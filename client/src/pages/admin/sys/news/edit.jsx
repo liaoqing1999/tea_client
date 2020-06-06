@@ -233,7 +233,7 @@ export default class EditNews extends Component {
     if (!state) {
       this.props.history.goBack()
     }
-    const { news, type, dict, editType } = state
+    const { news, type, editType } = state
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -257,7 +257,7 @@ export default class EditNews extends Component {
             "content": news.content,
             "avatar": news.avatar,
             "org": news.org,
-            "href":news.href,
+            "href": news.href,
             "cover": this.getCover(news.cover),
             "state": news.state,
           }}>
@@ -268,17 +268,17 @@ export default class EditNews extends Component {
             <Input />
           </Form.Item>
           <Form.Item name='type' label="类型" rules={[{ required: true }]}>
-                <Select
-                  showSearch
-                  placeholder="请选择类型"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {this.getOption('news_type')}
-                </Select>
-              </Form.Item>
+            <Select
+              showSearch
+              placeholder="请选择类型"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {this.getOption('news_type')}
+            </Select>
+          </Form.Item>
           {editType === 'sys' ? (
             <div>
               <Form.Item name='org' label="所属机构">

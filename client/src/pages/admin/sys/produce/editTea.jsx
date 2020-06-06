@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Select, Form, Button, Input, Upload ,Modal, message} from 'antd'
 import { PlusOutlined } from '@ant-design/icons';
-import { reqStaffName, reqAddTea, reqUpdateTea } from "../../../../api";
+import {  reqAddTea, reqUpdateTea } from "../../../../api";
 import TeaType from "../../../../components/teaType";
 import { addImg } from "../../../../api/ipfs";
 const layout = {
@@ -212,21 +212,6 @@ export default class EditTea extends Component {
                 <div className="ant-upload-text">上传图片</div>
             </div>
         );
-        const validfunc = async (rule, value) => {
-            if (!tea.name) {
-                if (value) {
-                    const res = await reqStaffName(value)
-                    if (res.data.data === '') {
-
-                    } else {
-                        throw new Error('用户名已存在!');
-                    }
-                } else {
-                    throw new Error('用户名是必须的!');
-                }
-            }
-
-        }
         return (<div>
             <Form {...layout} ref={this.form} onFinish={this.onFinish} validateMessages={validateMessages}
                 initialValues={{

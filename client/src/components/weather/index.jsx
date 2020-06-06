@@ -34,7 +34,7 @@ class Weather extends Component {
     render() {
         const { dayPictureUrl, weather } = this.state;
         return (<span onClick={this.onClick} className="weather">
-            <img src={dayPictureUrl}></img>
+            <img alt="" src={dayPictureUrl}></img>
             <span>{weather}</span>
         </span>)
     }

@@ -52,7 +52,6 @@ export default class Place extends Component {
         let place = this.props.value? this.props.value: this.props.place
         if(place){
             if(Array.isArray(place)){
-                place = place
             }else{
                 place = place.split('-')
             }

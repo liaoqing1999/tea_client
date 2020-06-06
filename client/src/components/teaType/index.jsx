@@ -50,7 +50,6 @@ export default class TeaType extends Component {
         }
     }
     render() {
-        const { editorState } = this.state
         return (
             <Select
                 showSearch

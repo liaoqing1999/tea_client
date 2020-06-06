@@ -24,7 +24,7 @@ export default class UserPassword extends Component {
     }
     onFinish =async (values) => {
         const { user } = this.state
-        const res = await reqUpdatePassword(user.id, values.password)
+        await reqUpdatePassword(user.id, values.password)
         message.success("修改成功")
         storageUtils.removeUser();
         memoryUtils.user = {};

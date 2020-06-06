@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Table, Select, PageHeader, Modal, Carousel, Collapse, Row, Col, Descriptions, Popconfirm, Divider, message, Form, Input } from 'antd'
-import { reqPageTea, reqDictType, reqDeleteTea, reqDownloadQR } from '../../../../api'
+import { Button, Table, PageHeader, Modal, Carousel, Collapse, Row, Col, Descriptions, Popconfirm, Divider, message} from 'antd'
+import { reqPageTea, reqDictType, reqDeleteTea } from '../../../../api'
 import { FileImageTwoTone } from '@ant-design/icons';
 import Plant from '../../../../assets/plant.svg'
 import Process from '../../../../assets/process.svg'

@@ -21,8 +21,8 @@ export default class WeatherDetail extends Component {
                     <div key={index}>
                         <h3 style={{ color: color }}>{moment().add(index, 'days').date() + "日(" + item.date.slice(0, 2) + ")"}</h3>
                         <h1 style={{ color: color }}>
-                            <img src={item.dayPictureUrl}></img>/
-                            <img src={item.nightPictureUrl}></img>
+                            <img alt="" src={item.dayPictureUrl}></img>/
+                            <img alt="" src={item.nightPictureUrl}></img>
                         </h1>
                         <h3 style={{ color: color }}>{item.weather}</h3>
                         <h3 style={{ color: color }}>{item.temperature}</h3>
@@ -90,7 +90,7 @@ export default class WeatherDetail extends Component {
                     <h2 style={{ color: color }}>湖南省长沙市</h2>
 
                     <h1 style={{ color: color }}>
-                        <img src={data.dayPictureUrl}></img>
+                        <img alt="" src={data.dayPictureUrl}></img>
                         <span>{data.date}</span>
                     </h1>
                     <h3 style={{ color: color }}>{data.weather}</h3>
