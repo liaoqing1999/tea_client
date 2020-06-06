@@ -6,20 +6,7 @@ const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 },
 };
-const normFile = e => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
-function getBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
+
 const validateMessages = {
     required: '${label} 是必须的!',
     types: {

@@ -10,6 +10,7 @@ import Result404 from '../../components/result/404'
 import Result403 from '../../components/result/403'
 import Result500 from '../../components/result/500'
 import { routeList, menuList } from "../../config/menuConfig";
+import WeatherDetail from "../../components/weather/detail";
 const { Content, Footer, Sider } = Layout;
 class Admin extends Component {
   state = {
@@ -96,6 +97,7 @@ class Admin extends Component {
                     <Route path='/admin/404' component={Result404}></Route>
                     <Route path='/admin/403' component={Result403}></Route>
                     <Route path='/admin/500' component={Result500}></Route>
+                    <Route path='/admin/weather/detail' component={WeatherDetail}></Route>
                     <Redirect to='/admin/404' />
                   </Switch>
                 </div>
