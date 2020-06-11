@@ -39,7 +39,7 @@ export const reqAddTea = (tea) => ajax2('/tea/add', tea, 'POST')
 export const reqUpdateTea = (tea) => ajax2('/tea/update', tea, 'POST')
 
 //删除茶叶
-export const reqDeleteTea = (id) => ajax2('/tea/delete', {id}, 'GET')
+export const reqDeleteTea = (id) => ajax2('/tea/delete', {id}, 'DELETE')
 
 //下载生成二维码
 export const reqDownloadQR = (id,name) => ajax2('/tea/downloadQR', {id,name}, 'GET')
@@ -105,7 +105,7 @@ export const reqDictUpdate = (dictionary) => ajax2('/dictionary/update', diction
 export const reqDictTypeDelete = (typeCode) => ajax2('/dictionary/deleteType', { typeCode }, 'GET')
 
 //删除字典
-export const reqDictDelete = (id) => ajax2('/dictionary/delete', { id }, 'GET')
+export const reqDictDelete = (id) => ajax2('/dictionary/delete', { id }, 'DELETE')
 
 //检测字典名是否已存在
 export const reqDictTypeName = (typeCode, valueId) => ajax2('/dictionary/name', { typeCode, valueId }, 'GET')
@@ -136,7 +136,7 @@ export const reqProduceName = (name,org) => ajax2('/produce/name', { name,org },
 export const reqProducUpdate = (produce) => ajax2('/produce/update', produce, 'POST')
 
 //删除产品
-export const reqProducDelete = (id) => ajax2('/produce/delete', { id }, 'GET')
+export const reqProducDelete = (id) => ajax2('/produce/delete', { id }, 'DELETE')
 
 //机构入住
 export const reqOrgJoin = (org, staff) => ajax2('/org/join', { org, staff }, 'POST')
@@ -148,7 +148,7 @@ export const reqOrgAdd = (org) => ajax2('/org/add', org, 'POST')
 export const reqOrgUpdate = (org) => ajax2('/org/update', org, 'POST')
 
 //删除机构
-export const reqOrgDelete = (id) => ajax2('/org/delete', { id }, 'GET')
+export const reqOrgDelete = (id) => ajax2('/org/delete', { id }, 'DELETE')
 
 //获取机构
 export const reqOrg = (id) => ajax2('/org/get', { id }, 'GET')
@@ -183,7 +183,7 @@ export const reqUpdatePassword = (id, password) => ajax2('/staff/password', { id
 export const reqOrgRoleStaff = (org, role) => ajax2('/staff/getOrgRole', { org, role}, 'GET')
 
 //删除用户
-export const reqDeleteStaff = (id) => ajax2('/staff/delete', { id }, 'GET')
+export const reqDeleteStaff = (id) => ajax2('/staff/delete', { id }, 'DELETE')
 
 //角色分页
 export const reqRolePage = (page, rows) => ajax2('/role/getPage', { page, rows }, 'GET')
@@ -192,7 +192,7 @@ export const reqRolePage = (page, rows) => ajax2('/role/getPage', { page, rows }
 export const reqRoleAll = () => ajax2('/role/getAll', {}, 'GET')
 
 //删除角色
-export const reqDeleteRole = (id) => ajax2('/role/delete', { id }, 'GET')
+export const reqDeleteRole = (id) => ajax2('/role/delete', { id }, 'DELETE')
 
 //增加角色
 export const reqAddRole = (role) => ajax2('/role/add', role, 'POST')
@@ -201,7 +201,7 @@ export const reqAddRole = (role) => ajax2('/role/add', role, 'POST')
 export const reqFindRoleByName = (name) => ajax2('/role/findByName', { name }, 'GET')
 
 //通过id查询角色
-export const reqFindRole = (id) => ajax2('/role/find', { id }, 'GET')
+export const reqFindRole = (id) => ajax2('/role/get', { id }, 'GET')
 
 //更新角色
 export const reqUpdateRole = (role) => ajax2('/role/update', role, 'POST')
@@ -219,7 +219,7 @@ export const reqAddNews = (news) => ajax2('/news/add', news, 'POST')
 export const reqUpdateNews = (news) => ajax2('/news/update', news, 'POST')
 
 //更新资讯
-export const reqDeleteNews = (id) => ajax2('/news/delete', { id }, 'GET')
+export const reqDeleteNews = (id) => ajax2('/news/delete', { id }, 'DELETE')
 
 //增加资讯记录
 export const reqAddNewsDetail = (newsDetail) => ajax2('/newsDetail/add', newsDetail, 'POST')

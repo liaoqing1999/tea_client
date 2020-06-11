@@ -27,6 +27,13 @@ export  function ajax2(url,data={},type='GET'){
                     return qs.stringify(params, {arrayFormat: 'repeat'})
                 },
              });
+         }else if(type==='DELETE'){
+            promise =  Axios.delete(url,{
+                params:data,
+                paramsSerializer: function (params) {
+                   return qs.stringify(params, {arrayFormat: 'repeat'})
+               },
+            });
          }else{
             promise =  Axios.post(url,data);
          }

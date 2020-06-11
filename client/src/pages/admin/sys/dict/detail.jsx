@@ -211,7 +211,7 @@ export default class DictDetail extends Component {
                         });
                     }
                 }}>新增字典</Button>
-                <Button type="link" onClick={() => this.props.history.push("/admin/dict")} size="middle">返回类型列表</Button>
+                <Button type="link" onClick={() => this.props.history.goBack()} size="middle">返回类型列表</Button>
                 <Table title={(c) => state.dictType.typeName} size="middle" bordered rowKey="id" columns={columns} dataSource={dict} />
             </div>
         )
