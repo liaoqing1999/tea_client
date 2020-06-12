@@ -16,6 +16,7 @@ export  function ajax1(url,data={},type='GET'){
     
 }
 export  function ajax2(url,data={},type='GET'){ 
+    url='/api'+url
     return new Promise((resolve,reject) =>{
         const qs = require('qs')
         let promise

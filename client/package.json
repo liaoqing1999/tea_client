@@ -15,6 +15,7 @@
     "echarts": "^4.7.0",
     "echarts-for-react": "^2.0.15-beta.1",
     "ethereumjs-util": "^6.2.0",
+    "http-proxy-middleware": "^1.0.4",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^42.0.0",
     "jsonp": "^0.2.1",
@@ -53,6 +54,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://127.0.0.1:8090"
+  }
 }

@@ -367,7 +367,7 @@ export default class Join extends Component {
                                         <Input />
                                     </Form.Item>
                                     <Tooltip onClick={this.getVerify} placement="topLeft" title="看不清？点击更换" style={{ display: 'inline-block', width: 'calc(50% - 5px)' }}>
-                                        <img alt="验证码" style={{ marginLeft: "15px", width: "100px", height: "30px" }} src={"http://127.0.0.1:8090/verify/getVerify?p=" + this.state.verify}></img>
+                                        <img alt="验证码" style={{ marginLeft: "15px", width: "100px", height: "30px" }} src={"http://39.105.81.9:8090/verify/getVerify?p=" + this.state.verify}></img>
                                     </Tooltip>
                                 </Form.Item>
                                 <Form.Item name="agreement" valuePropName="checked"
