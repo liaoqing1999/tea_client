@@ -78,7 +78,7 @@ export class Login extends Component {
                                     <Form.Item name="remember" valuePropName="checked" noStyle>
                                         <Checkbox>记住密码</Checkbox>
                                     </Form.Item>
-                                    <Button type="link" size="small" onClick={() => { }}>忘记密码</Button>
+                                    <Button type="link" size="small" onClick={() => { this.props.history.replace("/forgerPwd")}}>忘记密码</Button>
                                 </Row>
                             </Form.Item>
 

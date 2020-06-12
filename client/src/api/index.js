@@ -170,6 +170,18 @@ export const reqStaffPage = (page, rows, cond) => {
 //检测用户名是否已存在
 export const reqStaffName = (name) => ajax2('/staff/name', { name }, 'GET')
 
+//根据用户名和邮箱查询用户
+export const reqStaffNameEmail = (name,email) => ajax2('/staff/nameEmail', { name,email }, 'GET')
+
+//发送修改密码邮箱验证
+export const reqStaffSendVerification = (id,operation) => ajax2('/staff/sendVerification', { id,operation }, 'GET')
+
+//邮箱验证码验证
+export const reqStaffVerificationCheck= (email,code,operation) => ajax2('/staff/verificationCheck', { email,code,operation }, 'GET')
+
+//通过邮箱验证码更新密码
+export const reqStaffUpdatePwdByEmail= (id,password,code,operation) => ajax2('/staff/updatePWByVerificationCode', { id,password,code,operation }, 'GET')
+
 //更新用户
 export const reqUpdateStaff = (staff) => ajax2('/staff/update', staff, 'POST')
 

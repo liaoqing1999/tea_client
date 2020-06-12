@@ -13,6 +13,7 @@ import "./config/config"
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { Register } from "./pages/login/register";
+import { ForgetPwd } from "./pages/login/forgetPwd";
 /*
 应用的根组件
 */
@@ -25,6 +26,7 @@ export default class App extends Component {
                         <Route exact path='/' component={Trace}></Route>
                         <Route exact path='/login' component={Login}></Route>
                         <Route exact path='/register' component={Register}></Route>
+                        <Route exact path='/forgerPwd' component={ForgetPwd}></Route>
                         <Route path='/admin' component={Admin}></Route>
                         <Route path='/main' component={Main}></Route>
                         <Route path='/404' component={Result404}></Route>
