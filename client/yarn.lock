@@ -7795,8 +7795,8 @@ load-json-file@^4.0.0:
 
 loader-fs-cache@^1.0.2:
   version "1.0.3"
-  resolved "https://registry.npm.taobao.org/loader-fs-cache/download/loader-fs-cache-1.0.3.tgz#f08657646d607078be2f0a032f8bd69dd6f277d9"
-  integrity sha1-8IZXZG1gcHi+LwoDL4vWndbyd9k=
+  resolved "https://registry.yarnpkg.com/loader-fs-cache/-/loader-fs-cache-1.0.3.tgz#f08657646d607078be2f0a032f8bd69dd6f277d9"
+  integrity sha512-ldcgZpjNJj71n+2Mf6yetz+c9bM4xpKtNds4LbqXzU/PTdeAX0g3ytnU1AJMEcTk2Lex4Smpe3Q/eCTsvUBxbA==
   dependencies:
     find-cache-dir "^0.1.1"
     mkdirp "^0.5.1"
@@ -8249,10 +8249,10 @@ minimatch@3.0.4, minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.npm.taobao.org/minimist/download/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
+minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
+  integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
 minipass@^2.6.0, minipass@^2.8.6, minipass@^2.9.0:
   version "2.9.0"
@@ -8309,16 +8309,16 @@ mkdirp-promise@^5.0.1:
     mkdirp "*"
 
 mkdirp@*:
-  version "1.0.3"
-  resolved "https://registry.npm.taobao.org/mkdirp/download/mkdirp-1.0.3.tgz#4cf2e30ad45959dddea53ad97d518b6c8205e1ea"
-  integrity sha1-TPLjCtRZWd3epTrZfVGLbIIF4eo=
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-3.0.1.tgz#e44e4c5607fb279c168241713cc6e0fea9adcb50"
+  integrity sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==
 
 mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
-  version "0.5.4"
-  resolved "https://registry.npm.taobao.org/mkdirp/download/mkdirp-0.5.4.tgz#fd01504a6797ec5c9be81ff43d204961ed64a512"
-  integrity sha1-/QFQSmeX7Fyb6B/0PSBJYe1kpRI=
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.6.tgz#7def03d2432dcae4ba1d611445c48396062255f6"
+  integrity sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==
   dependencies:
-    minimist "^1.2.5"
+    minimist "^1.2.6"
 
 mock-fs@^4.1.0:
   version "4.11.0"
